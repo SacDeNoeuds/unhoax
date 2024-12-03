@@ -14,7 +14,7 @@ const config = (format) => ({
     main: "src/main.ts",
   },
   output: [
-    { dir: folders[format], name: 'main.js', format, sourcemap: false },
+    { dir: folders[format], name: 'main.js', format, sourcemap: true },
   ],
   plugins: [
     resolve(),
@@ -22,9 +22,9 @@ const config = (format) => ({
       project: "./tsconfig.json",
       declaration: true,
       declarationDir: folders[format],
-      sourceMap: false,
+      sourceMap: true,
     }),
-    terser({ sourceMap: false }),
+    terser({ sourceMap: true }),
   ],
 })
 export default [
