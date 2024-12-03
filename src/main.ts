@@ -1,20 +1,23 @@
-export { array, type ArraySchema } from "./array"
-export { Enum } from "./enum"
-export { fromPredicate } from "./fromPredicate"
-export { Map, type MapSchema } from "./Map"
-export { object, type ObjectSchema } from "./object"
-export { nil, nullable, optional, or } from "./or"
-export type { ParseContext } from "./ParseContext"
-export type { ParseError, ParseIssue, ParseResult } from "./ParseResult"
+export { array, type ArraySchema } from "./array";
+export { Enum } from "./enum";
+export { fromPredicate } from "./fromPredicate";
+export { lazy } from "./lazy";
+export { Map, type MapSchema } from "./Map";
+export { object, partial, type ObjectSchema } from "./object";
+export { nil, nullable, optional, or } from "./or";
+export type { ParseError, ParseIssue, ParseResult } from "./ParseResult";
 export {
   boolean,
   integer,
   literal,
   number,
   string,
+  unsafeInteger,
+  unsafeNumber,
   untrimmedString,
-  type LiteralSchema
-} from "./primitives"
+  type Literal,
+  type LiteralSchema,
+} from "./primitives";
 export {
   between,
   greaterThan,
@@ -22,16 +25,15 @@ export {
   nonEmpty,
   refine,
   refineAs,
-  size
-} from "./refine"
-export { map, type Schema, type TypeOfSchema } from "./Schema"
-export { Set, type SetSchema } from "./Set"
-export { tuple, type TupleSchema } from "./tuple"
+  size,
+} from "./refine";
+export { map, type Schema, type TypeOfSchema as TypeOf } from "./Schema";
+export { Set, type SetSchema } from "./Set";
+export { tuple, type TupleSchema } from "./tuple";
 export {
   discriminatedUnion,
   union,
-  type DiscriminatedUnionSchema,
-  type UnionSchema
-} from "./union"
-export { unsafeParse } from "./unsafeParse"
-
+  // type DiscriminatedUnionSchema,
+  type UnionSchema,
+} from "./union";
+export { unsafeParse } from "./unsafeParse";
