@@ -19,7 +19,7 @@ export function refine<T, S extends Schema<T>>(
   })
 }
 
-export const refineTo = refine as <T, U extends T>(
+export const refineAs = refine as <T, U extends T>(
   name: string,
   predicate: (value: T) => value is U,
 ) => (schema: Schema<T>) => Schema<U>

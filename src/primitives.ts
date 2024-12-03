@@ -1,13 +1,12 @@
 import { fromPredicate } from "./fromPredicate"
-import { refine } from "./refine"
 import { map, type Schema } from "./Schema"
 
-export const boolean = fromPredicate<boolean>(
+export const boolean = fromPredicate(
   "boolean",
   (input) => typeof input === "boolean",
 )
 
-export const untrimmedString = fromPredicate<string>(
+export const untrimmedString = fromPredicate(
   "string",
   (input) => typeof input === "string",
 )
@@ -15,12 +14,14 @@ export const untrimmedString = fromPredicate<string>(
 const trim = map((str: string) => str.trim())
 export const string = trim(untrimmedString)
 
-const unsafeNumber = fromPredicate<number>(
+export const number = fromPredicate<number>(
   "number",
-  (input) => typeof input === "number",
+  Number.isFinite as (input: unknown) => input is number,
 )
-const notNaN = refine("NotNaN", (n: number) => !Number.isNaN(n))
-export const number = notNaN(unsafeNumber)
+export const integer = fromPredicate<number>(
+  "integer",
+  Number.isInteger as (input: unknown) => input is number,
+)
 
 type Literal = string | number | boolean | null | undefined
 const isLiteral =

@@ -1,9 +1,12 @@
-import { createParseContext } from './ParseContext'
-import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { createParseContext } from "./ParseContext"
+import { failure, success } from "./ParseResult"
+import type { Schema } from "./Schema"
 
-type Predicate<T> = (input: unknown) => input is T
-export function fromPredicate<T>(name: string, predicate: Predicate<T>): Schema<T> {
+type Predicate<Input, T extends Input> = (input: Input) => input is T
+export function fromPredicate<T extends Input, Input = unknown>(
+  name: string,
+  predicate: Predicate<Input, T>,
+): Schema<T, Input> {
   return {
     name,
     parse: (input, context = createParseContext(name, input)) =>
@@ -12,4 +15,3 @@ export function fromPredicate<T>(name: string, predicate: Predicate<T>): Schema<
         : failure(context, name, input),
   }
 }
-

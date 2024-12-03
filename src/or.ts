@@ -8,3 +8,4 @@ export function or<B>(b: Schema<B>) {
 
 export const optional = or(literal(undefined))
 export const nil = or(literal(undefined, null))
+export const nullable = or(literal(null))

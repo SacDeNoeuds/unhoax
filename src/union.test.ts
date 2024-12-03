@@ -32,9 +32,9 @@ describe("union", () => {
 })
 
 describe("discriminatedUnion", () => {
-  const person = object({ kind: literal("person" as const), name: string })
-  const car = object({ kind: literal("car" as const), doors: number })
-  const bike = object({ kind: literal("bike" as const), wheels: number })
+  const person = object({ kind: literal('person'), name: string })
+  const car = object({ kind: literal("car"), doors: number })
+  const bike = object({ kind: literal("bike"), wheels: number })
   const schema = discriminatedUnion([person, car, bike], "kind")
   type Value = TypeOfSchema<typeof schema>
 

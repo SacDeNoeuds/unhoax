@@ -1,6 +1,6 @@
 import { createParseContext, withPathSegment } from "./ParseContext"
 import { failure, success } from "./ParseResult"
-import type { Schema } from './Schema'
+import type { Schema, TypeOfSchema } from './Schema'
 
 type PropsOf<T extends Record<string, any>> = {
   [Key in keyof T]: Schema<T[Key]>
@@ -16,6 +16,14 @@ export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
   readonly props: PropsOf<T>
 }
 
+export function object<T extends Record<string, Schema<any>>>(
+  props: T,
+  name?: string
+): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }>
+export function object<T extends Record<string, any>>(
+  props: PropsOf<T>,
+  name?: string
+): ObjectSchema<T>
 export function object<T extends Record<string, any>>(
   props: PropsOf<T>,
   name?: string
