@@ -1,0 +1,54 @@
+{
+  "name": "unhoax",
+  "version": "0.1.0",
+  "description": "type/data-centric schema library. A schema library empower you, not constrain you with their types messy types.",
+  "type": "module",
+  "files": ["./lib", "./README.md"],
+  "types": "./lib/esm/main.d.ts",
+  "main": "lib/cjs/main.js",
+  "module": "lib/esm/main.js",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/main.js",
+      "require": "./lib/cjs/main.js",
+      "node": "./lib/cjs/main.js",
+      "types": "./lib/esm/main.d.ts"
+    }
+  },
+  "scripts": {
+    "prebuild": "npm run check-ts && rm -rf ./lib",
+    "check-ts": "tsc --noEmit",
+    "build": "rollup -c ./rollup.config.js",
+    "prepack": "npm run build",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SacDeNoeuds/unhoax.git"
+  },
+  "keywords": [
+    "schema",
+    "typescript",
+    "validation",
+    "type",
+    "inference",
+    "parsing",
+    "modular",
+    "type-safe"
+  ],
+  "author": "SacDeNoeuds <sacdenoeuds.dev@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SacDeNoeuds/unhoax/issues"
+  },
+  "homepage": "https://github.com/SacDeNoeuds/unhoax#readme",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "rollup": "^4.28.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
