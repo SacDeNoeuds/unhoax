@@ -2,8 +2,7 @@ import { fromPredicate } from "./fromPredicate";
 import { map, type Schema } from "./Schema";
 
 /**
- * @group Schema
- * @category Primitive
+ * @category Schema
  */
 export const boolean = fromPredicate(
   "boolean",
@@ -11,8 +10,7 @@ export const boolean = fromPredicate(
 );
 
 /**
- * @group Schema
- * @category Primitive
+ * @category Schema
  */
 export const untrimmedString = fromPredicate(
   "string",
@@ -21,8 +19,7 @@ export const untrimmedString = fromPredicate(
 
 const trim = map((str: string) => str.trim());
 /**
- * @group Schema
- * @category Primitive
+ * @category Schema
  */
 export const string = trim(untrimmedString);
 
@@ -32,8 +29,7 @@ export const string = trim(untrimmedString);
  *
  * Basically, it accepts anything passing the check `Number.isFinite`.
  *
- * @group Schema
- * @category Primitive
+ * @category Schema
  * @see {@link unsafeNumber}
  */
 export const number = fromPredicate<number>(
@@ -45,8 +41,7 @@ export const number = fromPredicate<number>(
  * ⚠️ valid inputs are `Infinity`, `NaN` and unsafe integers.<br>
  * Basically, anything which passes the check `typeof x = 'number'`.
  *
- * @group Schema
- * @category Primitive
+ * @category Schema
  * @see {@link number}
  */
 export const unsafeNumber = fromPredicate<number>(
@@ -57,8 +52,7 @@ export const unsafeNumber = fromPredicate<number>(
 /**
  * it accepts anything passing the check `Number.isSafeInteger`.
  *
- * @group Schema
- * @category Primitive
+ * @category Schema
  * @see {@link number}
  * @see {@link unsafeInteger}
  * @see {@link unsafeNumber}
@@ -70,8 +64,7 @@ export const integer = fromPredicate<number>(
 /**
  * it accepts anything passing the check `Number.isInteger`.
  *
- * @group Schema
- * @category Primitive
+ * @category Schema
  * @see {@link integer}
  * @see {@link number}
  * @see {@link unsafeNumber}
@@ -88,15 +81,14 @@ const isLiteral =
     literals.some((literal) => value === literal);
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  */
 export interface LiteralSchema<L> extends Schema<L> {
   literals: L[];
 }
 
 /**
- * @group Schema
- * @category Primitive
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

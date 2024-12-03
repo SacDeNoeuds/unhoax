@@ -3,7 +3,7 @@ import { failure, success } from "./ParseResult";
 import type { Schema } from "./Schema";
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link Map}
  */
 export interface MapSchema<T extends Map<any, any>> extends Schema<T> {
@@ -16,8 +16,7 @@ type MapValue<T> = T extends Map<any, infer V> ? V : never;
 export { Map_ as Map };
 
 /**
- * @group Schema
- * @category Composite
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

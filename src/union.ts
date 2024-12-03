@@ -5,7 +5,7 @@ import type { LiteralSchema } from "./primitives";
 import type { Schema, TypeOfSchema } from "./Schema";
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link union}
  * @see {@link discriminatedUnion}
  */
@@ -33,8 +33,7 @@ function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
 /**
  * If you want to use a discriminated union, checkout {@link discriminatedUnion}
  *
- * @group Schema
- * @category Composite
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -63,8 +62,7 @@ export function union<T extends [Schema<any>, ...Schema<any>[]]>(
 /**
  * If you need to use a simple union, checkout {@link union}
  *
- * @group Schema
- * @category Composite
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

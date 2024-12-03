@@ -3,7 +3,7 @@ import { failure, success } from "./ParseResult";
 import type { Schema } from "./Schema";
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link Set}
  */
 export interface SetSchema<T> extends Schema<Set<T>> {
@@ -13,8 +13,7 @@ export interface SetSchema<T> extends Schema<Set<T>> {
 export { Set_ as Set };
 
 /**
- * @group Schema
- * @category Composite
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

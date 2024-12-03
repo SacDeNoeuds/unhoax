@@ -2,8 +2,7 @@ import { createParseContext } from "./ParseContext";
 import type { Schema } from "./Schema";
 
 /**
- * @group Schema
- * @category Composite
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

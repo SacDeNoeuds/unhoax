@@ -4,12 +4,14 @@ type Success<T> = { success: true; value: T };
 type Failure = { success: false; error: ParseError };
 
 /**
- * @group Parsing
+ * @category Parsing
  * @see {@link ParseError}
  * @see {@link ParseIssue}
  * @example
  * ```ts
- * const result = mySchema.parse(someInput)
+ * import * as x from 'unhoax'
+ *
+ * const result = x.string.parse(someInput)
  * result:
  *  | { success: true, value: T }
  *  | { success: false, error: ParseError }
@@ -18,26 +20,26 @@ type Failure = { success: false; error: ParseError };
 export type ParseResult<T> = Success<T> | Failure;
 
 /**
- * @group Parsing
+ * @category Parsing
  * @see {@link ParseResult}
  * @see {@link ParseIssue}
  */
-export interface ParseError {
+export type ParseError = {
   schemaName: string;
   input: unknown;
   issues: ParseIssue[];
-}
+};
 
 /**
- * @group Parsing
+ * @category Parsing
  * @see {@link ParseError}
  */
-export interface ParseIssue {
+export type ParseIssue = {
   schemaName: string;
   refinement?: string;
   input: unknown;
   path: PropertyKey[];
-}
+};
 
 export function failure(
   context: ParseContext,

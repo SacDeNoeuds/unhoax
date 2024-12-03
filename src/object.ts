@@ -1,4 +1,3 @@
-/** @module */
 import { optional } from "./or";
 import { createParseContext, withPathSegment } from "./ParseContext";
 import { failure, success } from "./ParseResult";
@@ -15,7 +14,7 @@ export function isObject(input: unknown): input is Record<string, unknown> {
 }
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link object}
  */
 export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
@@ -23,52 +22,38 @@ export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
 }
 
 /**
- * @group Schema
- * @category Composite
+ * @category Schema
  * @see {@link partial}
- * @example
+ * @example Type-Driven
  * ```ts
  * import * as x from 'unhoax'
  *
- * // from a specific type:
  * type Person = { name: string, age: number }
  * const personSchema = h.object<Person>({
  *   name: x.string,
  *   age: x.number,
  * })
- *
- * // to generate a type:
- * const personSchema = x.object({
- *   name: x.string,
- *   age: x.number,
- * })
- * type Person = x.TypeOf<typeof personSchema>
- *
- * // intersect:
- * const personWithAddressSchema = x.object({
- *   ...personSchema.props,
- *   address: x.string,
- * })
- *
- * // omit:
- * import omit from 'just-omit'
- *
- * const personWithNoAgeSchema = x.object(
- *   omit(personSchema.props, ['age'])
- * )
- *
- * // pick
- * import pick from 'just-pick'
- *
- * const personWithName = x.object(
- *   pick(personSchema.props, ['name'])
- * )
  * ```
  */
 export function object<T extends Record<string, Schema<any>>>(
   props: T,
   name?: string,
 ): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }>;
+/**
+ * @category Schema
+ * @see {@link partial}
+ * @example Type Inference
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * // Use the schema as source of truth:
+ * const personSchema = x.object({
+ *   name: x.string,
+ *   age: x.number,
+ * })
+ * type Person = x.TypeOf<typeof personSchema>
+ * ```
+ */
 export function object<T extends Record<string, any>>(
   props: PropsOf<T>,
   name?: string,
@@ -97,8 +82,7 @@ export function object<T extends Record<string, any>>(
 }
 
 /**
- * @group Modifier
- * @category object
+ * @category Modifier
  * @see {@link object}
  * @example
  * ```ts

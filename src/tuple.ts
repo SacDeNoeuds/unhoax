@@ -3,7 +3,7 @@ import { failure, success } from "./ParseResult";
 import type { Schema } from "./Schema";
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link tuple}
  */
 export interface TupleSchema<T> extends Schema<T> {
@@ -11,8 +11,7 @@ export interface TupleSchema<T> extends Schema<T> {
 }
 
 /**
- * @group Schema
- * @category Composite
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

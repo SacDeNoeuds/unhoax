@@ -7,7 +7,7 @@ type Predicate<Input, T extends Input> = (input: Input) => input is T;
 /**
  * Utility to create schemas.<br>
  * Can be used to create custom schemas like `Email`.
- * @group Schema Factory
+ * @category Schema Factory
  * @see {@link string}
  * @see {@link number}
  * @see {@link boolean}

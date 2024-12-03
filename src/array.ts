@@ -4,7 +4,7 @@ import { failure, success } from "./ParseResult";
 import type { Schema } from "./Schema";
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link array}
  */
 export interface ArraySchema<T> extends Schema<T[]> {
@@ -12,8 +12,7 @@ export interface ArraySchema<T> extends Schema<T[]> {
 }
 
 /**
- * @group Schema
- * @category Composite
+ * @category Schema
  * @see {@link ArraySchema}
  * @example
  * ```ts

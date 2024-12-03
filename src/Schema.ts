@@ -2,21 +2,21 @@ import { createParseContext, type ParseContext } from "./ParseContext";
 import { type ParseResult, success } from "./ParseResult";
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link TypeOf}
  */
 export interface Schema<T, Input = unknown> {
   readonly name: string;
   readonly refinements?: string[];
   /**
-   * @group Parsing
+   * @category Parsing
    * @see {@link ParseResult}
    */
   readonly parse: (input: Input, context?: ParseContext) => ParseResult<T>;
 }
 
 /**
- * @group Schema Definition
+ * @category Schema Definition
  * @see {@link Schema}
  */
 export type TypeOfSchema<T> = T extends Schema<infer U> ? U : never;
