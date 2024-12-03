@@ -221,4 +221,9 @@ const pickDemo = x.object(pick(person.props, ['name']))
 // omit
 import omit from 'just-omit'
 const omitDemo = x.object(omit(person.props, ['age']))
+
+const partial1 = x.partial(person)
+partial1.parse({}) // { result: true, value: {} }
+const partial2 = x.partial(person, ['age'])
+partial2.parse({ name: 'Jack' }) // { result: true, value: { name: "Jack" } }
 ```

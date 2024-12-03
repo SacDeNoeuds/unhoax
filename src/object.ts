@@ -1,3 +1,4 @@
+import { optional } from './or'
 import { createParseContext, withPathSegment } from "./ParseContext"
 import { failure, success } from "./ParseResult"
 import type { Schema, TypeOfSchema } from './Schema'
@@ -45,4 +46,15 @@ export function object<T extends Record<string, any>>(
       return success(context, parsed)
     },
   }
+}
+
+export function partial<T extends Record<string, any>>(schema: ObjectSchema<T>): ObjectSchema<Partial<T>>
+export function partial<T extends Record<string, any>, Key extends keyof T>(schema: ObjectSchema<T>, keys: Key[]): ObjectSchema<Omit<T, Key> & Partial<Pick<T, Key>>>
+export function partial(schema: ObjectSchema<Record<string, any>>, keys?: string[]): ObjectSchema<Record<string, any>> {
+  const keySet = new Set(keys ?? Object.keys(schema.props))
+  const copy = {} as typeof schema.props
+  Object.entries(schema.props).forEach(([key, schema]) => {
+    copy[key] = keySet.has(key) ? optional(schema) : schema
+  })
+  return object(copy)
 }

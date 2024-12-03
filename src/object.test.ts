@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { object } from './object'
+import { object, partial } from './object'
 import { number, string } from "./primitives"
 
 describe("object", () => {
@@ -48,6 +48,32 @@ describe("object", () => {
     expect(person.parse(input)).toEqual({
       success: true,
       value: { name: input.name, age: input.age },
+    })
+  })
+})
+
+describe('partial', () => {
+  type Person = { name: string; age: number }
+  const person = object<Person>({
+    name: string,
+    age: number,
+  })
+  
+  it('parses a person without age', () => {
+    const partialPerson = partial(person, ['age'])
+    const result = partialPerson.parse({ name: 'hello' })
+    expect(result).toEqual({
+      success: true,
+      value: { name: 'hello' },
+    })
+  })
+
+  it('parses an empty object', () => {
+    const partialPerson = partial(person)
+    const result = partialPerson.parse({})
+    expect(result).toEqual({
+      success: true,
+      value: {},
     })
   })
 })
