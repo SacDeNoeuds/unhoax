@@ -1,8 +1,8 @@
-# unhoax
-
-A schema library that is consumer-centric rather than schema-centric
-
 ![Package Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*])
+
+A safe-by-default schema library that is type/data-driven rather than schema-centric: you bring your entity types, we do not lose you with complex schema typings.
+
+Particularly lightweight and extendible by design.
 
 ## Installation
 
@@ -10,220 +10,57 @@ A schema library that is consumer-centric rather than schema-centric
 npm i -S unhoax
 ```
 
-Although not required, I recommend using the library with a `pipe` function, like `pipeWith` from [`pipe-ts`](https://github.com/unsplash/pipe-ts) or `pipe` from [`just-pipe`](https://github.com/angus-c/just?tab=readme-ov-file#just-pipe)
+Although not required, I recommend using the library with a `pipe` function, like `pipe` from [`just-pipe`](https://github.com/angus-c/just?tab=readme-ov-file#just-pipe) or `pipeWith` from [`pipe-ts`](https://github.com/unsplash/pipe-ts)
 
+## Getting Started
 
-## Reference
+### Type-Driven
 
-### Parsing
-
-```ts
-import { unsafeParse } from 'unhoax'
-
-const result = mySchema.parse(…)
-result:
-  | { success: true, value: T }
-  | { success: false, error: { input, schemaName, issues: …[] } }
-
-// throws an Error with ParseError as the error cause if parsing fails.
-const value = unsafeParse(mySchema, input)
-value: T
-```
-
-### Schemas
-
-#### Primitives
+Aka writing your type first and then your schema.
 
 ```ts
-import {
-  boolean,
-  string,
-  number,
-  literal
-  untrimmedString, // By default strings are trimmed, use `untrimmedString` if you don't want that
+import * as x from "unhoax";
 
-  fromPredicate,
-} from 'unhoax'
-
-const myLiteral = literal('oneValue')
-const myLiteral = literal('value1', 2, true, …)
-
-type Pixel = `${number}px`
-const isPixel = (input: unknown): input is Pixel => …
-const pixelSchema = fromPredicate('pixel', isPixel)
-pixelSchema: Schema<Pixel>
-```
-
-#### Optionals
-
-```ts
-import { nullable, nil, optional } from 'unhoax'
-
-const schema = nullable(string) // Schema<string | null>
-const schema = optional(string) // Schema<string | undefined>
-const schema = nil(string)      // Schema<string | null | undefined>
-```
-
-#### Refinements & Custom types
-
-```ts
-import { string, refineAs, refine } from 'unhoax'
-
-type Email = string & { _tag: 'Email' }
-declare const isEmail: (value: string) => value is Email
-
-const refineAsEmail = refineAs('Email', isEmail)
-export const email = refineAsEmail(string)
-
-const isCompanyEmail = (email: Email) => email.endsWith('@my-company.org')
-
-const refineToCompanyEmail = refine('CompanyEmail', isCompanyEmail)
-export const companyEmail = refineToCompanyEmail(email) // Schema<Email>
-```
-
-The difference between `refine` and `refineAs` is the output type:
-```ts
-const refineAsEmail = refineAs('email', (value: string) => value is Email)
-const refineAsEmail: (schema: Schema<string>) => Schema<Email>
-// VS
-const refineToCompanyEmail = refine('CompanyEmail', (value: Email) => boolean)
-const refineToCompanyEmail: (schema: Schema<Email>) => Schema<Email>
-// the output type did NOT change.
-```
-
-#### Building complex schemas with `pipe`
-
-```ts
-import pipe from 'just-pipe'
-import { email } from '…'
-import * as x from 'unhoax'
-
-const isCompanyEmail = (email: Email) => email.endsWith('@my-company.org')
-
-const person = object({
-  name: pipe(x.string, x.size({ min: 3, max: 50, reason: 'PersonName' })),
-  age: pipe(x.integer, x.between(18, 120, 'AgeBoundaries'), x.nil),
-  email: pipe(
-    email,
-    x.refine('CompanyEmail', isCompanyEmail),
-    x.optional
-  ),
-})
-```
-
-#### Lazy
-
-```ts
-import { Schema, lazy } from 'unhoax'
-
-type BinaryTree = {
-  element: string
-  left: BinaryTree | null
-  right: BinaryTree | null
-};
-
-const BinaryTreeSchema: Schema<BinaryTree> = object({
-  element: string,
-  left: nullable(lazy(() => BinaryTreeSchema)),
-  right: nullable(lazy(() => BinaryTreeSchema)),
-})
-```
-
-#### Composite
-
-```ts
-import * as x from 'unhoax'
-
-interface Person {
-  name: string
-  age: number
-}
-const person = x.object<Person>({
+// Type-Driven:
+type Person = { name: string; age: number };
+const personSchema = x.object<Person>({
   name: x.string,
   age: x.number,
-})
-
-const arrayOfPersons = x.array(person)
-const mapOfPersons = x.Map(x.string, person)
-const setOfString = x.Set(x.string)
-
-const tuple = x.tuple(x.string, x.number, x.boolean)
-tuple: x.Schema<[string, number, boolean]>
+});
 ```
 
-#### Unions
+### Schema-driven
+
+Aka writing your schema and inferring your type from the schema.
 
 ```ts
 import * as x from 'unhoax'
 
-const stringOrNumber = x.union(x.string, x.number)
-stringOrNumber: Schema<string | number>
-
-const bikeSchema = x.object({
-  kind: x.literal('Bike'),
-  wheels: x.number,
-})
-const carSchema = x.object({
-  kind: x.literal('Car'),
-  doors: x.number,
-})
-const bikeOrCarSchema = x.discriminatedUnion([bikeSchema, carSchema], 'kind')
+const personSchema = x.object({ … })
+type Person = x.TypeOf<typeof personSchema>
 ```
 
-#### Enums
+### Parsing Safely
 
 ```ts
 import * as x from 'unhoax'
 
-// As JavaScript object
-const Direction = {
-  Left: 'LEFT',
-  Right: 'RIGHT',
-} as const;
+const result = personSchema.parse({ name: …, age: … })
 
-// As TypeScript enum
-enum Direction {
-  Left = 'LEFT',
-  Right = 'RIGHT',
-}
-
-// As TypeScript enum
-enum Direction {
-  Left,
-  Right,
-}
-
-const schema = x.Enum(Direction)
+if (result.success) result.value // Person
+else result.error // x.ParseError
 ```
 
-#### Object pick/omit/intersect
+### Parsing Unsafely
 
 ```ts
-const person = x.object({
-  name: x.string,
-  age: x.number,
-})
-const footballer = x.object({
-  preferredFoot: x.literal('left', 'right'),
-  maxScoredGamePerSeason: x.number,
-})
+import * as x from 'unhoax'
 
-// intersect
-const intersectionDemo = x.object({
-  ...person.props,
-  ...footballer.props,
-})
-
-// pick
-import pick from 'just-pick'
-const pickDemo = x.object(pick(person.props, ['name']))
-
-// omit
-import omit from 'just-omit'
-const omitDemo = x.object(omit(person.props, ['age']))
-
-const partial1 = x.partial(person)
-partial1.parse({}) // { result: true, value: {} }
-const partial2 = x.partial(person, ['age'])
-partial2.parse({ name: 'Jack' }) // { result: true, value: { name: "Jack" } }
+try {
+  const result = x.unsafeParse(personSchema, { name: …, age: … })
+  result // Person
+} catch (err) {
+  err // Error
+  err.cause // x.ParseError
+}
 ```
