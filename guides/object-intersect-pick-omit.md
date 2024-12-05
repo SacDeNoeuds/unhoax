@@ -1,7 +1,6 @@
 ---
 title: Guide – intersect, pick & omit
-group: Guide
-children:
+category: Guide
 ---
 
 ### Introduction
@@ -16,17 +15,17 @@ They all have their TypeScript typing:
 Let’s consider those schemas:
 
 ```ts
-import * as x from "unhoax";
+import * as x from 'unhoax'
 
 const person = x.object({
   name: x.string,
   age: x.number,
-});
+})
 
 const footballer = x.object({
-  preferredFoot: x.literal("left", "right"),
+  preferredFoot: x.literal('left', 'right'),
   maxScoredGamePerSeason: x.number,
-});
+})
 ```
 
 ### Intersection – merging 2 objects
