@@ -6,7 +6,7 @@ interface Enum {
 }
 
 /**
- * @category Schema
+ * @category 2. Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

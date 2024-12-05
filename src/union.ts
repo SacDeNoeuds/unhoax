@@ -33,7 +33,7 @@ function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
 /**
  * If you want to use a discriminated union, checkout {@link discriminatedUnion}
  *
- * @category Schema
+ * @category 2. Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -62,7 +62,7 @@ export function union<T extends [Schema<any>, ...Schema<any>[]]>(
 /**
  * If you need to use a simple union, checkout {@link union}
  *
- * @category Schema
+ * @category 2. Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

@@ -13,7 +13,7 @@ export interface SetSchema<T> extends Schema<Set<T>> {
 export { Set_ as Set }
 
 /**
- * @category Schema
+ * @category 2. Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

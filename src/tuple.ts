@@ -11,7 +11,7 @@ export interface TupleSchema<T> extends Schema<T> {
 }
 
 /**
- * @category Schema
+ * @category 2. Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

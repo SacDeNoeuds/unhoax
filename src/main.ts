@@ -7,25 +7,31 @@
  * @document ../guides/object-intersect-pick-omit.md
  */
 export { array, type ArraySchema } from './array'
+export { date } from './date'
 export { Enum } from './enum'
 export { fromPredicate } from './fromPredicate'
+export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
 export { Map, type MapSchema } from './Map'
 export { object, partial, type ObjectSchema } from './object'
 export { nil, nullable, optional, or } from './or'
 export type { ParseError, ParseIssue, ParseResult } from './ParseResult'
 export {
+  bigint,
   boolean,
   integer,
   literal,
   number,
   string,
+  symbol,
   unsafeInteger,
   unsafeNumber,
   untrimmedString,
   type Literal,
   type LiteralSchema,
 } from './primitives'
+export { record, type RecordSchema } from './record'
+export { fallback, recover } from './recover'
 export {
   between,
   greaterThan,

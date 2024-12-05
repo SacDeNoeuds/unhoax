@@ -22,14 +22,16 @@ export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
 }
 
 /**
- * @category Schema
+ * @category 2. Schema
  * @see {@link partial}
+ * @see {@link record}
+ * @see {@link Map}
  * @example Type-Driven
  * ```ts
  * import * as x from 'unhoax'
  *
  * type Person = { name: string, age: number }
- * const personSchema = h.object<Person>({
+ * const personSchema = x.object<Person>({
  *   name: x.string,
  *   age: x.number,
  * })
@@ -40,7 +42,9 @@ export function object<T extends Record<string, Schema<any>>>(
   name?: string,
 ): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }>
 /**
- * @category Schema
+ * @category 2. Schema
+ * @see {@link record}
+ * @see {@link Map}
  * @see {@link partial}
  * @example Type Inference
  * ```ts
@@ -82,7 +86,7 @@ export function object<T extends Record<string, any>>(
 }
 
 /**
- * @category Modifier
+ * @category 4. Modifier
  * @see {@link object}
  * @example
  * ```ts

@@ -3,7 +3,7 @@ import { failure, success } from './ParseResult'
 import type { Schema } from './Schema'
 
 /**
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -40,7 +40,7 @@ export function refine<T, S extends Schema<T>>(
 }
 
 /**
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -66,7 +66,7 @@ export const refineAs = refine as <T, U extends T>(
 ) => (schema: Schema<T>) => Schema<U>
 
 /**
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -99,7 +99,7 @@ export function greaterThan<T extends { valueOf(): number }>(
 }
 
 /**
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -132,7 +132,7 @@ export function lowerThan<T extends { valueOf(): number }>(
 }
 
 /**
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -171,7 +171,7 @@ export function between<T extends { valueOf(): number }>(
  * Commonly known: array, set, map and strings
  *
  * It could also be your own types.
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -210,7 +210,7 @@ export function nonEmpty<T extends { length: number } | { size: number }>(
  * Commonly known: array, set, map and strings
  *
  * It could also be your own types.
- * @category Refinement
+ * @category 3. Refinement
  * @example
  * ```ts
  * import * as x from 'unhoax'

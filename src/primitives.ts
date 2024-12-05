@@ -2,7 +2,13 @@ import { fromPredicate } from './fromPredicate'
 import { map, type Schema } from './Schema'
 
 /**
- * @category Schema
+ * @category 2. Schema
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.boolean.parse(true) // { success: true, value: true }
+ * ```
  */
 export const boolean = fromPredicate(
   'boolean',
@@ -10,7 +16,28 @@ export const boolean = fromPredicate(
 )
 
 /**
- * @category Schema
+ * @category 2. Schema
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.symbol.parse(Symbol.iterator)
+ * // { success: true, value: Symbol.iterator }
+ * ```
+ */
+export const symbol = fromPredicate(
+  'symbol',
+  (input) => typeof input === 'symbol',
+)
+
+/**
+ * @category Unsafe Schema
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.untrimmedString.parse('  hello  ') // '  hello  '
+ * ```
  */
 export const untrimmedString = fromPredicate(
   'string',
@@ -19,7 +46,15 @@ export const untrimmedString = fromPredicate(
 
 const trim = map((str: string) => str.trim())
 /**
- * @category Schema
+ * This also trims the string. If you do not want this behavior,
+ * explicitly use {@link untrimmedString}
+ * @category 2. Schema
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.untrimmedString.parse('  hello  ') // '  hello  '
+ * ```
  */
 export const string = trim(untrimmedString)
 
@@ -29,8 +64,14 @@ export const string = trim(untrimmedString)
  *
  * Basically, it accepts anything passing the check `Number.isFinite`.
  *
- * @category Schema
+ * @category 2. Schema
  * @see {@link unsafeNumber}
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.number.parse(1) // { success: true, value: 1 }
+ * ```
  */
 export const number = fromPredicate<number>(
   'number',
@@ -41,7 +82,7 @@ export const number = fromPredicate<number>(
  * ⚠️ valid inputs are `Infinity`, `NaN` and unsafe integers.<br>
  * Basically, anything which passes the check `typeof x = 'number'`.
  *
- * @category Schema
+ * @category Unsafe Schema
  * @see {@link number}
  */
 export const unsafeNumber = fromPredicate<number>(
@@ -52,10 +93,16 @@ export const unsafeNumber = fromPredicate<number>(
 /**
  * it accepts anything passing the check `Number.isSafeInteger`.
  *
- * @category Schema
+ * @category 2. Schema
  * @see {@link number}
  * @see {@link unsafeInteger}
  * @see {@link unsafeNumber}
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.integer.parse(1) // { success: true, value: 1 }
+ * ```
  */
 export const integer = fromPredicate<number>(
   'integer',
@@ -64,7 +111,7 @@ export const integer = fromPredicate<number>(
 /**
  * it accepts anything passing the check `Number.isInteger`.
  *
- * @category Schema
+ * @category Unsafe Schema
  * @see {@link integer}
  * @see {@link number}
  * @see {@link unsafeNumber}
@@ -72,6 +119,21 @@ export const integer = fromPredicate<number>(
 export const unsafeInteger = fromPredicate<number>(
   'unsafeInteger',
   Number.isInteger as (input: unknown) => input is number,
+)
+
+/**
+ * @category 2. Schema
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.bigint.parse(BigInt(12)) // { success: true, value: 12n }
+ * x.bigint.parse(BigInt('12')) // { success: true, value: 12n }
+ * ```
+ */
+export const bigint = fromPredicate(
+  'bigint',
+  (input) => typeof input === 'bigint',
 )
 
 /** @ignore */
@@ -89,7 +151,7 @@ export interface LiteralSchema<L> extends Schema<L> {
 }
 
 /**
- * @category Schema
+ * @category 2. Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

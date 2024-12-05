@@ -1,7 +1,7 @@
 import type { Schema } from './Schema'
 
 /**
- * @category Parsing
+ * @category 1. Parsing
  * @example
  * ```ts
  * import * as x from 'unhoax'

@@ -9,7 +9,7 @@ export interface Schema<T, Input = unknown> {
   readonly name: string
   readonly refinements?: string[]
   /**
-   * @category Parsing
+   * @category 1. Parsing
    * @see {@link ParseResult}
    */
   readonly parse: (input: Input, context?: ParseContext) => ParseResult<T>
@@ -22,9 +22,13 @@ export interface Schema<T, Input = unknown> {
 export type TypeOfSchema<T> = T extends Schema<infer U> ? U : never
 
 /** @ignore */
-export function map<Input, Output>(mapper: (input: Input) => Output) {
+export function map<Input, Output>(
+  mapper: (input: Input) => Output,
+  name?: string,
+) {
   return <I = unknown>(schema: Schema<Input, I>): Schema<Output, I> => ({
     ...schema,
+    name: name ?? schema.name,
     parse: (input, context = createParseContext(schema.name, input)) => {
       const result = schema.parse(input, context)
       return result.success ? success(context, mapper(result.value)) : result
