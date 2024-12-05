@@ -8,7 +8,7 @@ import type { Schema } from './Schema'
  * ```ts
  * import * as x from 'unhoax'
  *
- * declare const isEmail: (input: string) => input is string
+ * declare const isEmail: (input: string) => boolean
  *
  * const refineAsEmail = x.refine('Email', isEmail)
  * const emailSchema = refineAsEmail(x.string) // Schema<string>
@@ -22,7 +22,7 @@ import type { Schema } from './Schema'
  * )
  * ```
  */
-export function refine<T, S extends Schema<T, any>>(
+export function refine<T, S extends Schema<T, unknown>>(
   name: string,
   refine: (value: T) => boolean,
 ) {
@@ -54,10 +54,10 @@ export function refine<T, S extends Schema<T, any>>(
  * // or, using pipe:
  * import pipe from 'just-pipe'
  *
- * const emailSchema: Schema<Email> = pipe(
+ * const emailSchema = pipe(
  *   x.string,
  *   x.refineAs('Email', isEmail),
- * )
+ * ) // Schema<Email>
  * ```
  */
 export const refineAs = refine as <T, U extends T>(
@@ -251,4 +251,21 @@ export function size<T extends { size: number } | { length: number }>(options: {
     const max = options.max ?? Infinity
     return size >= min && size <= max
   })
+}
+
+/**
+ * @category 3. Refinement
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * const pattern = x.pattern(/^https?:\/\/.+/)
+ * const withUrlPattern = pattern(x.string)
+ *
+ * const url = withUrlPattern(x.string)
+ * // Schema<string>
+ * ```
+ */
+export function pattern(regexp: RegExp) {
+  return refine<string, Schema<string>>('pattern', (s) => regexp.test(s))
 }

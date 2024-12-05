@@ -1,12 +1,24 @@
 import type { ParseIssue } from './ParseResult'
 
-/** @ignore */
+/**
+ * @category 5. Advanced Usage / Core
+ * @see {@link createParseContext}
+ * @see {@link failure}
+ * @see {@link success}
+ */
 export interface ParseContext {
   rootInput: unknown
   rootSchemaName: string
   path: PropertyKey[] // how nested we are. PropertyKey = string | number | symbol
   issues: ParseIssue[] // accumulated issues.
 }
+
+/**
+ * @category 5. Advanced Usage / Core
+ * @see {@link ParseContext}
+ * @see {@link failure}
+ * @see {@link success}
+ */
 export function createParseContext(
   rootSchemaName: string,
   rootInput: unknown,

@@ -41,6 +41,23 @@ export type ParseIssue = {
   path: PropertyKey[]
 }
 
+/**
+ * @category 5. Advanced Usage / Core
+ * @see {@link ParseResult}
+ * @see {@link createParseContext}
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * const customSchema: x.Schema<string> = {
+ *   name: 'myType',
+ *   parse: (input, context = createParseContext('myType', input)) => {
+ *      if (typeof input === 'string') return x.success(context, input)
+ *      else return x.failure(context, 'myType', input)
+ *   }
+ * }
+ * ```
+ */
 export function failure(
   context: ParseContext,
   schemaName: string,
@@ -57,6 +74,24 @@ export function failure(
     },
   }
 }
+
+/**
+ * @category 5. Advanced Usage / Core
+ * @see {@link ParseResult}
+ * @see {@link createParseContext}
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * const customSchema: x.Schema<string> = {
+ *   name: 'myType',
+ *   parse: (input, context = createParseContext('myType', input)) => {
+ *      if (typeof input === 'string') return x.success(context, input)
+ *      else return x.failure(context, 'myType', input)
+ *   }
+ * }
+ * ```
+ */
 export function success<T>(context: ParseContext, value: T): ParseResult<T> {
   return context.issues.length === 0
     ? { success: true, value }

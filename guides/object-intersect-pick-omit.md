@@ -1,5 +1,5 @@
 ---
-title: Guide – intersect, pick & omit
+title: Intersect, pick & omit from object schemas
 category: Guide
 ---
 
@@ -62,7 +62,8 @@ typeof result: {
 import * as x from "unhoax"
 import pick from "just-pick"
 
-const withNameOnly = x.object(pick(person.props, ["name"]))
+const nameOnlyProps = pick(person.props, ["name"])
+const withNameOnly = x.object(nameOnlyProps)
 
 const result = withNameOnly.parse({ name: 'toto', age: 21 })
 
@@ -78,7 +79,8 @@ typeof result: {
 import * as x from "unhoax";
 import omit from "just-omit";
 
-const withoutAge = x.object(omit(person.props, ["age"]));
+const withoutAgeProps = omit(person.props, ["age"])
+const withoutAge = x.object(withoutAgeProps);
 
 const result = withoutAge.parse({ name: 'toto', age: 21 })
 
@@ -87,10 +89,3 @@ typeof result: {
   value: { name: 'toto' },
 }
 ```
-
-<!-- ```ts
-const partial1 = x.partial(person);
-partial1.parse({}); // { result: true, value: {} }
-const partial2 = x.partial(person, ["age"]);
-partial2.parse({ name: "Jack" }); // { result: true, value: { name: "Jack" } }
-``` -->

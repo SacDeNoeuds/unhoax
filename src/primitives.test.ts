@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { bigint, literal, number, string, symbol } from './primitives'
+import { literal, number, string, symbol } from './primitives'
 import type { Schema } from './Schema'
 
 describe('fromPredicate', () => {
@@ -12,7 +12,6 @@ describe('fromPredicate', () => {
     { schema: number, validInput: 42, invalidInput: 'hello world' },
     { schema: literal(42), validInput: 42, invalidInput: 43 },
     { schema: symbol, validInput: Symbol.iterator, invalidInput: 'h' },
-    { schema: bigint, validInput: 12n, invalidInput: 'h' },
   ])('$schema.name', ({ schema, invalidInput, validInput }) => {
     it('parses a valid input', () => {
       expect(schema.parse(validInput)).toEqual({

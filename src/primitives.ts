@@ -2,6 +2,21 @@ import { fromPredicate } from './fromPredicate'
 import { map, type Schema } from './Schema'
 
 /**
+ * Never-failing schema.
+ * @category 2. Schema
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * x.unknown.parse(true) // { success: true, value: true }
+ * ```
+ */
+export const unknown: Schema<unknown> = {
+  name: 'unknown',
+  parse: (input) => ({ success: true, value: input }),
+}
+
+/**
  * @category 2. Schema
  * @example
  * ```ts
@@ -119,21 +134,6 @@ export const integer = fromPredicate<number>(
 export const unsafeInteger = fromPredicate<number>(
   'unsafeInteger',
   Number.isInteger as (input: unknown) => input is number,
-)
-
-/**
- * @category 2. Schema
- * @example
- * ```ts
- * import * as x from 'unhoax'
- *
- * x.bigint.parse(BigInt(12)) // { success: true, value: 12n }
- * x.bigint.parse(BigInt('12')) // { success: true, value: 12n }
- * ```
- */
-export const bigint = fromPredicate(
-  'bigint',
-  (input) => typeof input === 'bigint',
 )
 
 /** @ignore */

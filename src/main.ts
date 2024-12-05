@@ -1,12 +1,15 @@
 /**
- * @packageDocumentation
- * @categoryDescription Component
- * React Components -- This description is added with the `@categoryDescription` tag
- * on the entry point in src/index.ts
- *
+ * @module
  * @document ../guides/object-intersect-pick-omit.md
+ * @document ../guides/custom-type-email.md
+ * @document ../guides/custom-type-first-name.md
+ * @document ../guides/migrating-from-x.md
+ *
+ * @__document ../guides/coercing-a-date-from-json.md
+ * @__document ../guides/coercing-a-bigint-from-json.md
  */
 export { array, type ArraySchema } from './array'
+export { bigint } from './bigint'
 export { date } from './date'
 export { Enum } from './enum'
 export { fromPredicate } from './fromPredicate'
@@ -15,9 +18,15 @@ export { lazy } from './lazy'
 export { Map, type MapSchema } from './Map'
 export { object, partial, type ObjectSchema } from './object'
 export { nil, nullable, optional, or } from './or'
-export type { ParseError, ParseIssue, ParseResult } from './ParseResult'
+export { createParseContext, type ParseContext } from './ParseContext'
 export {
-  bigint,
+  failure,
+  success,
+  type ParseError,
+  type ParseIssue,
+  type ParseResult,
+} from './ParseResult'
+export {
   boolean,
   integer,
   literal,
@@ -37,11 +46,13 @@ export {
   greaterThan,
   lowerThan,
   nonEmpty,
+  pattern,
   refine,
   refineAs,
   size,
 } from './refine'
 export {
+  flatMap,
   map,
   type InputOfSchema as InputOf,
   type Schema,
