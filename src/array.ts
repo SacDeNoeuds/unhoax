@@ -7,8 +7,8 @@ import type { Schema } from './Schema'
  * @category Schema Definition
  * @see {@link array}
  */
-export interface ArraySchema<T> extends Schema<T[]> {
-  readonly item: Schema<T>
+export interface ArraySchema<T, Input = unknown> extends Schema<T[]> {
+  readonly item: Schema<T, Input>
 }
 
 /**
@@ -22,7 +22,9 @@ export interface ArraySchema<T> extends Schema<T[]> {
  * const result = schema.parse(['a', 'b'])
  * ```
  */
-export function array<T>(itemSchema: Schema<T>): ArraySchema<T> {
+export function array<T, Input = unknown>(
+  itemSchema: Schema<T>,
+): ArraySchema<T, Input> {
   const name = `Array<${itemSchema.name}>`
   return {
     name,

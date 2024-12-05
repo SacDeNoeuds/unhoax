@@ -6,7 +6,7 @@ import type { Schema } from './Schema'
  * @category Schema Definition
  * @see {@link tuple}
  */
-export interface TupleSchema<T> extends Schema<T> {
+export interface TupleSchema<T, Input = unknown> extends Schema<T, Input> {
   readonly items: { [Key in keyof T]: Schema<T> }
 }
 
@@ -21,9 +21,9 @@ export interface TupleSchema<T> extends Schema<T> {
  * result // ['a', 1]
  * ```
  */
-export function tuple<T extends [any, ...any[]]>(
+export function tuple<T extends [any, ...any[]], Input = unknown>(
   ...items: { [K in keyof T]: Schema<T[K]> }
-): TupleSchema<T> {
+): TupleSchema<T, Input> {
   const name = `[${items.map((schema) => schema.name).join(', ')}]`
   return {
     name,

@@ -6,7 +6,7 @@ import type { Schema } from './Schema'
  * @category Schema Definition
  * @see {@link Set}
  */
-export interface SetSchema<T> extends Schema<Set<T>> {
+export interface SetSchema<T, Input = unknown> extends Schema<Set<T>, Input> {
   readonly item: Schema<T>
 }
 
@@ -23,7 +23,7 @@ export { Set_ as Set }
  * result // { success: true, value: Set { 'a', 'b' } }
  * ```
  */
-function Set_<T>(item: Schema<T>): SetSchema<T> {
+function Set_<T, Input = unknown>(item: Schema<T>): SetSchema<T, Input> {
   const name = `Set<${item.name}>`
   return {
     name,

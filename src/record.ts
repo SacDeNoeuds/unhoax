@@ -34,10 +34,10 @@ export interface RecordSchema<
  * schema.parse({ hello: 42 }) // { success: true, value: { hello: 42 } }
  * ```
  */
-export function record<T extends Record<PropertyKey, any>>(
+export function record<T extends Record<PropertyKey, any>, Input = unknown>(
   key: Schema<keyof T>,
   value: Schema<T[keyof T]>,
-): RecordSchema<T> {
+): RecordSchema<T, Input> {
   const name = `Record<${key.name}, ${value.name}>`
   return {
     name,

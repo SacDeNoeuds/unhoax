@@ -146,7 +146,7 @@ const isLiteral =
 /**
  * @category Schema Definition
  */
-export interface LiteralSchema<L> extends Schema<L> {
+export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
   literals: L[]
 }
 
@@ -162,9 +162,9 @@ export interface LiteralSchema<L> extends Schema<L> {
  * // Schema<'a' | 42 | true | null | undefined>
  * ```
  */
-export function literal<L extends [Literal, ...Literal[]]>(
+export function literal<L extends [Literal, ...Literal[]], Input = unknown>(
   ...literals: L
-): LiteralSchema<L[number]> {
+): LiteralSchema<L[number], Input> {
   return {
     ...fromPredicate('literal', isLiteral(...literals)),
     literals,

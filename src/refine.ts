@@ -22,7 +22,7 @@ import type { Schema } from './Schema'
  * )
  * ```
  */
-export function refine<T, S extends Schema<T>>(
+export function refine<T, S extends Schema<T, any>>(
   name: string,
   refine: (value: T) => boolean,
 ) {
@@ -63,7 +63,7 @@ export function refine<T, S extends Schema<T>>(
 export const refineAs = refine as <T, U extends T>(
   name: string,
   predicate: (value: T) => value is U,
-) => (schema: Schema<T>) => Schema<U>
+) => <Input = unknown>(schema: Schema<T, Input>) => Schema<U, Input>
 
 /**
  * @category 3. Refinement
@@ -90,7 +90,7 @@ export const refineAs = refine as <T, U extends T>(
  */
 export function greaterThan<T extends { valueOf(): number }>(
   min: T,
-  reason: string,
+  reason = `> ${min}`,
 ) {
   return refine<T, Schema<T>>(
     reason,
@@ -123,7 +123,7 @@ export function greaterThan<T extends { valueOf(): number }>(
  */
 export function lowerThan<T extends { valueOf(): number }>(
   max: T,
-  reason: string,
+  reason = `< ${max}`,
 ) {
   return refine<T, Schema<T>>(
     reason,
@@ -159,7 +159,7 @@ export function lowerThan<T extends { valueOf(): number }>(
 export function between<T extends { valueOf(): number }>(
   min: T,
   max: T,
-  reason: string,
+  reason = `${min} < T < ${max}`,
 ) {
   return refine<T, Schema<T>>(reason, (value) => {
     return value.valueOf() > min.valueOf() && value.valueOf() < max.valueOf()
@@ -242,9 +242,10 @@ export function nonEmpty<T extends { length: number } | { size: number }>(
 export function size<T extends { size: number } | { length: number }>(options: {
   min?: number
   max?: number
-  reason: string
+  reason?: string
 }) {
-  return refine<T, Schema<T>>(options.reason, (value) => {
+  const reason = options.reason ?? `Size: ${options.min} - ${options.max}`
+  return refine<T, Schema<T>>(reason, (value) => {
     const size: number = (value as any)?.length ?? (value as any)?.size
     const min = options.min ?? -Infinity
     const max = options.max ?? Infinity

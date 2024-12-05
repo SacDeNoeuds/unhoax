@@ -6,7 +6,8 @@ import type { Schema } from './Schema'
  * @category Schema Definition
  * @see {@link Map}
  */
-export interface MapSchema<T extends Map<any, any>> extends Schema<T> {
+export interface MapSchema<T extends Map<any, any>, Input = unknown>
+  extends Schema<T, Input> {
   readonly key: Schema<MapKey<T>>
   readonly value: Schema<MapValue<T>>
 }
@@ -31,10 +32,10 @@ export { Map_ as Map }
  * result // Map { 1 => 'Jack', 2 => 'Mary' }
  * ```
  */
-function Map_<T extends Map<PropertyKey, any>>(
+function Map_<T extends Map<PropertyKey, any>, Input = unknown>(
   key: Schema<MapKey<T>>,
   value: Schema<MapValue<T>>,
-): MapSchema<T> {
+): MapSchema<T, Input> {
   const name = `Map<${key.name}, ${value.name}>`
   return {
     name,

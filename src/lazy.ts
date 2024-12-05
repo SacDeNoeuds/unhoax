@@ -15,7 +15,9 @@ import type { Schema } from './Schema'
  * })
  * ```
  */
-export function lazy<T>(getSchema: () => Schema<T>): Schema<T> {
+export function lazy<T, Input = unknown>(
+  getSchema: () => Schema<T, Input>,
+): Schema<T, Input> {
   let name = 'lazy'
   let refinements: string[] | undefined
   return {

@@ -19,7 +19,13 @@ export interface Schema<T, Input = unknown> {
  * @category Schema Definition
  * @see {@link Schema}
  */
-export type TypeOfSchema<T> = T extends Schema<infer U> ? U : never
+export type TypeOfSchema<T> = T extends Schema<infer U, any> ? U : never
+
+/**
+ * @category Schema Definition
+ * @see {@link Schema}
+ */
+export type InputOfSchema<T> = T extends Schema<any, infer U> ? U : never
 
 /** @ignore */
 export function map<Input, Output>(

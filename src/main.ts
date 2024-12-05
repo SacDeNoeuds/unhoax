@@ -41,7 +41,12 @@ export {
   refineAs,
   size,
 } from './refine'
-export { map, type Schema, type TypeOfSchema as TypeOf } from './Schema'
+export {
+  map,
+  type InputOfSchema as InputOf,
+  type Schema,
+  type TypeOfSchema as TypeOf,
+} from './Schema'
 export { Set, type SetSchema } from './Set'
 export { tuple, type TupleSchema } from './tuple'
 export {

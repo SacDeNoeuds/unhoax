@@ -17,7 +17,8 @@ export function isObject(input: unknown): input is Record<string, unknown> {
  * @category Schema Definition
  * @see {@link object}
  */
-export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
+export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
+  extends Schema<T, Input> {
   readonly props: PropsOf<T>
 }
 
@@ -37,10 +38,10 @@ export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
  * })
  * ```
  */
-export function object<T extends Record<string, Schema<any>>>(
+export function object<T extends Record<string, Schema<any>>, Input = unknown>(
   props: T,
   name?: string,
-): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }>
+): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
 /**
  * @category 2. Schema
  * @see {@link record}
@@ -58,14 +59,14 @@ export function object<T extends Record<string, Schema<any>>>(
  * type Person = x.TypeOf<typeof personSchema>
  * ```
  */
-export function object<T extends Record<string, any>>(
+export function object<T extends Record<string, any>, Input = unknown>(
   props: PropsOf<T>,
   name?: string,
-): ObjectSchema<T>
-export function object<T extends Record<string, any>>(
+): ObjectSchema<T, Input>
+export function object<T extends Record<string, any>, Input = unknown>(
   props: PropsOf<T>,
   name?: string,
-): ObjectSchema<T> {
+): ObjectSchema<T, Input> {
   name ||= 'object'
   return {
     name,
