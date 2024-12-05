@@ -1,6 +1,6 @@
-import { createParseContext } from "./ParseContext";
-import { failure, success } from "./ParseResult";
-import type { Schema } from "./Schema";
+import { createParseContext } from './ParseContext'
+import { failure, success } from './ParseResult'
+import type { Schema } from './Schema'
 
 /**
  * @category Refinement
@@ -30,13 +30,13 @@ export function refine<T, S extends Schema<T>>(
     ...schema,
     refinements: [...(schema.refinements ?? []), name],
     parse: (input, context = createParseContext(schema.name, input)) => {
-      const result = schema.parse(input, context);
-      if (!result.success) return result;
+      const result = schema.parse(input, context)
+      if (!result.success) return result
       return refine(result.value)
         ? success(context, result.value)
-        : failure(context, schema.name, input, name);
+        : failure(context, schema.name, input, name)
     },
-  });
+  })
 }
 
 /**
@@ -63,7 +63,7 @@ export function refine<T, S extends Schema<T>>(
 export const refineAs = refine as <T, U extends T>(
   name: string,
   predicate: (value: T) => value is U,
-) => (schema: Schema<T>) => Schema<U>;
+) => (schema: Schema<T>) => Schema<U>
 
 /**
  * @category Refinement
@@ -95,7 +95,7 @@ export function greaterThan<T extends { valueOf(): number }>(
   return refine<T, Schema<T>>(
     reason,
     (value) => value.valueOf() > min.valueOf(),
-  );
+  )
 }
 
 /**
@@ -128,7 +128,7 @@ export function lowerThan<T extends { valueOf(): number }>(
   return refine<T, Schema<T>>(
     reason,
     (value) => value.valueOf() < max.valueOf(),
-  );
+  )
 }
 
 /**
@@ -162,8 +162,8 @@ export function between<T extends { valueOf(): number }>(
   reason: string,
 ) {
   return refine<T, Schema<T>>(reason, (value) => {
-    return value.valueOf() > min.valueOf() && value.valueOf() < max.valueOf();
-  });
+    return value.valueOf() > min.valueOf() && value.valueOf() < max.valueOf()
+  })
 }
 
 /**
@@ -200,9 +200,9 @@ export function between<T extends { valueOf(): number }>(
  * ```
  */
 export function nonEmpty<T extends { length: number } | { size: number }>(
-  reason = "NonEmpty",
+  reason = 'NonEmpty',
 ) {
-  return size<T>({ min: 1, reason });
+  return size<T>({ min: 1, reason })
 }
 
 /**
@@ -240,14 +240,14 @@ export function nonEmpty<T extends { length: number } | { size: number }>(
  * ```
  */
 export function size<T extends { size: number } | { length: number }>(options: {
-  min?: number;
-  max?: number;
-  reason: string;
+  min?: number
+  max?: number
+  reason: string
 }) {
   return refine<T, Schema<T>>(options.reason, (value) => {
-    const size: number = (value as any)?.length ?? (value as any)?.size;
-    const min = options.min ?? -Infinity;
-    const max = options.max ?? Infinity;
-    return size >= min && size <= max;
-  });
+    const size: number = (value as any)?.length ?? (value as any)?.size
+    const min = options.min ?? -Infinity
+    const max = options.max ?? Infinity
+    return size >= min && size <= max
+  })
 }

@@ -1,6 +1,6 @@
-import { literal } from "./primitives";
-import type { Schema } from "./Schema";
-import { union } from "./union";
+import { literal } from './primitives'
+import type { Schema } from './Schema'
+import { union } from './union'
 
 /**
  * @category Modifier
@@ -18,7 +18,7 @@ import { union } from "./union";
  * const schema = pipe(x.number, x.or(x.string)) // Schema<number | string>
  */
 export function or<B>(b: Schema<B>) {
-  return <A>(a: Schema<A>) => union(a, b);
+  return <A>(a: Schema<A>) => union(a, b)
 }
 
 /**
@@ -32,7 +32,7 @@ export function or<B>(b: Schema<B>) {
  *
  * const schema = x.optional(x.string) // Schema<string | undefined>
  */
-export const optional = or(literal(undefined));
+export const optional = or(literal(undefined))
 
 /**
  * Equivalent of `or(literal(undefined, null))` (see {@link or})
@@ -45,7 +45,7 @@ export const optional = or(literal(undefined));
  *
  * const schema = x.nil(x.string) // Schema<string | undefined | null>
  */
-export const nil = or(literal(undefined, null));
+export const nil = or(literal(undefined, null))
 
 /**
  * Equivalent of `or(literal(null))` (see {@link or})
@@ -58,4 +58,4 @@ export const nil = or(literal(undefined, null));
  *
  * const schema = x.nullable(x.string) // Schema<string | null>
  */
-export const nullable = or(literal(null));
+export const nullable = or(literal(null))

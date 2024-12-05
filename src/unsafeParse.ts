@@ -1,4 +1,4 @@
-import type { Schema } from "./Schema";
+import type { Schema } from './Schema'
 
 /**
  * @category Parsing
@@ -22,7 +22,7 @@ export function unsafeParse<T, Input = unknown>(
   schema: Schema<T, Input>,
   input: Input,
 ): T {
-  const result = schema.parse(input);
-  if (result.success) return result.value;
-  throw new Error("ParseError", { cause: result.error });
+  const result = schema.parse(input)
+  if (result.success) return result.value
+  throw new Error('ParseError', { cause: result.error })
 }

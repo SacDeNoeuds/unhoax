@@ -1,8 +1,8 @@
-import type { ObjectSchema } from "./object";
-import { createParseContext } from "./ParseContext";
-import { failure, success } from "./ParseResult";
-import type { LiteralSchema } from "./primitives";
-import type { Schema, TypeOfSchema } from "./Schema";
+import type { ObjectSchema } from './object'
+import { createParseContext } from './ParseContext'
+import { failure, success } from './ParseResult'
+import type { LiteralSchema } from './primitives'
+import type { Schema, TypeOfSchema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -10,7 +10,7 @@ import type { Schema, TypeOfSchema } from "./Schema";
  * @see {@link discriminatedUnion}
  */
 export interface UnionSchema<T> extends Schema<T> {
-  readonly schemas: Schema<unknown>[];
+  readonly schemas: Schema<unknown>[]
 }
 function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
   name: string,
@@ -22,12 +22,12 @@ function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
     refinements: [],
     parse: (input, context = createParseContext(name, input)) => {
       for (const schema of schemas) {
-        const result = schema.parse(input);
-        if (result.success) return success(context, result.value);
+        const result = schema.parse(input)
+        if (result.success) return success(context, result.value)
       }
-      return failure(context, name, input);
+      return failure(context, name, input)
     },
-  };
+  }
 }
 
 /**
@@ -46,8 +46,8 @@ function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
 export function union<T extends [Schema<any>, ...Schema<any>[]]>(
   ...schemas: T
 ): UnionSchema<TypeOfSchema<T[number]>> {
-  const name = schemas.map((schema) => schema.name).join(" | ");
-  return namedUnion(name, schemas);
+  const name = schemas.map((schema) => schema.name).join(' | ')
+  return namedUnion(name, schemas)
 }
 
 // /**
@@ -81,7 +81,7 @@ export function discriminatedUnion<
   T extends [ObjectSchema<any>, ...ObjectSchema<any>[]],
 >(
   schemas: T,
-  discriminant: keyof T[number]["props"],
+  discriminant: keyof T[number]['props'],
 ): UnionSchema<TypeOfSchema<T[number]>> {
   const name = schemas
     .map(
@@ -89,6 +89,6 @@ export function discriminatedUnion<
         (schema.props[discriminant] as LiteralSchema<string>)?.literals[0] ??
         schema.name,
     )
-    .join(" | ");
-  return namedUnion(name, schemas);
+    .join(' | ')
+  return namedUnion(name, schemas)
 }

@@ -1,27 +1,27 @@
-import { fromPredicate } from "./fromPredicate";
-import { map, type Schema } from "./Schema";
+import { fromPredicate } from './fromPredicate'
+import { map, type Schema } from './Schema'
 
 /**
  * @category Schema
  */
 export const boolean = fromPredicate(
-  "boolean",
-  (input) => typeof input === "boolean",
-);
+  'boolean',
+  (input) => typeof input === 'boolean',
+)
 
 /**
  * @category Schema
  */
 export const untrimmedString = fromPredicate(
-  "string",
-  (input) => typeof input === "string",
-);
+  'string',
+  (input) => typeof input === 'string',
+)
 
-const trim = map((str: string) => str.trim());
+const trim = map((str: string) => str.trim())
 /**
  * @category Schema
  */
-export const string = trim(untrimmedString);
+export const string = trim(untrimmedString)
 
 /**
  * This schema only accepts **finite** numbers for safety.<br>
@@ -33,9 +33,9 @@ export const string = trim(untrimmedString);
  * @see {@link unsafeNumber}
  */
 export const number = fromPredicate<number>(
-  "number",
+  'number',
   Number.isFinite as (input: unknown) => input is number,
-);
+)
 
 /**
  * ⚠️ valid inputs are `Infinity`, `NaN` and unsafe integers.<br>
@@ -45,9 +45,9 @@ export const number = fromPredicate<number>(
  * @see {@link number}
  */
 export const unsafeNumber = fromPredicate<number>(
-  "number",
-  (input) => typeof input === "number",
-);
+  'number',
+  (input) => typeof input === 'number',
+)
 
 /**
  * it accepts anything passing the check `Number.isSafeInteger`.
@@ -58,9 +58,9 @@ export const unsafeNumber = fromPredicate<number>(
  * @see {@link unsafeNumber}
  */
 export const integer = fromPredicate<number>(
-  "integer",
+  'integer',
   Number.isSafeInteger as (input: unknown) => input is number,
-);
+)
 /**
  * it accepts anything passing the check `Number.isInteger`.
  *
@@ -70,21 +70,22 @@ export const integer = fromPredicate<number>(
  * @see {@link unsafeNumber}
  */
 export const unsafeInteger = fromPredicate<number>(
-  "unsafeInteger",
+  'unsafeInteger',
   Number.isInteger as (input: unknown) => input is number,
-);
+)
 
-export type Literal = string | number | boolean | null | undefined;
+/** @ignore */
+export type Literal = string | number | boolean | null | undefined
 const isLiteral =
   <L extends [Literal, ...Literal[]]>(...literals: L) =>
   (value: unknown): value is L[number] =>
-    literals.some((literal) => value === literal);
+    literals.some((literal) => value === literal)
 
 /**
  * @category Schema Definition
  */
 export interface LiteralSchema<L> extends Schema<L> {
-  literals: L[];
+  literals: L[]
 }
 
 /**
@@ -103,7 +104,7 @@ export function literal<L extends [Literal, ...Literal[]]>(
   ...literals: L
 ): LiteralSchema<L[number]> {
   return {
-    ...fromPredicate("literal", isLiteral(...literals)),
+    ...fromPredicate('literal', isLiteral(...literals)),
     literals,
-  };
+  }
 }

@@ -1,33 +1,33 @@
 /** @type {Partial<import('typedoc').TypeDocOptions>} */
 const config = {
-  entryPoints: ["./src/main.ts"],
-  sortEntryPoints: false,
-  out: "docs",
-  excludeNotDocumented: true,
-  excludeReferences: true,
-  excludePrivate: true,
-  excludeInternal: true,
-  excludeExternals: true,
-  excludeProtected: true,
-  excludePrivate: true,
+  name: 'unhoax',
+  entryPoints: ['./src/main.ts'],
+  plugin: ['typedoc-unhoax-theme'],
+  out: 'docs',
   includeVersion: true,
   searchInComments: true,
   searchInDocuments: true,
+  categorizeByGroup: false,
   navigation: {
     compactFolders: true,
-    includeFolders: true,
-    includeGroups: false,
     includeCategories: true,
     excludeReferences: true,
+    includeGroups: false,
   },
   visibilityFilters: {},
   useFirstParagraphOfCommentAsSummary: true,
   categorizeByGroup: false,
   cleanOutputDir: true,
-  customCss: "./guides/custom.css",
-  projectDocuments: ["./guides/*.md"],
-  groupOrder: ["Guide", "Parsing", "Schema", "*", "Schema Definition"],
-  sort: ["documents-first", "alphabetical"],
-};
+  groupOrder: [
+    'Guide',
+    'Parsing',
+    'Schema',
+    'Modifier',
+    'Refinement',
+    'Schema Definition',
+    '*',
+  ],
+  sort: ['documents-first', 'alphabetical'],
+}
 
-export default config;
+export default config

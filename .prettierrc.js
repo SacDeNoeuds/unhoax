@@ -2,10 +2,10 @@
 export default {
   singleQuote: true,
   semi: false,
-  quoteProps: "consistent",
+  quoteProps: 'consistent',
   printWidth: 80,
   tabWidth: 2,
-  trailingComma: "all",
+  trailingComma: 'all',
   bracketSpacing: true,
-  arrowParens: "always",
-};
+  arrowParens: 'always',
+}

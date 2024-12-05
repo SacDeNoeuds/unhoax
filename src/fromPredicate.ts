@@ -1,8 +1,8 @@
-import { createParseContext } from "./ParseContext";
-import { failure, success } from "./ParseResult";
-import type { Schema } from "./Schema";
+import { createParseContext } from './ParseContext'
+import { failure, success } from './ParseResult'
+import type { Schema } from './Schema'
 
-type Predicate<Input, T extends Input> = (input: Input) => input is T;
+type Predicate<Input, T extends Input> = (input: Input) => input is T
 
 /**
  * Utility to create schemas.<br>
@@ -37,5 +37,5 @@ export function fromPredicate<T extends Input, Input = unknown>(
       predicate(input)
         ? success(context, input)
         : failure(context, name, input),
-  };
+  }
 }

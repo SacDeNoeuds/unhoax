@@ -1,17 +1,17 @@
-import type { ParseIssue } from "./ParseResult";
+import type { ParseIssue } from './ParseResult'
 
 /** @ignore */
 export interface ParseContext {
-  rootInput: unknown;
-  rootSchemaName: string;
-  path: PropertyKey[]; // how nested we are. PropertyKey = string | number | symbol
-  issues: ParseIssue[]; // accumulated issues.
+  rootInput: unknown
+  rootSchemaName: string
+  path: PropertyKey[] // how nested we are. PropertyKey = string | number | symbol
+  issues: ParseIssue[] // accumulated issues.
 }
 export function createParseContext(
   rootSchemaName: string,
   rootInput: unknown,
 ): ParseContext {
-  return { rootSchemaName, rootInput, path: [], issues: [] };
+  return { rootSchemaName, rootInput, path: [], issues: [] }
 }
 
 export function withPathSegment(
@@ -19,5 +19,5 @@ export function withPathSegment(
   segment: PropertyKey,
 ): ParseContext {
   // explicitly DO NOT CLONE context.issues because errors are **pushed** to the same array.
-  return { ...context, path: [...context.path, segment] };
+  return { ...context, path: [...context.path, segment] }
 }

@@ -1,11 +1,19 @@
-export { array, type ArraySchema } from "./array";
-export { Enum } from "./enum";
-export { fromPredicate } from "./fromPredicate";
-export { lazy } from "./lazy";
-export { Map, type MapSchema } from "./Map";
-export { object, partial, type ObjectSchema } from "./object";
-export { nil, nullable, optional, or } from "./or";
-export type { ParseError, ParseIssue, ParseResult } from "./ParseResult";
+/**
+ * @packageDocumentation
+ * @categoryDescription Component
+ * React Components -- This description is added with the `@categoryDescription` tag
+ * on the entry point in src/index.ts
+ *
+ * @document ../guides/object-intersect-pick-omit.md
+ */
+export { array, type ArraySchema } from './array'
+export { Enum } from './enum'
+export { fromPredicate } from './fromPredicate'
+export { lazy } from './lazy'
+export { Map, type MapSchema } from './Map'
+export { object, partial, type ObjectSchema } from './object'
+export { nil, nullable, optional, or } from './or'
+export type { ParseError, ParseIssue, ParseResult } from './ParseResult'
 export {
   boolean,
   integer,
@@ -17,7 +25,7 @@ export {
   untrimmedString,
   type Literal,
   type LiteralSchema,
-} from "./primitives";
+} from './primitives'
 export {
   between,
   greaterThan,
@@ -26,14 +34,14 @@ export {
   refine,
   refineAs,
   size,
-} from "./refine";
-export { map, type Schema, type TypeOfSchema as TypeOf } from "./Schema";
-export { Set, type SetSchema } from "./Set";
-export { tuple, type TupleSchema } from "./tuple";
+} from './refine'
+export { map, type Schema, type TypeOfSchema as TypeOf } from './Schema'
+export { Set, type SetSchema } from './Set'
+export { tuple, type TupleSchema } from './tuple'
 export {
   discriminatedUnion,
   union,
   // type DiscriminatedUnionSchema,
   type UnionSchema,
-} from "./union";
-export { unsafeParse } from "./unsafeParse";
+} from './union'
+export { unsafeParse } from './unsafeParse'
