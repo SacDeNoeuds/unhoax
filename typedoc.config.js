@@ -1,5 +1,8 @@
+const isGithubActions = process.env.GITHUB_ACTIONS === 'true'
+
 /** @type {Partial<import('typedoc').TypeDocOptions>} */
 const config = {
+  basePath: isGithubActions ? './unhoax' : './docs',
   name: 'unhoax',
   entryPoints: ['./src/main.ts'],
   plugin: ['typedoc-unhoax-theme'],
@@ -15,16 +18,15 @@ const config = {
     includeGroups: false,
   },
   visibilityFilters: {},
-  useFirstParagraphOfCommentAsSummary: true,
-  categorizeByGroup: false,
   cleanOutputDir: true,
-  groupOrder: [
+  categoryOrder: [
     'Guide',
     'Parsing',
     'Schema',
     'Modifier',
     'Refinement',
     'Schema Definition',
+    'Advanced Usage / Core',
     '*',
   ],
   sort: ['documents-first', 'alphabetical'],
