@@ -1,4 +1,4 @@
-![Package Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*]) !![Total coverage](./badges/coverage-total.svg) <!-- ![Branches](./badges/coverage-branches.svg) ![Functions](./badges/coverage-functions.svg) ![Lines](./badges/coverage-lines.svg) ![Statements](./badges/coverage-statements.svg) -->
+![Package Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*]) ![Total coverage](./badges/coverage-total.svg) <!-- ![Branches](./badges/coverage-branches.svg) ![Functions](./badges/coverage-functions.svg) ![Lines](./badges/coverage-lines.svg) ![Statements](./badges/coverage-statements.svg) -->
 
 A safe-by-default schema library that is type/data-driven rather than schema-centric: you bring your entity types, we do not lose you with complex schema typings.
 
