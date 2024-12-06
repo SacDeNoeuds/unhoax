@@ -1,0 +1,19 @@
+name: Generate Coverage Badge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-badge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install
+      - run: npm run coverage # Run your Vitest tests
+      - uses: jpb06/coverage-badges-action@latest
+        with:
+          coverage-summary-path: ./coverage/coverage-summary.json # Path to your coverage report
+          target-branch: gh-pages # Branch to push badges to
+          badges-icon: vitest # Optional: Specify an icon

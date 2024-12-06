@@ -25,7 +25,8 @@
     "doc": "typedoc",
     "doc:watch": "typedoc --watch",
     "prepack": "npm run build",
-    "test": "vitest"
+    "test": "vitest",
+    "coverage": "vitest --coverage"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.1",
+    "@vitest/coverage-v8": "^2.1.8",
     "prettier": "^3.4.1",
     "rollup": "^4.28.0",
     "tslib": "^2.8.1",
