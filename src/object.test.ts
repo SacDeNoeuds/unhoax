@@ -29,7 +29,6 @@ describe('object', () => {
 
   it('collects issues when name is number and age is string', () => {
     const result = person.parse({ name: 42, age: 'hello' })
-    console.dir(result, { depth: null })
     expect(result).toEqual({
       success: false,
       error: {

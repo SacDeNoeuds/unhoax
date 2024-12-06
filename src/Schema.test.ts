@@ -21,7 +21,6 @@ describe('flatMap', () => {
 
     it('fails parsing a number from an invalid string', () => {
       const result = numberFromString.parse('foo')
-      console.dir(result, { depth: null })
       expect(result).toEqual({
         success: false,
         error: {

@@ -1,9 +1,13 @@
 import { defineConfig } from 'vitest/config'
 
+const isCI = process.env.CI === 'true'
+
 export default defineConfig({
   test: {
     coverage: {
-      reporter: ['json-summary'],
+      ...(isCI && { reporter: ['json-summary'] }),
+      include: ['src'],
+      exclude: ['./src/main.ts', '**/*.test.ts'],
     },
   },
 })

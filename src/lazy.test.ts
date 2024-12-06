@@ -5,15 +5,29 @@ import { size } from './refine'
 
 describe('lazy', () => {
   const minSize = size({ min: 5, reason: 'minSize' })
-  const schema = () => lazy(() => minSize(string))
+  const make = () => lazy(() => minSize(string))
+
+  it('has name "lazy" until called', () => {
+    const schema = make()
+    expect(schema.name).toBe('lazy')
+    schema.parse('')
+    expect(schema.name).toBe('string')
+  })
+
+  it('has no refinements until called', () => {
+    const schema = make()
+    expect(schema.refinements).toEqual(undefined)
+    schema.parse('')
+    expect(schema.refinements).toHaveLength(1)
+  })
 
   it('parses a valid input', () => {
-    const result = schema().parse('12345')
+    const result = make().parse('12345')
     expect(result).toEqual({ success: true, value: '12345' })
   })
 
   it('fails parsing a string less than 5 characters', () => {
-    const result = schema().parse('1234')
+    const result = make().parse('1234')
     expect(result).toEqual({
       success: false,
       error: {
@@ -32,7 +46,7 @@ describe('lazy', () => {
   })
 
   it('fails parsing a number', () => {
-    const result = schema().parse(42)
+    const result = make().parse(42)
     expect(result).toEqual({
       success: false,
       error: {
