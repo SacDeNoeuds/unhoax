@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: git fetch
-      - run: npm install
+      - run: npm ci
       - run: npm run coverage # Run your Vitest tests
       - uses: jpb06/coverage-badges-action@latest
         with:
           coverage-summary-path: ./coverage/coverage-summary.json # Path to your coverage report
-          target-branch: badges # Branch to push badges to
+          target-branch: gh-badges # Branch to push badges to
           badges-icon: vitest # Optional: Specify an icon
