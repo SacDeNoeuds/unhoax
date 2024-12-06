@@ -16,5 +16,4 @@ jobs:
       - uses: jpb06/coverage-badges-action@latest
         with:
           coverage-summary-path: ./coverage/coverage-summary.json # Path to your coverage report
-          # target-branch: gh-badges # Branch to push badges to
           badges-icon: vitest # Optional: Specify an icon
