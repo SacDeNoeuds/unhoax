@@ -23,7 +23,7 @@ export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
 }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @see {@link partial}
  * @see {@link record}
  * @see {@link Map}
@@ -43,7 +43,7 @@ export function object<T extends Record<string, Schema<any>>, Input = unknown>(
   name?: string,
 ): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
 /**
- * @category 2. Schema
+ * @category Schema
  * @see {@link record}
  * @see {@link Map}
  * @see {@link partial}
@@ -87,7 +87,7 @@ export function object<T extends Record<string, any>, Input = unknown>(
 }
 
 /**
- * @category 4. Modifier
+ * @category Modifier
  * @see {@link object}
  * @example
  * ```ts

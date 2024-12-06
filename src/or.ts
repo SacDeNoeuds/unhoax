@@ -3,7 +3,7 @@ import type { Schema } from './Schema'
 import { union } from './union'
 
 /**
- * @category 4. Modifier
+ * @category Modifier
  * @see {@link union}
  * @example
  * ```ts
@@ -23,7 +23,7 @@ export function or<B, InputB = unknown>(b: Schema<B, InputB>) {
 
 /**
  * Equivalent of `or(literal(undefined))` (see {@link or})
- * @category 4. Modifier
+ * @category Modifier
  * @see {@link nil}
  * @see {@link nullable}
  * @example
@@ -36,7 +36,7 @@ export const optional = or(literal(undefined))
 
 /**
  * Equivalent of `or(literal(undefined, null))` (see {@link or})
- * @category 4. Modifier
+ * @category Modifier
  * @see {@link optional}
  * @see {@link nullable}
  * @example
@@ -49,7 +49,7 @@ export const nil = or(literal(undefined, null))
 
 /**
  * Equivalent of `or(literal(null))` (see {@link or})
- * @category 4. Modifier
+ * @category Modifier
  * @see {@link optional}
  * @see {@link nil}
  * @example

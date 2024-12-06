@@ -12,7 +12,7 @@ export interface ArraySchema<T, Input = unknown> extends Schema<T[]> {
 }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @see {@link ArraySchema}
  * @example
  * ```ts

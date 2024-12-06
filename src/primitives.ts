@@ -3,7 +3,7 @@ import { map, type Schema } from './Schema'
 
 /**
  * Never-failing schema.
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -17,7 +17,7 @@ export const unknown: Schema<unknown> = {
 }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -31,7 +31,7 @@ export const boolean = fromPredicate(
 )
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -63,7 +63,7 @@ const trim = map((str: string) => str.trim())
 /**
  * This also trims the string. If you do not want this behavior,
  * explicitly use {@link untrimmedString}
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -79,7 +79,7 @@ export const string = trim(untrimmedString)
  *
  * Basically, it accepts anything passing the check `Number.isFinite`.
  *
- * @category 2. Schema
+ * @category Schema
  * @see {@link unsafeNumber}
  * @example
  * ```ts
@@ -108,7 +108,7 @@ export const unsafeNumber = fromPredicate<number>(
 /**
  * it accepts anything passing the check `Number.isSafeInteger`.
  *
- * @category 2. Schema
+ * @category Schema
  * @see {@link number}
  * @see {@link unsafeInteger}
  * @see {@link unsafeNumber}
@@ -151,7 +151,7 @@ export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
 }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

@@ -9,7 +9,7 @@ export interface Schema<T, Input = unknown> {
   readonly name: string
   readonly refinements?: string[]
   /**
-   * @category 1. Parsing
+   * @category Parsing
    * @see {@link ParseResult}
    */
   readonly parse: (input: Input, context?: ParseContext) => ParseResult<T>
@@ -44,7 +44,7 @@ export type TypeOfSchema<T> = T extends Schema<infer U, any> ? U : never
 export type InputOfSchema<T> = T extends Schema<any, infer U> ? U : never
 
 /**
- * @category 4. Modifier
+ * @category Modifier
  * @example
  * ```ts
  * import * as x from 'unhoax'
@@ -82,7 +82,7 @@ export function map<Input, Output>(
 }
 
 /**
- * @category 5. Advanced Usage / Core
+ * @category Advanced Usage / Core
  * @example
  * ```ts
  * import * as x from 'unhoax'

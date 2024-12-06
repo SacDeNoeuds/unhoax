@@ -6,7 +6,7 @@ function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
 }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

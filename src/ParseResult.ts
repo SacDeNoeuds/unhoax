@@ -4,7 +4,7 @@ type Success<T> = { success: true; value: T }
 type Failure = { success: false; error: ParseError }
 
 /**
- * @category 1. Parsing
+ * @category Parsing
  * @see {@link ParseError}
  * @see {@link ParseIssue}
  * @example
@@ -20,7 +20,7 @@ type Failure = { success: false; error: ParseError }
 export type ParseResult<T> = Success<T> | Failure
 
 /**
- * @category 1. Parsing
+ * @category Parsing
  * @see {@link ParseResult}
  * @see {@link ParseIssue}
  */
@@ -31,7 +31,7 @@ export type ParseError = {
 }
 
 /**
- * @category 1. Parsing
+ * @category Parsing
  * @see {@link ParseError}
  */
 export type ParseIssue = {
@@ -42,7 +42,7 @@ export type ParseIssue = {
 }
 
 /**
- * @category 5. Advanced Usage / Core
+ * @category Advanced Usage / Core
  * @see {@link ParseResult}
  * @see {@link createParseContext}
  * @example
@@ -76,7 +76,7 @@ export function failure(
 }
 
 /**
- * @category 5. Advanced Usage / Core
+ * @category Advanced Usage / Core
  * @see {@link ParseResult}
  * @see {@link createParseContext}
  * @example

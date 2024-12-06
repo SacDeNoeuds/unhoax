@@ -25,7 +25,7 @@ const mapBigInt = flatMap((input: BigIntInput, context) => {
 }, 'bigint')
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

@@ -2,7 +2,7 @@ import type { Schema } from './Schema'
 
 /**
  * Allows to never fail from parsing an input by providing a fallback.
- * @category 2. Schema
+ * @category Schema
  * @see {@link fallback} for usage without callback
  * @example
  * ```ts
@@ -29,7 +29,7 @@ export function recover<U>(fallback: () => U) {
 
 /**
  * Built on top of {@link recover}
- * @category 2. Schema
+ * @category Schema
  * @see {@link recover}
  * @example
  * ```ts

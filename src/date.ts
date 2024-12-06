@@ -18,7 +18,7 @@ const unsafeDate = mapDateFromInput(inputSchema)
  *
  * If you need to accept `Date` only, use `x.instanceOf(Date)`
  *
- * @category 2. Schema
+ * @category Schema
  * @example
  * ```ts
  * import * as x from 'unhoax'

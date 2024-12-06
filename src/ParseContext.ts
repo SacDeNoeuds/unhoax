@@ -1,7 +1,7 @@
 import type { ParseIssue } from './ParseResult'
 
 /**
- * @category 5. Advanced Usage / Core
+ * @category Advanced Usage / Core
  * @see {@link createParseContext}
  * @see {@link failure}
  * @see {@link success}
@@ -14,7 +14,7 @@ export interface ParseContext {
 }
 
 /**
- * @category 5. Advanced Usage / Core
+ * @category Advanced Usage / Core
  * @see {@link ParseContext}
  * @see {@link failure}
  * @see {@link success}

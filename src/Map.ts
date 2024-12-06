@@ -17,7 +17,7 @@ type MapValue<T> = T extends Map<any, infer V> ? V : never
 export { Map_ as Map }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @see {@link object}
  * @see {@link record}
  * @example

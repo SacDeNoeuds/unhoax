@@ -16,7 +16,7 @@ export interface RecordSchema<
 }
 
 /**
- * @category 2. Schema
+ * @category Schema
  * @see {@link object}
  * @see {@link Map}
  * @example
