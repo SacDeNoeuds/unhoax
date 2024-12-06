@@ -14,19 +14,21 @@ Although not required, I recommend using the library with a `pipe` function, lik
 
 ## Getting Started
 
+The full documentation is available at [here](https://sacdenoeuds.github.io/unhoax/).
+
 ### Type-Driven
 
 Aka writing your type first and then your schema.
 
 ```ts
-import * as x from "unhoax";
+import * as x from 'unhoax'
 
 // Type-Driven:
-type Person = { name: string; age: number };
+type Person = { name: string; age: number }
 const personSchema = x.object<Person>({
   name: x.string,
   age: x.number,
-});
+})
 ```
 
 ### Schema-driven
