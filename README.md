@@ -1,4 +1,4 @@
-![Package Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*])
+![Package Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*]) ![Total Coverage](https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/gh-badges/badges/coverage-total.svg) <!-- ![Branches](https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/gh-badges/badges/coverage-branches.svg) ![Functions](https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/gh-badges/badges/coverage-functions.svg) ![Lines](https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/gh-badges/badges/coverage-lines.svg) ![Statements](https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/gh-badges/badges/coverage-statements.svg) -->
 
 A safe-by-default schema library that is type/data-driven rather than schema-centric: you bring your entity types, we do not lose you with complex schema typings.
 
