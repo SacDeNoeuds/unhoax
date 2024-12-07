@@ -1,11 +1,11 @@
 ---
-title: Defining custom types – First Name
+title: 3b. Custom Type – First Name
 category: Guide
 ---
 
 ## Introduction
 
-It is very common to bring your own, I built this library specifically for that actually ; because we all have our concepts which vary on the industry we work in and how our business models are defined.
+It is very common to bring your own types, I built this library specifically for that actually ; because we all have our concepts which vary on the industry we work in and how our business models are defined.
 
 Let’s consider a first name. Depending on the domain, it will have some constraints, for instance:
 

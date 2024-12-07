@@ -1,5 +1,5 @@
 ---
-title: Intersect, pick & omit from object schemas
+title: 2. Intersect, pick & omit
 category: Guide
 ---
 

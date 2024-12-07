@@ -1,5 +1,5 @@
 ---
-title: Defining custom types – Email
+title: 3a. Custom Type – Email
 category: Guide
 ---
 
