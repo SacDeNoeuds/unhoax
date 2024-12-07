@@ -3,7 +3,7 @@ import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
 import type { Schema, TypeOfSchema } from './Schema'
 
-type PropsOf<T extends Record<string, any>> = {
+export type PropsOf<T extends Record<string, any>> = {
   [Key in keyof T]: Schema<T[Key]>
 }
 

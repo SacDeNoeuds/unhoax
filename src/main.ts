@@ -1,30 +1,33 @@
 /**
  * @module
  * @document ../guides/object-intersect-pick-omit.md
+ * @document ../guides/getting-started.md
  * @document ../guides/custom-type-email.md
  * @document ../guides/custom-type-first-name.md
  * @document ../guides/migrating-from-x.md
- *
- * @__document ../guides/coercing-a-date-from-json.md
- * @__document ../guides/coercing-a-bigint-from-json.md
  */
+
+// @document ../guides/coercing-a-date-from-json.md
+// @document ../guides/coercing-a-bigint-from-json.md
 export { array, type ArraySchema } from './array'
 export { bigint } from './bigint'
 export { date } from './date'
 export { Enum } from './enum'
-export { fromPredicate } from './fromPredicate'
+export { fromPredicate, type Predicate } from './fromPredicate'
 export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
-export { Map, type MapSchema } from './Map'
-export { object, partial, type ObjectSchema } from './object'
+export { Map, type MapKey, type MapSchema, type MapValue } from './Map'
+export { object, partial, type ObjectSchema, type PropsOf } from './object'
 export { nil, nullable, optional, or } from './or'
 export { createParseContext, type ParseContext } from './ParseContext'
 export {
   failure,
   success,
+  type Failure,
   type ParseError,
   type ParseIssue,
   type ParseResult,
+  type Success,
 } from './ParseResult'
 export {
   boolean,
@@ -33,6 +36,7 @@ export {
   number,
   string,
   symbol,
+  unknown,
   unsafeInteger,
   unsafeNumber,
   untrimmedString,

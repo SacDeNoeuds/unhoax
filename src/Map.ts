@@ -11,8 +11,8 @@ export interface MapSchema<T extends Map<any, any>, Input = unknown>
   readonly key: Schema<MapKey<T>>
   readonly value: Schema<MapValue<T>>
 }
-type MapKey<T> = T extends Map<infer K, any> ? K : never
-type MapValue<T> = T extends Map<any, infer V> ? V : never
+export type MapKey<T> = T extends Map<infer K, any> ? K : never
+export type MapValue<T> = T extends Map<any, infer V> ? V : never
 
 export { Map_ as Map }
 

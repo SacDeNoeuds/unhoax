@@ -1,7 +1,7 @@
 import type { ParseContext } from './ParseContext'
 
-type Success<T> = { success: true; value: T }
-type Failure = { success: false; error: ParseError }
+export type Success<T> = { success: true; value: T }
+export type Failure = { success: false; error: ParseError }
 
 /**
  * @category Parsing

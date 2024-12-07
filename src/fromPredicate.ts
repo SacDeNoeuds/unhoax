@@ -2,7 +2,7 @@ import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
 import type { Schema } from './Schema'
 
-type Predicate<Input, T extends Input> = (input: Input) => input is T
+export type Predicate<Input, T extends Input> = (input: Input) => input is T
 
 /**
  * Utility to create schemas.<br>
