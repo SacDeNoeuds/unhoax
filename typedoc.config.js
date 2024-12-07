@@ -18,7 +18,9 @@ const config = {
     includeGroups: false,
   },
   visibilityFilters: {},
+  defaultCategory: 'Default Category',
   cleanOutputDir: true,
+  excludeCategories: ['Default Category'],
   categoryOrder: [
     'Guide',
     'Parsing',
