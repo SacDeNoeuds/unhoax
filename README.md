@@ -18,7 +18,7 @@ Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/).
 
 Checkout the [getting started guide](https://sacdenoeuds.github.io/unhoax/documents/1._Getting_Started.html).
 
-### Quick Sample – we want code!
+## Quick Sample – we want code!
 
 ```ts
 import * as x from 'unhoax'
