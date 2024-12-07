@@ -14,11 +14,11 @@ Although not required, I recommend using the library with a `pipe` function, lik
 
 ## Getting Started
 
-The full documentation is available at [here](https://sacdenoeuds.github.io/unhoax/).
+Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/).
 
-### Type-Driven
+Checkout the [getting started guide](https://sacdenoeuds.github.io/unhoax/documents/1._Getting_Started.html).
 
-Aka writing your type first and then your schema.
+### Quick Sample – we want code!
 
 ```ts
 import * as x from 'unhoax'
@@ -29,39 +29,22 @@ const personSchema = x.object<Person>({
   name: x.string,
   age: x.number,
 })
-```
 
-### Schema-driven
-
-Aka writing your schema and inferring your type from the schema.
-
-```ts
-import * as x from 'unhoax'
-
-const personSchema = x.object({ … })
+// or using type inference
 type Person = x.TypeOf<typeof personSchema>
-```
 
-### Parsing Safely
-
-```ts
-import * as x from 'unhoax'
-
+// parsing safely
 const result = personSchema.parse({ name: …, age: … })
 
 if (result.success) result.value // Person
 else result.error // x.ParseError
-```
 
-### Parsing Unsafely
-
-```ts
-import * as x from 'unhoax'
-
+// parsing unsafely
 try {
   const result = x.unsafeParse(personSchema, { name: …, age: … })
   result // Person
 } catch (err) {
+  // although `err` is typed as `unknown`, this is what you get inside:
   err // Error
   err.cause // x.ParseError
 }
