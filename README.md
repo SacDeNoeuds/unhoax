@@ -14,9 +14,7 @@ Although not required, I recommend using the library with a `pipe` function, lik
 
 ## Getting Started
 
-Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/).
-
-Checkout the [getting started guide](https://sacdenoeuds.github.io/unhoax/documents/1._Getting_Started.html).
+Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/), you may want to start with the [getting started guide](https://sacdenoeuds.github.io/unhoax/documents/1._Getting_Started.html) 😊
 
 ## Quick Sample – we want code!
 
