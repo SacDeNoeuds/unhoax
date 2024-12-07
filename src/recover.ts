@@ -13,7 +13,7 @@ import type { Schema } from './Schema'
  * schema.parse(42) // { success: true, value: 42 }
  * schema.parse('toto') // { success: true, value: 'not a number' }
  */
-export function recover<U>(fallback: () => U) {
+export function recover<U>(getFallback: () => U) {
   return function recover<T, Input = unknown>(
     schema: Schema<T, Input>,
   ): Schema<T | U, Input> {
@@ -21,7 +21,7 @@ export function recover<U>(fallback: () => U) {
       ...schema,
       parse: (input) => {
         const result = schema.parse(input)
-        return result.success ? result : { success: true, value: fallback() }
+        return result.success ? result : { success: true, value: getFallback() }
       },
     }
   }
