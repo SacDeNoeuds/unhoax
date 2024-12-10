@@ -1,5 +1,6 @@
 import { createParseContext, type ParseContext } from './ParseContext'
 import { type ParseResult } from './ParseResult'
+import type { Refinement } from './refine'
 
 /**
  * @category Schema Definition
@@ -7,7 +8,7 @@ import { type ParseResult } from './ParseResult'
  */
 export interface Schema<T, Input = unknown> {
   readonly name: string
-  readonly refinements?: string[]
+  readonly refinements?: Refinement[]
   /**
    * @category Parsing
    * @see {@link ParseResult}

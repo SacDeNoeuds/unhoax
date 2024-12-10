@@ -2,6 +2,11 @@ import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
 import type { Schema } from './Schema'
 
+export interface Refinement {
+  name: string
+  meta?: unknown
+}
+
 /**
  * @category Refinement
  * @example
@@ -25,10 +30,11 @@ import type { Schema } from './Schema'
 export function refine<T, S extends Schema<T, unknown>>(
   name: string,
   refine: (value: T) => boolean,
+  meta?: unknown,
 ) {
   return (schema: S): S => ({
     ...schema,
-    refinements: [...(schema.refinements ?? []), name],
+    refinements: [...(schema.refinements ?? []), { name, meta }],
     parse: (input, context = createParseContext(schema.name, input)) => {
       const result = schema.parse(input, context)
       if (!result.success) return result
@@ -63,6 +69,7 @@ export function refine<T, S extends Schema<T, unknown>>(
 export const refineAs = refine as <T, U extends T>(
   name: string,
   predicate: (value: T) => value is U,
+  meta?: unknown,
 ) => <Input = unknown>(schema: Schema<T, Input>) => Schema<U, Input>
 
 /**
@@ -95,6 +102,7 @@ export function greaterThan<T extends { valueOf(): number }>(
   return refine<T, Schema<T>>(
     reason,
     (value) => value.valueOf() > min.valueOf(),
+    { min },
   )
 }
 
@@ -128,6 +136,7 @@ export function lowerThan<T extends { valueOf(): number }>(
   return refine<T, Schema<T>>(
     reason,
     (value) => value.valueOf() < max.valueOf(),
+    { max },
   )
 }
 
@@ -161,9 +170,12 @@ export function between<T extends { valueOf(): number }>(
   max: T,
   reason = `${min} < T < ${max}`,
 ) {
-  return refine<T, Schema<T>>(reason, (value) => {
-    return value.valueOf() > min.valueOf() && value.valueOf() < max.valueOf()
-  })
+  return refine<T, Schema<T>>(
+    reason,
+    (value) =>
+      value.valueOf() > min.valueOf() && value.valueOf() < max.valueOf(),
+    { min, max },
+  )
 }
 
 /**
@@ -245,12 +257,17 @@ export function size<T extends { size: number } | { length: number }>(options: {
   reason?: string
 }) {
   const reason = options.reason ?? `Size: ${options.min} - ${options.max}`
-  return refine<T, Schema<T>>(reason, (value) => {
-    const size: number = (value as any)?.length ?? (value as any)?.size
-    const min = options.min ?? -1
-    const max = options.max ?? Infinity
-    return size >= min && size <= max
-  })
+  const min = options.min ?? -1
+  const max = options.max ?? Infinity
+
+  return refine<T, Schema<T>>(
+    reason,
+    (value) => {
+      const size: number = (value as any)?.length ?? (value as any)?.size
+      return size >= min && size <= max
+    },
+    { min, max },
+  )
 }
 
 /**
@@ -267,5 +284,7 @@ export function size<T extends { size: number } | { length: number }>(options: {
  * ```
  */
 export function pattern(regexp: RegExp) {
-  return refine<string, Schema<string>>('pattern', (s) => regexp.test(s))
+  return refine<string, Schema<string>>('pattern', (s) => regexp.test(s), {
+    regexp,
+  })
 }
