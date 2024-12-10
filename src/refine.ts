@@ -4,7 +4,7 @@ import type { Schema } from './Schema'
 
 export interface Refinement {
   name: string
-  meta?: unknown
+  meta?: Record<string, unknown>
 }
 
 /**
