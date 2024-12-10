@@ -7,7 +7,7 @@ import type { InputOfSchema, Schema, TypeOfSchema } from './Schema'
 /**
  * @category Schema Definition
  * @see {@link union}
- * @see {@link discriminatedUnion}
+ * @see {@link variant}
  */
 export interface UnionSchema<T, Input = unknown> extends Schema<T, Input> {
   readonly schemas: Schema<unknown>[]
@@ -31,7 +31,7 @@ function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
 }
 
 /**
- * If you want to use a discriminated union, checkout {@link discriminatedUnion}
+ * If you want to use a discriminated union, checkout {@link variant}
  *
  * @category Schema
  * @example
@@ -50,15 +50,6 @@ export function union<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
   return namedUnion(name, schemas)
 }
 
-// /**
-//  * @group Schema Definition
-//  * @see {@link discriminatedUnion}
-//  */
-// export interface DiscriminatedUnionSchema<Discriminant, T>
-//   extends UnionSchema<T> {
-//   discriminant: Discriminant;
-// }
-
 /**
  * If you need to use a simple union, checkout {@link union}
  *
@@ -70,18 +61,18 @@ export function union<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
  * const a = x.object({ type: x.literal('a'), a: x.string }),
  * const b = x.object({ type: x.literal('b'), b: x.number }),
  *
- * const schema = x.discriminatedUnion([a, b], 'type')
+ * const schema = x.variant('type', [a, b])
  * // Schema<{ type: 'a', a: string } | { type: 'b', b: number }>
  *
  * const result = schema.parse({ type: 'a', a: 'Hello' })
- * result // { success: true, value: { type: 'a', a: 'Hello' } }
+ * // { success: true, value: { type: 'a', a: 'Hello' } }
  * ```
  */
-export function discriminatedUnion<
+export function variant<
   T extends [ObjectSchema<any, any>, ...ObjectSchema<any, any>[]],
 >(
-  schemas: T,
   discriminant: keyof T[number]['props'],
+  schemas: T,
 ): UnionSchema<TypeOfSchema<T[number]>, InputOfSchema<T[number]>> {
   const name = schemas
     .map(

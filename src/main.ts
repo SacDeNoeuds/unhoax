@@ -64,10 +64,5 @@ export {
 } from './Schema'
 export { Set, type SetSchema } from './Set'
 export { tuple, type TupleSchema } from './tuple'
-export {
-  discriminatedUnion,
-  union,
-  // type DiscriminatedUnionSchema,
-  type UnionSchema,
-} from './union'
+export { union, variant, type UnionSchema } from './union'
 export { unsafeParse } from './unsafeParse'

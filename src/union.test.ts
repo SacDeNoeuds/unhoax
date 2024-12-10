@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { object } from './object'
 import { boolean, literal, number, string } from './primitives'
 import type { TypeOfSchema } from './Schema'
-import { discriminatedUnion, union } from './union'
+import { union, variant } from './union'
 
 describe('union', () => {
   const schema = union(string, number, boolean)
@@ -33,7 +33,7 @@ describe('discriminatedUnion', () => {
   const person = object({ kind: literal('person'), name: string })
   const car = object({ kind: literal('car'), doors: number })
   const bike = object({ kind: literal('bike'), wheels: number })
-  const schema = discriminatedUnion([person, car, bike], 'kind')
+  const schema = variant('kind', [person, car, bike])
   type Value = TypeOfSchema<typeof schema>
 
   it.each<Value>([
