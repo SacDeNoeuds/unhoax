@@ -10,6 +10,12 @@ import type { Schema } from './Schema'
  *
  * const orString = x.recover(() => 'not a number')
  * const schema = orString(x.number)
+ *
+ * // or, using pipe
+ * import pipe from 'just-pipe'
+ *
+ * const schema = pipe(x.number, x.recover(() => 'not a number'))
+ *
  * schema.parse(42) // { success: true, value: 42 }
  * schema.parse('toto') // { success: true, value: 'not a number' }
  * ```
@@ -38,6 +44,12 @@ export function recover<U>(getFallback: () => U) {
  *
  * const orString = x.fallback('not a number')
  * const schema = orString(x.number)
+ *
+ * // or, using pipe
+ * import pipe from 'just-pipe'
+ *
+ * const schema = pipe(x.number, x.fallback('not a number'))
+ *
  * schema.parse(42) // { success: true, value: 42 }
  * schema.parse('toto') // { success: true, value: 'not a number' }
  * ```
