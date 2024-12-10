@@ -23,31 +23,34 @@ export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
 }
 
 /**
+ * Providing a name improves readability of parse errors.
+ *
  * @category Schema
- * @see {@link partial}
  * @see {@link record}
  * @see {@link Map}
- * @example Type-Driven
+ * @see {@link partial}
+ * @example Type Inference – Named Schema
  * ```ts
  * import * as x from 'unhoax'
  *
- * type Person = { name: string, age: number }
- * const personSchema = x.object<Person>({
+ * // Use the schema as source of truth:
+ * const personSchema = x.object('Person', {
  *   name: x.string,
  *   age: x.number,
  * })
+ * type Person = x.TypeOf<typeof personSchema>
  * ```
  */
 export function object<T extends Record<string, Schema<any>>, Input = unknown>(
+  name: string,
   props: T,
-  name?: string,
 ): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
 /**
  * @category Schema
  * @see {@link record}
  * @see {@link Map}
  * @see {@link partial}
- * @example Type Inference
+ * @example Type Inference – Unnamed Schema
  * ```ts
  * import * as x from 'unhoax'
  *
@@ -59,15 +62,52 @@ export function object<T extends Record<string, Schema<any>>, Input = unknown>(
  * type Person = x.TypeOf<typeof personSchema>
  * ```
  */
+export function object<T extends Record<string, Schema<any>>, Input = unknown>(
+  props: T,
+): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
+/**
+ * @category Schema
+ * @see {@link partial}
+ * @see {@link record}
+ * @see {@link Map}
+ * @example Type-Driven – Named Schema
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * type Person = { name: string, age: number }
+ * const personSchema = x.object<Person>('Person', {
+ *   name: x.string,
+ *   age: x.number,
+ * })
+ * ```
+ */
+export function object<T extends Record<string, any>, Input = unknown>(
+  name: string,
+  props: PropsOf<T>,
+): ObjectSchema<T, Input>
+/**
+ * @category Schema
+ * @see {@link partial}
+ * @see {@link record}
+ * @see {@link Map}
+ * @example Type-Driven – Unnamed Schema
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * type Person = { name: string, age: number }
+ * const personSchema = x.object<Person>({
+ *   name: x.string,
+ *   age: x.number,
+ * })
+ * ```
+ */
 export function object<T extends Record<string, any>, Input = unknown>(
   props: PropsOf<T>,
-  name?: string,
 ): ObjectSchema<T, Input>
 export function object<T extends Record<string, any>, Input = unknown>(
-  props: PropsOf<T>,
-  name?: string,
+  ...args: [string, PropsOf<T>] | [PropsOf<T>]
 ): ObjectSchema<T, Input> {
-  name ||= 'object'
+  const [name, props] = args.length === 1 ? ['object', args[0]] : args
   return {
     name,
     props,

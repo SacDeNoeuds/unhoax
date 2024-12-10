@@ -1,12 +1,25 @@
 import { describe, expect, it } from 'vitest'
-import { object, partial } from './object'
+import { object, partial, type ObjectSchema } from './object'
 import { number, string } from './primitives'
 
-describe('object', () => {
-  type Person = { name: string; age: number }
-  const person = object<Person>({
-    name: string,
-    age: number,
+type Person = {
+  name: string
+  age: number
+}
+describe.each<{ case: string; schema: ObjectSchema<Person>; name: string }>([
+  {
+    case: 'unnamed',
+    schema: object<Person>({ name: string, age: number }),
+    name: 'object',
+  },
+  {
+    case: 'named',
+    schema: object<Person>('Person', { name: string, age: number }),
+    name: 'Person',
+  },
+])('$case person schema', ({ schema: person, name: schemaName }) => {
+  it('has proper name', () => {
+    expect(person.name).toBe(schemaName)
   })
 
   it('parses a valid input', () => {
@@ -21,8 +34,8 @@ describe('object', () => {
       success: false,
       error: {
         input: 42,
-        schemaName: 'object',
-        issues: [{ input: 42, schemaName: 'object', path: [] }],
+        schemaName,
+        issues: [{ input: 42, schemaName, path: [] }],
       },
     })
   })
@@ -33,7 +46,7 @@ describe('object', () => {
       success: false,
       error: {
         input: { name: 42, age: 'hello' },
-        schemaName: 'object',
+        schemaName,
         issues: [
           { path: ['name'], input: 42, schemaName: 'string' },
           { path: ['age'], input: 'hello', schemaName: 'number' },

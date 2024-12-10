@@ -17,7 +17,7 @@ Let’s consider those schemas:
 ```ts
 import * as x from 'unhoax'
 
-const person = x.object({
+const person = x.object('Person', {
   name: x.string,
   age: x.number,
 })
@@ -26,6 +26,10 @@ const footballer = x.object({
   preferredFoot: x.literal('left', 'right'),
   maxScoredGamePerSeason: x.number,
 })
+
+// It works the same for named objects:
+const person = x.object('Person', { … })
+const footballer = x.object('Footballer', { … })
 ```
 
 ### Intersection – merging 2 objects
@@ -34,6 +38,12 @@ const footballer = x.object({
 import * as x from "unhoax";
 
 const footballerPerson = x.object({
+  ...person.props,
+  ...footballer.props,
+})
+
+// it works the same for named objects:
+const footballerPerson = x.object('FootballerPerson', {
   ...person.props,
   ...footballer.props,
 })
@@ -64,6 +74,9 @@ import pick from "just-pick"
 
 const nameOnlyProps = pick(person.props, ["name"])
 const withNameOnly = x.object(nameOnlyProps)
+
+// it works with named objects too:
+const withNameOnly = x.object('PersonWithNameOnly', nameOnlyProps)
 
 const result = withNameOnly.parse({ name: 'toto', age: 21 })
 
