@@ -12,6 +12,7 @@ import type { Schema } from './Schema'
  * const schema = orString(x.number)
  * schema.parse(42) // { success: true, value: 42 }
  * schema.parse('toto') // { success: true, value: 'not a number' }
+ * ```
  */
 export function recover<U>(getFallback: () => U) {
   return function recover<T, Input = unknown>(
@@ -39,6 +40,7 @@ export function recover<U>(getFallback: () => U) {
  * const schema = orString(x.number)
  * schema.parse(42) // { success: true, value: 42 }
  * schema.parse('toto') // { success: true, value: 'not a number' }
+ * ```
  */
 export function fallback<T>(fallback: T) {
   return recover(() => fallback)
