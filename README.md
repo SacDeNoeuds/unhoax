@@ -1,8 +1,18 @@
-![Package Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*]) ![Total coverage](./badges/coverage-total.svg) <!-- ![Branches](./badges/coverage-branches.svg) ![Functions](./badges/coverage-functions.svg) ![Lines](./badges/coverage-lines.svg) ![Statements](./badges/coverage-statements.svg) -->
+<p align="center">
+  <img alt="Package Size" src="https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*]">
+  <span>·</span>
+  <img alt="Total coverage" src="https://github.com/SacDeNoeuds/unhoax/tree/main/badges/coverage-total.svg">
+  <span>·</span>
+  <img alt="Dependency Count" src="https://badgen.net/bundlephobia/dependency-count/unhoax">
+</p>
 
+<p align="center">
 A safe-by-default schema library that is type/data-driven rather than schema-centric: you bring your entity types, we do not lose you with complex schema typings.
-
+<br>
 Particularly lightweight and extendible by design.
+<p>
+
+---
 
 ## Installation
 
