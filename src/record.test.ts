@@ -9,7 +9,25 @@ describe('record', () => {
     expect(result).toEqual({ success: true, value: { hello: 42 } })
   })
 
-  it('fails parsing an invalid input', () => {
+  it('fails parsing a non-object', () => {
+    const result = schema.parse(42)
+    expect(result).toEqual({
+      success: false,
+      error: {
+        input: 42,
+        schemaName: 'Record<string, number>',
+        issues: [
+          {
+            input: 42,
+            schemaName: 'Record<string, number>',
+            path: [],
+          },
+        ],
+      },
+    })
+  })
+
+  it('fails parsing an invalid object', () => {
     const input = { a: 1, b: '2' }
     const result = schema.parse(input)
     expect(result).toEqual({

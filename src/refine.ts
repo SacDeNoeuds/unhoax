@@ -247,7 +247,7 @@ export function size<T extends { size: number } | { length: number }>(options: {
   const reason = options.reason ?? `Size: ${options.min} - ${options.max}`
   return refine<T, Schema<T>>(reason, (value) => {
     const size: number = (value as any)?.length ?? (value as any)?.size
-    const min = options.min ?? -Infinity
+    const min = options.min ?? -1
     const max = options.max ?? Infinity
     return size >= min && size <= max
   })

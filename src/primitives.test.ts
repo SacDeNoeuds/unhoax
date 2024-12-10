@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { literal, number, string, symbol } from './primitives'
+import {
+  boolean,
+  literal,
+  number,
+  string,
+  symbol,
+  unknown,
+  unsafeNumber,
+} from './primitives'
 import type { Schema } from './Schema'
 
 describe('fromPredicate', () => {
@@ -8,8 +16,10 @@ describe('fromPredicate', () => {
     invalidInput: unknown
     validInput: unknown
   }>([
-    { schema: string, validInput: 'hello world', invalidInput: 4 },
+    { schema: boolean, validInput: true, invalidInput: 4 },
     { schema: number, validInput: 42, invalidInput: 'hello world' },
+    { schema: string, validInput: 'hello world', invalidInput: 4 },
+    { schema: unsafeNumber, validInput: Infinity, invalidInput: 'hello world' },
     { schema: literal(42), validInput: 42, invalidInput: 43 },
     { schema: symbol, validInput: Symbol.iterator, invalidInput: 'h' },
   ])('$schema.name', ({ schema, invalidInput, validInput }) => {
@@ -30,5 +40,11 @@ describe('fromPredicate', () => {
         },
       })
     })
+  })
+})
+
+describe('unknown', () => {
+  it('always resolves', () => {
+    expect(unknown.parse('toto')).toEqual({ success: true, value: 'toto' })
   })
 })

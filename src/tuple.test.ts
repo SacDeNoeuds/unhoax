@@ -10,6 +10,19 @@ describe('tuple', () => {
     expect(result).toEqual({ success: true, value: input })
   })
 
+  it('fails parsing a tuple of different length', () => {
+    const input = ['hello', 42]
+    const result = schema.parse(input)
+    expect(result).toEqual({
+      success: false,
+      error: {
+        input,
+        schemaName: '[string, number, boolean]',
+        issues: [{ schemaName: '[string, number, boolean]', input, path: [] }],
+      },
+    })
+  })
+
   it('fails parsing invalid values', () => {
     const input = ['hello', true, 42]
     const result = schema.parse(input)
