@@ -1,4 +1,5 @@
 import { createParseContext } from './ParseContext'
+import type { Refinement } from './refine'
 import type { Schema } from './Schema'
 
 /**
@@ -19,7 +20,7 @@ export function lazy<T, Input = unknown>(
   getSchema: () => Schema<T, Input>,
 ): Schema<T, Input> {
   let name = 'lazy'
-  let refinements: string[] | undefined
+  let refinements: Refinement[] | undefined
   return {
     get name() {
       return name
