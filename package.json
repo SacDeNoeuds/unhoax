@@ -58,7 +58,7 @@
   "bugs": {
     "url": "https://github.com/SacDeNoeuds/unhoax/issues"
   },
-  "homepage": "https://github.com/SacDeNoeuds/unhoax#readme",
+  "homepage": "https://sacdenoeuds.github.io/unhoax/",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
