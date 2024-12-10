@@ -1,6 +1,6 @@
 import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import type { Schema, TypeOfSchema } from './Schema'
 
 export interface Refinement {
   name: string
@@ -27,9 +27,19 @@ export interface Refinement {
  * )
  * ```
  */
+export function refine<S extends Schema<any, unknown>>(
+  name: string,
+  refine: (value: TypeOfSchema<S>) => boolean,
+  meta?: unknown,
+): (schema: S) => S
 export function refine<T, S extends Schema<T, unknown>>(
   name: string,
   refine: (value: T) => boolean,
+  meta?: unknown,
+): (schema: S) => S
+export function refine<S extends Schema<any, unknown>>(
+  name: string,
+  refine: (value: TypeOfSchema<S>) => boolean,
   meta?: unknown,
 ) {
   return (schema: S): S => ({
@@ -95,13 +105,47 @@ export const refineAs = refine as <T, U extends T>(
  * ) // Schema<number>
  * ```
  */
-export function greaterThan<T extends { valueOf(): number }>(
+// export function greaterThan<T extends { valueOf(): number }>(
+//   min: T,
+//   reason = `> ${min}`,
+// ) {
+//   return refine<T, Schema<T>>(
+//     reason,
+//     (value) => value.valueOf() > min.valueOf(),
+//     { min },
+//   )
+// }
+
+/**
+ * @category Refinement
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * // works with dates
+ * const refineNowOrAfter = x.min(new Date(), 'now or after')
+ * const dateNowOrAfter = refineNowOrAfter(x.date)
+ *
+ * // works with numbers
+ * const refineAsPositiveOrZero = x.min(0, 'PositiveOrZero')
+ * const positiveOrZero = refineAsPositiveZero(x.number)
+ *
+ * // or, using pipe
+ * import pipe from 'just-pipe'
+ *
+ * const positiveOrZeroNumber = pipe(
+ *   x.number,
+ *   x.min(0, 'PositiveOrZero'),
+ * ) // Schema<number>
+ * ```
+ */
+export function min<T extends { valueOf(): number }>(
   min: T,
-  reason = `> ${min}`,
+  reason = `>= ${min}`,
 ) {
   return refine<T, Schema<T>>(
     reason,
-    (value) => value.valueOf() > min.valueOf(),
+    (value) => value.valueOf() >= min.valueOf(),
     { min },
   )
 }
@@ -129,13 +173,47 @@ export function greaterThan<T extends { valueOf(): number }>(
  * ) // Schema<number>
  * ```
  */
-export function lowerThan<T extends { valueOf(): number }>(
+// export function lowerThan<T extends { valueOf(): number }>(
+//   max: T,
+//   reason = `< ${max}`,
+// ) {
+//   return refine<T, Schema<T>>(
+//     reason,
+//     (value) => value.valueOf() < max.valueOf(),
+//     { max },
+//   )
+// }
+
+/**
+ * @category Refinement
+ * @example
+ * ```ts
+ * import * as x from 'unhoax'
+ *
+ * // works with dates
+ * const refineNowOrBefore = x.max(new Date(), 'now or before')
+ * const dateNowOrBefore = refineNowOrBefore(x.date)
+ *
+ * // works with numbers
+ * const refineAsNegativeOrZero = x.max(0, 'Negative or zero')
+ * const negativeOrZero = refineAsNegativeOrZero(x.number)
+ *
+ * // or, using pipe
+ * import pipe from 'just-pipe'
+ *
+ * const negativeNumber = pipe(
+ *   x.number,
+ *   x.max(0, 'NegativeOrZero'),
+ * ) // Schema<number>
+ * ```
+ */
+export function max<T extends { valueOf(): number }>(
   max: T,
-  reason = `< ${max}`,
+  reason = `<= ${max}`,
 ) {
   return refine<T, Schema<T>>(
     reason,
-    (value) => value.valueOf() < max.valueOf(),
+    (value) => value.valueOf() <= max.valueOf(),
     { max },
   )
 }
@@ -168,12 +246,12 @@ export function lowerThan<T extends { valueOf(): number }>(
 export function between<T extends { valueOf(): number }>(
   min: T,
   max: T,
-  reason = `${min} < T < ${max}`,
+  reason = `${min} <= T <= ${max}`,
 ) {
   return refine<T, Schema<T>>(
     reason,
     (value) =>
-      value.valueOf() > min.valueOf() && value.valueOf() < max.valueOf(),
+      value.valueOf() >= min.valueOf() && value.valueOf() <= max.valueOf(),
     { min, max },
   )
 }
@@ -266,7 +344,7 @@ export function size<T extends { size: number } | { length: number }>(options: {
       const size: number = (value as any)?.length ?? (value as any)?.size
       return size >= min && size <= max
     },
-    { min, max },
+    { min: options.min, max: options.max },
   )
 }
 

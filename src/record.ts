@@ -7,12 +7,10 @@ import type { Schema } from './Schema'
  * @category Schema Definition
  * @see {@link record}
  */
-export interface RecordSchema<
-  T extends Record<PropertyKey, any>,
-  Input = unknown,
-> extends Schema<T, Input> {
-  readonly key: Schema<keyof T>
-  readonly value: Schema<T[keyof T]>
+export interface RecordSchema<Key extends PropertyKey, Value, Input = unknown>
+  extends Schema<Record<Key, Value>, Input> {
+  readonly key: Schema<Key>
+  readonly value: Schema<Value>
 }
 
 /**
@@ -34,10 +32,10 @@ export interface RecordSchema<
  * schema.parse({ hello: 42 }) // { success: true, value: { hello: 42 } }
  * ```
  */
-export function record<T extends Record<PropertyKey, any>, Input = unknown>(
-  key: Schema<keyof T>,
-  value: Schema<T[keyof T]>,
-): RecordSchema<T, Input> {
+export function record<Key extends PropertyKey, Value, Input = unknown>(
+  key: Schema<Key>,
+  value: Schema<Value>,
+): RecordSchema<Key, Value, Input> {
   const name = `Record<${key.name}, ${value.name}>`
   return {
     name,
@@ -46,7 +44,7 @@ export function record<T extends Record<PropertyKey, any>, Input = unknown>(
     value,
     parse: (input, context = createParseContext(name, input)) => {
       if (!isObject(input)) return failure(context, name, input)
-      const acc = {} as T
+      const acc = {} as Record<Key, Value>
       Object.entries(input).forEach(([k, v]) => {
         const ctx = withPathSegment(context, k as PropertyKey)
         const keyResult = key.parse(k, ctx)

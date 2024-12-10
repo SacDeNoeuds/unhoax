@@ -1,14 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { number, string } from './primitives'
-import {
-  between,
-  greaterThan,
-  lowerThan,
-  nonEmpty,
-  pattern,
-  refineAs,
-  size,
-} from './refine'
+import { between, max, min, nonEmpty, pattern, refineAs, size } from './refine'
 import type { Schema } from './Schema'
 import { Set as setOf } from './Set'
 
@@ -46,22 +38,22 @@ describe.each<{
   invalidInputs: number[]
 }>([
   {
-    name: 'lowerThan(42)',
-    schema: lowerThan(42)(number),
-    validInputs: [41.99, 0, -10],
-    invalidInputs: [42, 100],
+    name: 'max(42)',
+    schema: max(42)(number),
+    validInputs: [42, 0, -10],
+    invalidInputs: [42.01, 100],
   },
   {
-    name: 'greaterThan(42)',
-    schema: greaterThan(42)(number),
-    validInputs: [42.01, 100],
-    invalidInputs: [42, 10, -10],
+    name: 'min(42)',
+    schema: min(42)(number),
+    validInputs: [42, 100],
+    invalidInputs: [41.99, 10, -10],
   },
   {
     name: 'between(-2, 42)',
     schema: between(-2, 42)(number),
-    validInputs: [-1.99, 41.99],
-    invalidInputs: [-2, 42, -10, 100],
+    validInputs: [-2, 42],
+    invalidInputs: [-2.01, 42.01, -10, 100],
   },
 ])('$name', ({ schema, validInputs, invalidInputs }) => {
   it.each(validInputs)('succeeds with %s', (input) => {

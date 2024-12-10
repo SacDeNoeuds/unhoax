@@ -47,8 +47,8 @@ export { record, type RecordSchema } from './record'
 export { fallback, recover } from './recover'
 export {
   between,
-  greaterThan,
-  lowerThan,
+  max,
+  min,
   nonEmpty,
   pattern,
   refine,
