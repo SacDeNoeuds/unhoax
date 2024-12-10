@@ -63,6 +63,14 @@ export type InputOfSchema<T> = T extends Schema<any, infer U> ? U : never
  * // { success: true, value: { _tag: 'Person', name: 'JACK' } }
  * ```
  */
+// export function map<S extends Schema<unknown>, Output>(
+//   mapper: (input: TypeOfSchema<S>) => Output,
+//   name?: string,
+// ): (schema: S) => MappedSchema<S, Output>
+// export function map<Input, Output>(
+//   mapper: (input: Input) => Output,
+//   name?: string,
+// ): <S extends Schema<Input>>(schema: S) => MappedSchema<S, Output>
 export function map<Input, Output>(
   mapper: (input: Input) => Output,
   name?: string,
@@ -71,15 +79,14 @@ export function map<Input, Output>(
     (value) => ({ success: true, value: mapper(value) }),
     name,
   )
-  // return <I = unknown>(schema: Schema<Input, I>): Schema<Output, I> => ({
-  //   ...schema,
-  //   name: name ?? schema.name,
-  //   parse: (input, context = createParseContext(schema.name, input)) => {
-  //     const result = schema.parse(input, context)
-  //     return result.success ? success(context, mapper(result.value)) : result
-  //   },
-  // })
 }
+
+// type MappedSchema<S extends Schema<any>, Output> = Omit<S, 'parse'> & {
+//   parse: (
+//     input: InputOfSchema<S>,
+//     context?: ParseContext,
+//   ) => ParseResult<Output>
+// }
 
 /**
  * @category Advanced Usage / Core
@@ -102,6 +109,17 @@ export function map<Input, Output>(
  * )
  * ```
  */
+// export function flatMap<S extends Schema<any>, Output>(
+//   mapper: (
+//     input: InputOfSchema<S>,
+//     context: ParseContext,
+//   ) => ParseResult<Output>,
+//   name?: string,
+// ): (schema: S) => MappedSchema<S, Output>
+// export function flatMap<Input, Output>(
+//   mapper: (input: Input, context: ParseContext) => ParseResult<Output>,
+//   name?: string,
+// ): <S extends Schema<Input>>(schema: S) => MappedSchema<S, Output>
 export function flatMap<Input, Output>(
   mapper: (input: Input, context: ParseContext) => ParseResult<Output>,
   name?: string,
