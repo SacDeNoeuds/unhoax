@@ -77,7 +77,7 @@ export function variant<
   const name = schemas
     .map(
       (schema) =>
-        (schema.props[discriminant] as LiteralSchema<string>)?.literals[0] ??
+        (schema.props[discriminant] as LiteralSchema<string>).literals?.[0] ??
         schema.name,
     )
     .join(' | ')

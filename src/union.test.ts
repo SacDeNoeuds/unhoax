@@ -29,10 +29,10 @@ describe('union', () => {
   })
 })
 
-describe('discriminatedUnion', () => {
+describe('variant', () => {
   const person = object({ kind: literal('person'), name: string })
   const car = object({ kind: literal('car'), doors: number })
-  const bike = object({ kind: literal('bike'), wheels: number })
+  const bike = object({ kind: string, wheels: number })
   const schema = variant('kind', [person, car, bike])
   type Value = TypeOfSchema<typeof schema>
 
@@ -52,8 +52,8 @@ describe('discriminatedUnion', () => {
       success: false,
       error: {
         input,
-        schemaName: 'person | car | bike',
-        issues: [{ schemaName: 'person | car | bike', input, path: [] }],
+        schemaName: 'person | car | object',
+        issues: [{ schemaName: 'person | car | object', input, path: [] }],
       },
     })
   })
@@ -65,8 +65,8 @@ describe('discriminatedUnion', () => {
       success: false,
       error: {
         input,
-        schemaName: 'person | car | bike',
-        issues: [{ schemaName: 'person | car | bike', input, path: [] }],
+        schemaName: 'person | car | object',
+        issues: [{ schemaName: 'person | car | object', input, path: [] }],
       },
     })
   })
