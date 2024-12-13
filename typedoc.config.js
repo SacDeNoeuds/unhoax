@@ -6,6 +6,9 @@ const config = {
   name: 'unhoax',
   entryPoints: ['./src/main.ts'],
   plugin: ['typedoc-unhoax-theme'],
+  navigationLinks: {
+    GitHub: 'https://github.com/SacDeNoeuds/unhoax',
+  },
   out: 'docs',
   includeVersion: true,
   searchInComments: true,
