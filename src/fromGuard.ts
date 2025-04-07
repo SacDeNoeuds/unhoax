@@ -2,7 +2,7 @@ import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
 import type { Schema } from './Schema'
 
-export type Predicate<Input, T extends Input> = (input: Input) => input is T
+export type Guard<Input, T extends Input> = (input: Input) => input is T
 
 /**
  * Utility to create schemas.<br>
@@ -13,9 +13,9 @@ export type Predicate<Input, T extends Input> = (input: Input) => input is T
  * @see {@link boolean}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
- * const string = x.fromPredicate(
+ * const string = x.fromGuard(
  *  'string',
  *  (input) => typeof input === 'string'
  * )
@@ -24,18 +24,16 @@ export type Predicate<Input, T extends Input> = (input: Input) => input is T
  * type Email = string & { _tag: 'Email' }
  * declare const isEmail: (input: unknown) => input is Email
  *
- * const email = x.fromPredicate('Email', isEmail)
+ * const email = x.fromGuard('Email', isEmail)
  * ```
  */
-export function fromPredicate<T extends Input, Input = unknown>(
+export function fromGuard<T extends Input, Input = unknown>(
   name: string,
-  predicate: Predicate<Input, T>,
+  guard: Guard<Input, T>,
 ): Schema<T, Input> {
   return {
     name,
     parse: (input, context = createParseContext(name, input)) =>
-      predicate(input)
-        ? success(context, input)
-        : failure(context, name, input),
+      guard(input) ? success(context, input) : failure(context, name, input),
   }
 }

@@ -20,7 +20,7 @@ It is a stupid spec, but it will do for this example.
 Well, that’s typically where the `pipe` approach helps improving readability of the various constraints we may have:
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 import pipe from 'just-pipe'
 
 type FirstName = Branded<string, 'FirstName'>

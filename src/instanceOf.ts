@@ -1,4 +1,4 @@
-import { fromPredicate } from './fromPredicate'
+import { fromGuard } from './fromGuard'
 import type { Schema } from './Schema'
 
 function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
@@ -9,7 +9,7 @@ function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.instanceOf(Date)
  *
@@ -21,5 +21,5 @@ function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
 export function instanceOf<T, Input = unknown>(
   constructor: new (...args: any[]) => T,
 ): Schema<T, Input> {
-  return fromPredicate(constructor.name, isInstanceOf(constructor))
+  return fromGuard(constructor.name, isInstanceOf(constructor))
 }

@@ -61,7 +61,7 @@ type LoginData = {
 
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 import pipe from 'just-pipe' // pick your pkg
 import isEmail from 'is-email' // pick your pkg
 

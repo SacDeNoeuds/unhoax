@@ -14,7 +14,7 @@ export interface TupleSchema<T, Input = unknown> extends Schema<T, Input> {
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.tuple(x.string, x.number)
  * const result = schema.parse(['a', 1])

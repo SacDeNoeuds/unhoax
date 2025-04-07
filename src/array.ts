@@ -16,7 +16,7 @@ export interface ArraySchema<T, Input = unknown> extends Schema<T[]> {
  * @see {@link ArraySchema}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.array(x.string)
  * const result = schema.parse(['a', 'b'])

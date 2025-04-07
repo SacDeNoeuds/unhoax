@@ -19,7 +19,7 @@ export interface RecordSchema<Key extends PropertyKey, Value, Input = unknown>
  * @see {@link Map}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // Type-Driven
  * type MyRecord = Record<string, number>

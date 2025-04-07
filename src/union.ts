@@ -36,7 +36,7 @@ function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.union(x.string, x.number) // Schema<string | number>
  * const result = schema.parse('a')
@@ -56,7 +56,7 @@ export function union<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const a = x.object({ type: x.literal('a'), a: x.string }),
  * const b = x.object({ type: x.literal('b'), b: x.number }),

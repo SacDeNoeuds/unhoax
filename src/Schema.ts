@@ -21,7 +21,7 @@ export interface Schema<T, Input = unknown> {
  * @see {@link Schema}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.object({ name: x.string })
  * x.TypeOf<typeof schema> // { name: string }
@@ -34,7 +34,7 @@ export type TypeOfSchema<T> = T extends Schema<infer U, any> ? U : never
  * @see {@link Schema}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // reminder: type Schema<T, Input = unknown> = …
  * declare const stringFromNumber = Schema<string, number>
@@ -48,7 +48,7 @@ export type InputOfSchema<T> = T extends Schema<any, infer U> ? U : never
  * @category Modifier
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const mapToUppercase = x.map((value: string) => value.toUpperCase())
  * const upperString = mapToUppercase(x.string)
@@ -93,7 +93,7 @@ export function map<Input, Output>(
  * @category Advanced Usage / Core
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const mapNumberFromString = x.flatMap((value: string) => x.number.parse(Number(value)))
  * const numberFromString = mapNumberFromString(string)

@@ -6,7 +6,7 @@ import type { Schema } from './Schema'
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * type Tree = { left: Tree | null, right: Tree | null }
  *

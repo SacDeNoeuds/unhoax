@@ -16,7 +16,7 @@ npm install --save unhoax
 Let’s start with a string.
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 // or
 import { string } from 'unhoax'
 
@@ -100,7 +100,7 @@ x.Enum(Toto) // Schema<Toto>
 ## Inference
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 const schema = x.object({ name: x.string })
 type Test = x.TypeOf<typeof schema>
@@ -111,7 +111,7 @@ Test // { name: string }
 
 ```ts
 import pipe from 'just-pipe'
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 const objectWithNameFromString = pipe(
   x.string,
@@ -131,7 +131,7 @@ Checkout the [reference](../modules.html) for built-in refinements.
 ### With predicates – `isX(value: T): boolean`
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 import pipe from 'just-pipe'
 
 declare function isEmail(value: string): boolean
@@ -142,7 +142,7 @@ const email = pipe(x.string, x.refine('Email', isEmail))
 ### With guards – `isX(value: …): value is T`
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 import pipe from 'just-pipe'
 
 declare function isEmail(value: string): value is Email

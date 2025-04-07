@@ -10,7 +10,7 @@ It is very common to bring your own, I built this library specifically for that 
 ## Without branded types
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 declare const isEmail: (value: string) => boolean
 
@@ -38,7 +38,7 @@ declare const isEmail: (value: string) => value is Email
 Now let’s build the schema:
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 const refineAsEmail = x.refineAs('Email', isEmail)
 const emailSchema = refineAsEmail(x.string)

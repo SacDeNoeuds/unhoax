@@ -1,4 +1,4 @@
-import { fromPredicate } from './fromPredicate'
+import { fromGuard } from './fromGuard'
 import { map, type Schema } from './Schema'
 
 /**
@@ -6,7 +6,7 @@ import { map, type Schema } from './Schema'
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.unknown.parse(true) // { success: true, value: true }
  * ```
@@ -20,12 +20,12 @@ export const unknown: Schema<unknown> = {
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.boolean.parse(true) // { success: true, value: true }
  * ```
  */
-export const boolean = fromPredicate(
+export const boolean = fromGuard(
   'boolean',
   (input) => typeof input === 'boolean',
 )
@@ -34,27 +34,24 @@ export const boolean = fromPredicate(
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.symbol.parse(Symbol.iterator)
  * // { success: true, value: Symbol.iterator }
  * ```
  */
-export const symbol = fromPredicate(
-  'symbol',
-  (input) => typeof input === 'symbol',
-)
+export const symbol = fromGuard('symbol', (input) => typeof input === 'symbol')
 
 /**
  * @category Unsafe Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.untrimmedString.parse('  hello  ') // '  hello  '
  * ```
  */
-export const untrimmedString = fromPredicate(
+export const untrimmedString = fromGuard(
   'string',
   (input) => typeof input === 'string',
 )
@@ -66,7 +63,7 @@ const trim = map((str: string) => str.trim())
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.untrimmedString.parse('  hello  ') // '  hello  '
  * ```
@@ -83,12 +80,12 @@ export const string = trim(untrimmedString)
  * @see {@link unsafeNumber}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.number.parse(1) // { success: true, value: 1 }
  * ```
  */
-export const number = fromPredicate<number>(
+export const number = fromGuard<number>(
   'number',
   Number.isFinite as (input: unknown) => input is number,
 )
@@ -100,7 +97,7 @@ export const number = fromPredicate<number>(
  * @category Unsafe Schema
  * @see {@link number}
  */
-export const unsafeNumber = fromPredicate<number>(
+export const unsafeNumber = fromGuard<number>(
   'number',
   (input) => typeof input === 'number',
 )
@@ -114,12 +111,12 @@ export const unsafeNumber = fromPredicate<number>(
  * @see {@link unsafeNumber}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * x.integer.parse(1) // { success: true, value: 1 }
  * ```
  */
-export const integer = fromPredicate<number>(
+export const integer = fromGuard<number>(
   'integer',
   Number.isSafeInteger as (input: unknown) => input is number,
 )
@@ -131,7 +128,7 @@ export const integer = fromPredicate<number>(
  * @see {@link number}
  * @see {@link unsafeNumber}
  */
-export const unsafeInteger = fromPredicate<number>(
+export const unsafeInteger = fromGuard<number>(
   'unsafeInteger',
   Number.isInteger as (input: unknown) => input is number,
 )
@@ -154,7 +151,7 @@ export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.literal('a') // Schema<'a'>
  *
@@ -166,7 +163,7 @@ export function literal<L extends [Literal, ...Literal[]], Input = unknown>(
   ...literals: L
 ): LiteralSchema<L[number], Input> {
   return {
-    ...fromPredicate('literal', isLiteral(...literals)),
+    ...fromGuard('literal', isLiteral(...literals)),
     literals,
   }
 }

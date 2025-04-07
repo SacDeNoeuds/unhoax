@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { number, string } from './primitives'
-import { between, max, min, nonEmpty, pattern, refineAs, size } from './refine'
+import { between, max, min, nonEmpty, pattern, guardAs, size } from './refine'
 import type { Schema } from './Schema'
 import { Set as setOf } from './Set'
 
@@ -8,7 +8,7 @@ describe('refineAs', () => {
   type Email = string & { _tag: 'Email' }
   const isEmail = (value: string): value is Email => value.includes('@')
 
-  const refineAsEmail = refineAs('Email', isEmail)
+  const refineAsEmail = guardAs('Email', isEmail)
   const emailSchema = refineAsEmail(string)
 
   it('parses an email', () => {

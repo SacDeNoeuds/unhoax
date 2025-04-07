@@ -16,7 +16,7 @@ export { Set_ as Set }
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.Set(x.string)
  * const result = schema.parse(new Set(['a', 'b']))

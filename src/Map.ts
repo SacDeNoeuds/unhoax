@@ -22,7 +22,7 @@ export { Map_ as Map }
  * @see {@link record}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const nameByIdSchema = x.Map(x.number, x.string)
  *

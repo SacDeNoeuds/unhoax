@@ -4,7 +4,7 @@ import type { Schema } from './Schema'
  * @category Parsing
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const result = x.unsafeParse(x.string, 'hello')
  * result // 'hello'

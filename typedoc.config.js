@@ -4,7 +4,7 @@ const isGithubActions = process.env.GITHUB_ACTIONS === 'true'
 const config = {
   basePath: isGithubActions ? './unhoax' : './docs',
   name: 'unhoax',
-  entryPoints: ['./src/main.ts'],
+  entryPoints: ['./src/main-exports.ts'],
   plugin: ['typedoc-unhoax-theme'],
   navigationLinks: {
     GitHub: 'https://github.com/SacDeNoeuds/unhoax',

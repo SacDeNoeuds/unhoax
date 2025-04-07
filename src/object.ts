@@ -31,7 +31,7 @@ export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
  * @see {@link partial}
  * @example Type Inference – Named Schema
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // Use the schema as source of truth:
  * const personSchema = x.object({
@@ -54,7 +54,7 @@ export function object<T extends Record<string, Schema<any>>, Input = unknown>(
  * @see {@link Map}
  * @example Type-Driven – Named Schema
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * type Person = { name: string, age: number }
  * const personSchema = x.object<Person>({
@@ -95,7 +95,7 @@ export function object<T extends Record<string, any>, Input = unknown>(
  * @see {@link object}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const personSchema = x.object({
  *   name: x.string,

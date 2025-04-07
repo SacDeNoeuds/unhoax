@@ -9,7 +9,7 @@ export type Failure = { success: false; error: ParseError }
  * @see {@link ParseIssue}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const result = x.string.parse(someInput)
  * result:
@@ -47,7 +47,7 @@ export type ParseIssue = {
  * @see {@link createParseContext}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const customSchema: x.Schema<string> = {
  *   name: 'myType',
@@ -81,7 +81,7 @@ export function failure(
  * @see {@link createParseContext}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const customSchema: x.Schema<string> = {
  *   name: 'myType',

@@ -6,14 +6,16 @@
  * @document ../guides/custom-type-first-name.md
  * @document ../guides/migrating-from-x.md
  */
-
 // @document ../guides/coercing-a-date-from-json.md
 // @document ../guides/coercing-a-bigint-from-json.md
 export { array, type ArraySchema } from './array'
 export { bigint } from './bigint'
 export { date } from './date'
 export { Enum } from './enum'
-export { fromPredicate, type Predicate } from './fromPredicate'
+export {
+  fromGuard as fromPredicate,
+  type Guard as Predicate,
+} from './fromGuard'
 export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
 export { Map, type MapKey, type MapSchema, type MapValue } from './Map'
@@ -52,7 +54,7 @@ export {
   nonEmpty,
   pattern,
   refine,
-  refineAs,
+  guardAs as refineAs,
   size,
 } from './refine'
 export {

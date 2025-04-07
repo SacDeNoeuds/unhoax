@@ -11,7 +11,7 @@ export interface Refinement {
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * declare const isEmail: (input: string) => boolean
  *
@@ -59,26 +59,26 @@ export function refine<S extends Schema<any, unknown>>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * type Email = string & { _tag: 'Email' }
  * declare const isEmail: (input: string) => input is Email
  *
- * const refineAsEmail = x.refineAs('Email', isEmail)
- * const emailSchema = refineAsEmail(x.string) // Schema<Email>
+ * const guardAsEmail = x.guardAs('Email', isEmail)
+ * const emailSchema = guardAsEmail(x.string) // Schema<Email>
  *
  * // or, using pipe:
  * import pipe from 'just-pipe'
  *
  * const emailSchema = pipe(
  *   x.string,
- *   x.refineAs('Email', isEmail),
+ *   x.guardAs('Email', isEmail),
  * ) // Schema<Email>
  * ```
  */
-export const refineAs = refine as <T, U extends T>(
+export const guardAs = refine as <T, U extends T>(
   name: string,
-  predicate: (value: T) => value is U,
+  guard: (value: T) => value is U,
   meta?: unknown,
 ) => <Input = unknown>(schema: Schema<T, Input>) => Schema<U, Input>
 
@@ -86,7 +86,7 @@ export const refineAs = refine as <T, U extends T>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // works with dates
  * const refineAfterNow = x.greaterThan(new Date(), 'after now')
@@ -120,7 +120,7 @@ export const refineAs = refine as <T, U extends T>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // works with dates
  * const refineNowOrAfter = x.min(new Date(), 'now or after')
@@ -154,7 +154,7 @@ export function min<T extends { valueOf(): number }>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // works with dates
  * const refineBeforeNow = x.lowerThan(new Date(), 'before now')
@@ -188,7 +188,7 @@ export function min<T extends { valueOf(): number }>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // works with dates
  * const refineNowOrBefore = x.max(new Date(), 'now or before')
@@ -222,7 +222,7 @@ export function max<T extends { valueOf(): number }>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // works with dates
  * declare const today: Date
@@ -264,7 +264,7 @@ export function between<T extends { valueOf(): number }>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  * import pipe from 'just-pipe'
  *
  * // With a Set
@@ -303,7 +303,7 @@ export function nonEmpty<T extends { length: number } | { size: number }>(
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * // With a Set
  * const mySet = x.size({ min: 1, max: 10, reason: 'My sets are small' })
@@ -352,7 +352,7 @@ export function size<T extends { size: number } | { length: number }>(options: {
  * @category Refinement
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const pattern = x.pattern(/^https?:\/\/.+/)
  * const withUrlPattern = pattern(x.string)

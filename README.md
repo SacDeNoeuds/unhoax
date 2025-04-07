@@ -27,7 +27,7 @@ Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/), yo
 ## Quick Sample – we want code!
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 // Type-Driven:
 type Person = { name: string; age: number }

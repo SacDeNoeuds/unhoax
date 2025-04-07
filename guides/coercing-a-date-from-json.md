@@ -16,7 +16,7 @@ Now this is not always feasible, so let’s do it using our schemas:
 What we will do is parsing any BigInt input and create a BigInt from it:
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 type DateInput = ConstructorParameters<typeof Date>[0] // Date | string | number
 const dateInputSchema: x.Schema<DateInput> = x.union(

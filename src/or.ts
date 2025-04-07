@@ -7,7 +7,7 @@ import { union } from './union'
  * @see {@link union}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const orString = x.or(x.string)
  * const schema = orString(x.number) // Schema<number | string>
@@ -28,7 +28,7 @@ export function or<B, InputB = unknown>(b: Schema<B, InputB>) {
  * @see {@link nullable}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.optional(x.string) // Schema<string | undefined>
  */
@@ -41,7 +41,7 @@ export const optional = or(literal(undefined))
  * @see {@link nullable}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.nil(x.string) // Schema<string | undefined | null>
  */
@@ -54,7 +54,7 @@ export const nil = or(literal(undefined, null))
  * @see {@link nil}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.nullable(x.string) // Schema<string | null>
  */

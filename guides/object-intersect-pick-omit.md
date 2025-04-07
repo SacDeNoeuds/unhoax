@@ -15,7 +15,7 @@ They all have their TypeScript typing:
 Let’s consider those schemas:
 
 ```ts
-import * as x from 'unhoax'
+import { x } from 'unhoax'
 
 const person = x.object('Person', {
   name: x.string,
@@ -35,7 +35,7 @@ const footballer = x.object('Footballer', { … })
 ### Intersection – merging 2 objects
 
 ```ts
-import * as x from "unhoax";
+import { x } from "unhoax";
 
 const footballerPerson = x.object({
   ...person.props,
@@ -69,7 +69,7 @@ typeof result: {
 ### Pick – use only some properties
 
 ```ts
-import * as x from "unhoax"
+import { x } from "unhoax"
 import pick from "just-pick"
 
 const nameOnlyProps = pick(person.props, ["name"])
@@ -89,7 +89,7 @@ typeof result: {
 ### Omit – remove some properties
 
 ```ts
-import * as x from "unhoax";
+import { x } from "unhoax";
 import omit from "just-omit";
 
 const withoutAgeProps = omit(person.props, ["age"])

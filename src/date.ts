@@ -21,7 +21,7 @@ const unsafeDate = mapDateFromInput(inputSchema)
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const schema = x.date
  *

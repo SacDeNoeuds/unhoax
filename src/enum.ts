@@ -9,7 +9,7 @@ interface Enum {
  * @category Schema
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const Direction = {
  *   Left: 'LEFT',

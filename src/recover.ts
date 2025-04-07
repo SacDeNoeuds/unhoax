@@ -6,7 +6,7 @@ import type { Schema } from './Schema'
  * @see {@link fallback} for usage without callback
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const orString = x.recover(() => 'not a number')
  * const schema = orString(x.number)
@@ -40,7 +40,7 @@ export function recover<U>(getFallback: () => U) {
  * @see {@link recover}
  * @example
  * ```ts
- * import * as x from 'unhoax'
+ * import { x } from 'unhoax'
  *
  * const orString = x.fallback('not a number')
  * const schema = orString(x.number)
