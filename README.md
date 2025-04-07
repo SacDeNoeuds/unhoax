@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Package Size" src="https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*]">
+  <img alt="Package Size" src="https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}]">
   <img alt="Total coverage" src="https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/main/badges/coverage-total.svg">
   <img alt="Dependency Count" src="https://badgen.net/bundlephobia/dependency-count/unhoax">
 </p>

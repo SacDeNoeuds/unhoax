@@ -19,7 +19,7 @@ type LoginData = {
 
 ## unhoax
 
-![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[x])
+![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}])
 
 [NPM](https://www.npmjs.com/package/unhoax) | [Website](..) | tree-shakeable
 
