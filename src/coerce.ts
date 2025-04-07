@@ -1,7 +1,7 @@
 import { flatMap, map, type Schema } from './Schema'
 
 /**
- * @category Advanced
+ * @category Advanced Usage / Core
  * @example Implementation of x.numberFromString
  * ```ts
  * import { x } from 'unhoax'
