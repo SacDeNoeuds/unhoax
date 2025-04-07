@@ -1,7 +1,7 @@
 import { optional } from './or'
 import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema, TypeOfSchema } from './Schema'
+import { standardize, type Schema, type TypeOfSchema } from './Schema'
 
 export type PropsOf<T extends Record<string, any>> = {
   [Key in keyof T]: Schema<T[Key]>
@@ -70,9 +70,9 @@ export function object<T extends Record<string, any>, Input = unknown>(
 ): ObjectSchema<T, Input>
 export function object<T extends Record<string, any>, Input = unknown>(
   ...args: [name: string, props: PropsOf<T>] | [props: PropsOf<T>]
-): ObjectSchema<T, Input> {
+) {
   const [name, props] = args.length === 1 ? ['object', args[0]] : args
-  return {
+  return standardize<ObjectSchema<T, Input>>({
     name,
     props,
     parse: (input, context = createParseContext(name, input)) => {
@@ -87,7 +87,7 @@ export function object<T extends Record<string, any>, Input = unknown>(
       })
       return success(context, parsed)
     },
-  }
+  })
 }
 
 /**

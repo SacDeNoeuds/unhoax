@@ -1,6 +1,6 @@
 import { createParseContext } from './ParseContext'
 import type { Refinement } from './refine'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema
@@ -16,12 +16,10 @@ import type { Schema } from './Schema'
  * })
  * ```
  */
-export function lazy<T, Input = unknown>(
-  getSchema: () => Schema<T, Input>,
-): Schema<T, Input> {
+export function lazy<T, Input = unknown>(getSchema: () => Schema<T, Input>) {
   let name = 'lazy'
   let refinements: Refinement[] | undefined
-  return {
+  return standardize<Schema<T, Input>>({
     get name() {
       return name
     },
@@ -37,5 +35,5 @@ export function lazy<T, Input = unknown>(
         context ?? createParseContext(schema.name, input),
       )
     },
-  }
+  })
 }

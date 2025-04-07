@@ -24,11 +24,16 @@ describe('instanceOf', () => {
     it('fails parsing an invalid input', () => {
       expect(instanceOf(Class).parse(invalidInput)).toEqual({
         success: false,
-        error: {
-          input: invalidInput,
-          schemaName: Class.name,
-          issues: [{ schemaName: Class.name, input: invalidInput, path: [] }],
-        },
+        input: invalidInput,
+        schemaName: Class.name,
+        issues: [
+          {
+            schemaName: Class.name,
+            message: expect.any(String),
+            input: invalidInput,
+            path: [],
+          },
+        ],
       })
     })
   })

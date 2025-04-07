@@ -13,13 +13,16 @@ describe('bigint', () => {
     const result = bigint.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'bigint',
-        issues: [
-          { schemaName: 'bigint | number | string | boolean', input, path: [] },
-        ],
-      },
+      input,
+      schemaName: 'bigint',
+      issues: [
+        {
+          schemaName: 'bigint | number | string | boolean',
+          message: expect.any(String),
+          input,
+          path: [],
+        },
+      ],
     })
   })
 
@@ -28,11 +31,11 @@ describe('bigint', () => {
     const result = bigint.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'bigint',
-        issues: [{ schemaName: 'bigint', input, path: [] }],
-      },
+      input,
+      schemaName: 'bigint',
+      issues: [
+        { schemaName: 'bigint', message: expect.any(String), input, path: [] },
+      ],
     })
   })
 })

@@ -1,5 +1,5 @@
 import { fromGuard } from './fromGuard'
-import { map, type Schema } from './Schema'
+import { map, standardize, type Schema } from './Schema'
 
 /**
  * Never-failing schema.
@@ -11,10 +11,10 @@ import { map, type Schema } from './Schema'
  * x.unknown.parse(true) // { success: true, value: true }
  * ```
  */
-export const unknown: Schema<unknown> = {
+export const unknown = standardize<Schema<unknown>>({
   name: 'unknown',
   parse: (input) => ({ success: true, value: input }),
-}
+})
 
 /**
  * @category Schema
@@ -161,9 +161,9 @@ export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
  */
 export function literal<L extends [Literal, ...Literal[]], Input = unknown>(
   ...literals: L
-): LiteralSchema<L[number], Input> {
-  return {
+) {
+  return standardize<LiteralSchema<L[number], Input>>({
     ...fromGuard('literal', isLiteral(...literals)),
     literals,
-  }
+  })
 }

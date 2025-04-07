@@ -1,7 +1,7 @@
 import { isObject } from './object'
 import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -35,9 +35,9 @@ export interface RecordSchema<Key extends PropertyKey, Value, Input = unknown>
 export function record<Key extends PropertyKey, Value, Input = unknown>(
   key: Schema<Key>,
   value: Schema<Value>,
-): RecordSchema<Key, Value, Input> {
+) {
   const name = `Record<${key.name}, ${value.name}>`
-  return {
+  return standardize<RecordSchema<Key, Value, Input>>({
     name,
     refinements: [],
     key,
@@ -56,5 +56,5 @@ export function record<Key extends PropertyKey, Value, Input = unknown>(
       })
       return success(context, acc)
     },
-  }
+  })
 }

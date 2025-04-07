@@ -15,11 +15,16 @@ describe('tuple', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: '[string, number, boolean]',
-        issues: [{ schemaName: '[string, number, boolean]', input, path: [] }],
-      },
+      input,
+      schemaName: '[string, number, boolean]',
+      issues: [
+        {
+          schemaName: '[string, number, boolean]',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -28,14 +33,22 @@ describe('tuple', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: '[string, number, boolean]',
-        issues: [
-          { schemaName: 'number', input: true, path: [1] },
-          { schemaName: 'boolean', input: 42, path: [2] },
-        ],
-      },
+      input,
+      schemaName: '[string, number, boolean]',
+      issues: [
+        {
+          schemaName: 'number',
+          input: true,
+          path: [1],
+          message: expect.any(String),
+        },
+        {
+          schemaName: 'boolean',
+          input: 42,
+          path: [2],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -44,11 +57,16 @@ describe('tuple', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: '[string, number, boolean]',
-        issues: [{ schemaName: '[string, number, boolean]', input, path: [] }],
-      },
+      input,
+      schemaName: '[string, number, boolean]',
+      issues: [
+        {
+          schemaName: '[string, number, boolean]',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

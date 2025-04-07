@@ -20,11 +20,16 @@ describe('union', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'string | number | boolean',
-        issues: [{ schemaName: 'string | number | boolean', input, path: [] }],
-      },
+      input,
+      schemaName: 'string | number | boolean',
+      issues: [
+        {
+          schemaName: 'string | number | boolean',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })
@@ -50,11 +55,16 @@ describe('variant', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'person | car | object',
-        issues: [{ schemaName: 'person | car | object', input, path: [] }],
-      },
+      input,
+      schemaName: 'person | car | object',
+      issues: [
+        {
+          schemaName: 'person | car | object',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -63,11 +73,16 @@ describe('variant', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'person | car | object',
-        issues: [{ schemaName: 'person | car | object', input, path: [] }],
-      },
+      input,
+      schemaName: 'person | car | object',
+      issues: [
+        {
+          schemaName: 'person | car | object',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

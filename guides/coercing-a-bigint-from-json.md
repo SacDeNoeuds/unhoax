@@ -45,11 +45,9 @@ const bigint = pipe(
     } catch (error) {
       return {
         success: false,
-        error: {
-          input: stringOrNumber,
-          schemaName: 'bigint',
-          issues: [],
-        },
+        input: stringOrNumber,
+        schemaName: 'bigint',
+        issues: [],
       }
     }
   }),

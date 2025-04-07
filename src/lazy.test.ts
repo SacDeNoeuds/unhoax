@@ -30,18 +30,17 @@ describe('lazy', () => {
     const result = make().parse('1234')
     expect(result).toEqual({
       success: false,
-      error: {
-        input: '1234',
-        schemaName: 'string',
-        issues: [
-          {
-            schemaName: 'string',
-            input: '1234',
-            refinement: 'minSize',
-            path: [],
-          },
-        ],
-      },
+      input: '1234',
+      schemaName: 'string',
+      issues: [
+        {
+          schemaName: 'string',
+          input: '1234',
+          refinement: 'minSize',
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -49,11 +48,16 @@ describe('lazy', () => {
     const result = make().parse(42)
     expect(result).toEqual({
       success: false,
-      error: {
-        input: 42,
-        schemaName: 'string',
-        issues: [{ schemaName: 'string', input: 42, path: [] }],
-      },
+      input: 42,
+      schemaName: 'string',
+      issues: [
+        {
+          schemaName: 'string',
+          input: 42,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

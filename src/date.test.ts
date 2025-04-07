@@ -20,18 +20,17 @@ describe('date', () => {
     const result = date.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Date',
-        issues: [
-          {
-            schemaName: 'Date',
-            refinement: 'ValidDate',
-            input,
-            path: [],
-          },
-        ],
-      },
+      input,
+      schemaName: 'Date',
+      issues: [
+        {
+          schemaName: 'Date',
+          refinement: 'ValidDate',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -44,11 +43,16 @@ describe('date', () => {
     const result = date.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Date',
-        issues: [{ schemaName: 'Date | string | number', input, path: [] }],
-      },
+      input,
+      schemaName: 'Date',
+      issues: [
+        {
+          schemaName: 'Date | string | number',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

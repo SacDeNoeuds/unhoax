@@ -23,11 +23,16 @@ describe('flatMap', () => {
       const result = numberFromString.parse('foo')
       expect(result).toEqual({
         success: false,
-        error: {
-          input: 'foo',
-          schemaName: 'numberFromString',
-          issues: [{ schemaName: 'number', input: NaN, path: [] }],
-        },
+        input: 'foo',
+        schemaName: 'numberFromString',
+        issues: [
+          {
+            schemaName: 'number',
+            input: NaN,
+            path: [],
+            message: expect.any(String),
+          },
+        ],
       })
     })
 
@@ -35,11 +40,16 @@ describe('flatMap', () => {
       const result = numberFromString.parse(42)
       expect(result).toEqual({
         success: false,
-        error: {
-          input: 42,
-          schemaName: 'numberFromString',
-          issues: [{ schemaName: 'string', input: 42, path: [] }],
-        },
+        input: 42,
+        schemaName: 'numberFromString',
+        issues: [
+          {
+            schemaName: 'string',
+            input: 42,
+            path: [],
+            message: expect.any(String),
+          },
+        ],
       })
     })
   })

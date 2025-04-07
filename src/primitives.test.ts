@@ -33,11 +33,16 @@ describe('fromPredicate', () => {
     it('fails parsing an invalid input', () => {
       expect(schema.parse(invalidInput)).toEqual({
         success: false,
-        error: {
-          input: invalidInput,
-          schemaName: schema.name,
-          issues: [{ input: invalidInput, schemaName: schema.name, path: [] }],
-        },
+        input: invalidInput,
+        schemaName: schema.name,
+        issues: [
+          {
+            input: invalidInput,
+            schemaName: schema.name,
+            path: [],
+            message: expect.any(String),
+          },
+        ],
       })
     })
   })

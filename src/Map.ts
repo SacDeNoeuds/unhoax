@@ -1,6 +1,6 @@
 import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -35,9 +35,9 @@ export { Map_ as Map }
 function Map_<T extends Map<PropertyKey, any>, Input = unknown>(
   key: Schema<MapKey<T>>,
   value: Schema<MapValue<T>>,
-): MapSchema<T, Input> {
+) {
   const name = `Map<${key.name}, ${value.name}>`
-  return {
+  return standardize<MapSchema<T, Input>>({
     name,
     key,
     value,
@@ -56,5 +56,5 @@ function Map_<T extends Map<PropertyKey, any>, Input = unknown>(
       })
       return success(context, acc)
     },
-  }
+  })
 }

@@ -2,7 +2,12 @@ import type { ObjectSchema } from './object'
 import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
 import type { LiteralSchema } from './primitives'
-import type { InputOfSchema, Schema, TypeOfSchema } from './Schema'
+import {
+  standardize,
+  type InputOfSchema,
+  type Schema,
+  type TypeOfSchema,
+} from './Schema'
 
 /**
  * @category Schema Definition
@@ -15,8 +20,10 @@ export interface UnionSchema<T, Input = unknown> extends Schema<T, Input> {
 function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
   name: string,
   schemas: T,
-): UnionSchema<TypeOfSchema<T[number]>, InputOfSchema<T[number]>> {
-  return {
+) {
+  return standardize<
+    UnionSchema<TypeOfSchema<T[number]>, InputOfSchema<T[number]>>
+  >({
     name,
     schemas,
     refinements: [],
@@ -27,7 +34,7 @@ function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
       }
       return failure(context, name, input)
     },
-  }
+  })
 }
 
 /**

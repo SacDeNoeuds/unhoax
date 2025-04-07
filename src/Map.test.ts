@@ -16,14 +16,22 @@ describe('Map schema', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Map<number, number>',
-        issues: [
-          { schemaName: 'number', input: 'a', path: ['a'] },
-          { schemaName: 'number', input: 'b', path: ['b'] },
-        ],
-      },
+      input,
+      schemaName: 'Map<number, number>',
+      issues: [
+        {
+          schemaName: 'number',
+          input: 'a',
+          path: ['a'],
+          message: expect.any(String),
+        },
+        {
+          schemaName: 'number',
+          input: 'b',
+          path: ['b'],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -33,14 +41,22 @@ describe('Map schema', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Map<string, string>',
-        issues: [
-          { schemaName: 'string', input: 1, path: ['a'] },
-          { schemaName: 'string', input: 2, path: ['b'] },
-        ],
-      },
+      input,
+      schemaName: 'Map<string, string>',
+      issues: [
+        {
+          schemaName: 'string',
+          input: 1,
+          path: ['a'],
+          message: expect.any(String),
+        },
+        {
+          schemaName: 'string',
+          input: 2,
+          path: ['b'],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -50,11 +66,16 @@ describe('Map schema', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Map<string, string>',
-        issues: [{ schemaName: 'Map<string, string>', input, path: [] }],
-      },
+      input,
+      schemaName: 'Map<string, string>',
+      issues: [
+        {
+          schemaName: 'Map<string, string>',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

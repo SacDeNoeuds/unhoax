@@ -1,6 +1,6 @@
 import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -23,9 +23,9 @@ export interface TupleSchema<T, Input = unknown> extends Schema<T, Input> {
  */
 export function tuple<T extends [any, ...any[]], Input = unknown>(
   ...items: { [K in keyof T]: Schema<T[K]> }
-): TupleSchema<T, Input> {
+) {
   const name = `[${items.map((schema) => schema.name).join(', ')}]`
-  return {
+  return standardize<TupleSchema<T, Input>>({
     name,
     items,
     parse: (input, context = createParseContext(name, input)) => {
@@ -42,5 +42,5 @@ export function tuple<T extends [any, ...any[]], Input = unknown>(
       })
       return success(context, tuple as T)
     },
-  }
+  })
 }

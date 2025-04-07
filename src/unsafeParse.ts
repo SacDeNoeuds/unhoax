@@ -24,5 +24,5 @@ export function unsafeParse<T, Input = unknown>(
 ): T {
   const result = schema.parse(input)
   if (result.success) return result.value
-  throw new Error('ParseError', { cause: result.error })
+  throw new Error('ParseError', { cause: result })
 }

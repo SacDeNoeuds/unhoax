@@ -18,8 +18,8 @@ function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
  * x.instanceOf(User).parse(new User()) // succeeds
  * ```
  */
-export function instanceOf<T, Input = unknown>(
+export function instanceOf<T extends Input, Input = unknown>(
   constructor: new (...args: any[]) => T,
 ): Schema<T, Input> {
-  return fromGuard(constructor.name, isInstanceOf(constructor))
+  return fromGuard<T, Input>(constructor.name, isInstanceOf(constructor))
 }

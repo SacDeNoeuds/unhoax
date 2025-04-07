@@ -32,11 +32,11 @@ describe.each<{ case: string; schema: ObjectSchema<Person>; name: string }>([
   it('fails parsing a number', () => {
     expect(person.parse(42)).toEqual({
       success: false,
-      error: {
-        input: 42,
-        schemaName,
-        issues: [{ input: 42, schemaName, path: [] }],
-      },
+      input: 42,
+      schemaName,
+      issues: [
+        { input: 42, schemaName, path: [], message: expect.any(String) },
+      ],
     })
   })
 
@@ -44,14 +44,22 @@ describe.each<{ case: string; schema: ObjectSchema<Person>; name: string }>([
     const result = person.parse({ name: 42, age: 'hello' })
     expect(result).toEqual({
       success: false,
-      error: {
-        input: { name: 42, age: 'hello' },
-        schemaName,
-        issues: [
-          { path: ['name'], input: 42, schemaName: 'string' },
-          { path: ['age'], input: 'hello', schemaName: 'number' },
-        ],
-      },
+      input: { name: 42, age: 'hello' },
+      schemaName,
+      issues: [
+        {
+          path: ['name'],
+          input: 42,
+          schemaName: 'string',
+          message: expect.any(String),
+        },
+        {
+          path: ['age'],
+          input: 'hello',
+          schemaName: 'number',
+          message: expect.any(String),
+        },
+      ],
     })
   })
 

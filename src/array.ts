@@ -1,13 +1,13 @@
 /** @module */
 import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
  * @see {@link array}
  */
-export interface ArraySchema<T, Input = unknown> extends Schema<T[]> {
+export interface ArraySchema<T, Input = unknown> extends Schema<T[], Input> {
   readonly item: Schema<T, Input>
 }
 
@@ -22,13 +22,11 @@ export interface ArraySchema<T, Input = unknown> extends Schema<T[]> {
  * const result = schema.parse(['a', 'b'])
  * ```
  */
-export function array<T, Input = unknown>(
-  itemSchema: Schema<T>,
-): ArraySchema<T, Input> {
+export function array<T, Input = unknown>(itemSchema: Schema<T>) {
   const name = `Array<${itemSchema.name}>`
-  return {
+  return standardize<ArraySchema<T, Input>>({
     name,
-    item: itemSchema,
+    item: itemSchema as any,
     parse: (input, context = createParseContext(name, input)) => {
       if (!Array.isArray(input)) return failure(context, name, input)
 
@@ -41,5 +39,5 @@ export function array<T, Input = unknown>(
       })
       return success(context, parsed)
     },
-  }
+  })
 }

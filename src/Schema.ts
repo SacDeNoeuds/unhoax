@@ -1,12 +1,28 @@
+import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { createParseContext, type ParseContext } from './ParseContext'
 import { type ParseResult } from './ParseResult'
 import type { Refinement } from './refine'
+
+const vendor = 'unhoax'
+const version = 1 as const
+
+export function standardize<S extends Schema<any, any>>(
+  config: Omit<S, keyof StandardSchemaV1>,
+): S {
+  return Object.assign(config as any, {
+    '~standard': {
+      vendor,
+      version,
+      validate: config.parse,
+    },
+  })
+}
 
 /**
  * @category Schema Definition
  * @see {@link TypeOf}
  */
-export interface Schema<T, Input = unknown> {
+export interface Schema<T, Input = unknown> extends StandardSchemaV1<Input, T> {
   readonly name: string
   readonly refinements?: Refinement[]
   /**
@@ -132,11 +148,11 @@ export function flatMap<Input, Output>(
     return {
       ...schema,
       name: schemaName,
-      parse: (input, context = createParseContext(schemaName, input)) => {
+      parse: (input: any, context = createParseContext(schemaName, input)) => {
         const result = schema.parse(input, context)
         return result.success ? mapper(result.value, context) : result
       },
-    }
+    } as any
   }
 }
 

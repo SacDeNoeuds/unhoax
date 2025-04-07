@@ -1,7 +1,13 @@
+import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { ParseContext } from './ParseContext'
 
-export type Success<T> = { success: true; value: T }
-export type Failure = { success: false; error: ParseError }
+export type Success<T> = Extract<
+  { readonly success: true; readonly value: T },
+  StandardSchemaV1.SuccessResult<T>
+>
+export interface Failure extends ParseError {
+  readonly success: false
+}
 
 /**
  * @category Parsing
@@ -17,28 +23,44 @@ export type Failure = { success: false; error: ParseError }
  *  | { success: false, error: ParseError }
  * ```
  */
-export type ParseResult<T> = Success<T> | Failure
+export type ParseResult<T> = Extract<
+  Success<T> | Failure,
+  StandardSchemaV1.Result<T>
+>
 
 /**
  * @category Parsing
  * @see {@link ParseResult}
  * @see {@link ParseIssue}
  */
-export type ParseError = {
-  schemaName: string
-  input: unknown
-  issues: ParseIssue[]
-}
+export type ParseError = Extract<
+  {
+    readonly schemaName: string
+    readonly input: unknown
+    readonly issues: ReadonlyArray<StandardSchemaV1.Issue>
+  },
+  StandardSchemaV1.FailureResult
+>
 
 /**
  * @category Parsing
  * @see {@link ParseError}
  */
-export type ParseIssue = {
-  schemaName: string
-  refinement?: string
-  input: unknown
-  path: PropertyKey[]
+export type ParseIssue = Extract<
+  {
+    readonly schemaName: string
+    readonly refinement?: string
+    readonly input: unknown
+    readonly message: string
+    readonly path: PropertyKey[]
+  },
+  StandardSchemaV1.Issue
+>
+
+function makeMessage(issue: Omit<ParseIssue, 'message'>): string {
+  const refinement = issue.refinement ? ` (${issue.refinement})` : ''
+  const path = issue.path.length ? `At ${issue.path.join('.')}: ` : ''
+  return `${path}not a ${issue.schemaName}${refinement}`
 }
 
 /**
@@ -64,14 +86,20 @@ export function failure(
   input: unknown,
   refinement?: string,
 ): Failure {
-  context.issues.push({ input, schemaName, path: context.path, refinement })
+  context.issues.push({
+    input,
+    schemaName,
+    path: context.path,
+    refinement,
+    get message() {
+      return makeMessage(this)
+    },
+  })
   return {
     success: false,
-    error: {
-      input: context.rootInput,
-      schemaName: context.rootSchemaName,
-      issues: context.issues,
-    },
+    input: context.rootInput,
+    schemaName: context.rootSchemaName,
+    issues: context.issues,
   }
 }
 
@@ -97,10 +125,8 @@ export function success<T>(context: ParseContext, value: T): ParseResult<T> {
     ? { success: true, value }
     : {
         success: false,
-        error: {
-          input: context.rootInput,
-          schemaName: context.rootSchemaName,
-          issues: context.issues,
-        },
+        input: context.rootInput,
+        schemaName: context.rootSchemaName,
+        issues: context.issues,
       }
 }

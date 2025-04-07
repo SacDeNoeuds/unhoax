@@ -20,13 +20,17 @@ describe('refineAs', () => {
     const result = emailSchema.parse('a')
     expect(result).toEqual({
       success: false,
-      error: {
-        input: 'a',
-        schemaName: 'string',
-        issues: [
-          { schemaName: 'string', input: 'a', path: [], refinement: 'Email' },
-        ],
-      },
+      input: 'a',
+      schemaName: 'string',
+      issues: [
+        {
+          schemaName: 'string',
+          input: 'a',
+          path: [],
+          refinement: 'Email',
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })
@@ -64,18 +68,17 @@ describe.each<{
     const result = schema.parse(invalidInput)
     expect(result).toEqual({
       success: false,
-      error: {
-        input: invalidInput,
-        schemaName: 'number',
-        issues: [
-          {
-            schemaName: 'number',
-            input: invalidInput,
-            path: [],
-            refinement: expect.any(String),
-          },
-        ],
-      },
+      input: invalidInput,
+      schemaName: 'number',
+      issues: [
+        {
+          schemaName: 'number',
+          input: invalidInput,
+          path: [],
+          refinement: expect.any(String),
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })
@@ -129,18 +132,17 @@ describe.each<{
     const result = schema.parse(invalidInput)
     expect(result).toEqual({
       success: false,
-      error: {
-        input: invalidInput,
-        schemaName: schema.name,
-        issues: [
-          {
-            schemaName: schema.name,
-            input: invalidInput,
-            path: expect.any(Array),
-            refinement: expect.any(String),
-          },
-        ],
-      },
+      input: invalidInput,
+      schemaName: schema.name,
+      issues: [
+        {
+          schemaName: schema.name,
+          input: invalidInput,
+          path: expect.any(Array),
+          refinement: expect.any(String),
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

@@ -1,6 +1,6 @@
 import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 export type Guard<Input, T extends Input> = (input: Input) => input is T
 
@@ -30,10 +30,10 @@ export type Guard<Input, T extends Input> = (input: Input) => input is T
 export function fromGuard<T extends Input, Input = unknown>(
   name: string,
   guard: Guard<Input, T>,
-): Schema<T, Input> {
-  return {
+) {
+  return standardize<Schema<T, Input>>({
     name,
     parse: (input, context = createParseContext(name, input)) =>
       guard(input) ? success(context, input) : failure(context, name, input),
-  }
+  })
 }

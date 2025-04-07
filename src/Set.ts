@@ -1,6 +1,6 @@
 import { createParseContext, withPathSegment } from './ParseContext'
 import { failure, success } from './ParseResult'
-import type { Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -23,9 +23,9 @@ export { Set_ as Set }
  * result // { success: true, value: Set { 'a', 'b' } }
  * ```
  */
-function Set_<T, Input = unknown>(item: Schema<T>): SetSchema<T, Input> {
+function Set_<T, Input = unknown>(item: Schema<T>) {
   const name = `Set<${item.name}>`
-  return {
+  return standardize<SetSchema<T, Input>>({
     name,
     item,
     parse: (input, context = createParseContext(name, input)) => {
@@ -39,5 +39,5 @@ function Set_<T, Input = unknown>(item: Schema<T>): SetSchema<T, Input> {
       })
       return success(context, new Set(array))
     },
-  }
+  })
 }

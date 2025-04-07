@@ -13,17 +13,16 @@ describe('record', () => {
     const result = schema.parse(42)
     expect(result).toEqual({
       success: false,
-      error: {
-        input: 42,
-        schemaName: 'Record<string, number>',
-        issues: [
-          {
-            input: 42,
-            schemaName: 'Record<string, number>',
-            path: [],
-          },
-        ],
-      },
+      input: 42,
+      schemaName: 'Record<string, number>',
+      issues: [
+        {
+          input: 42,
+          schemaName: 'Record<string, number>',
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -32,17 +31,16 @@ describe('record', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Record<string, number>',
-        issues: [
-          {
-            input: '2',
-            schemaName: 'number',
-            path: ['b'],
-          },
-        ],
-      },
+      input,
+      schemaName: 'Record<string, number>',
+      issues: [
+        {
+          input: '2',
+          schemaName: 'number',
+          path: ['b'],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

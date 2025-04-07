@@ -16,14 +16,22 @@ describe('Set schema', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Set<string>',
-        issues: [
-          { schemaName: 'string', input: 1, path: [0] },
-          { schemaName: 'string', input: 2, path: [1] },
-        ],
-      },
+      input,
+      schemaName: 'Set<string>',
+      issues: [
+        {
+          schemaName: 'string',
+          input: 1,
+          path: [0],
+          message: expect.any(String),
+        },
+        {
+          schemaName: 'string',
+          input: 2,
+          path: [1],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -33,11 +41,16 @@ describe('Set schema', () => {
     const result = schema.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Set<string>',
-        issues: [{ schemaName: 'Set<string>', input, path: [] }],
-      },
+      input,
+      schemaName: 'Set<string>',
+      issues: [
+        {
+          schemaName: 'Set<string>',
+          input,
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

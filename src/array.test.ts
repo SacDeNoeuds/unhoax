@@ -23,11 +23,16 @@ describe('array', () => {
   it('fails parsing a number (non-array)', () => {
     expect(person.parse(42)).toEqual({
       success: false,
-      error: {
-        input: 42,
-        schemaName: 'Array<object>',
-        issues: [{ input: 42, schemaName: 'Array<object>', path: [] }],
-      },
+      input: 42,
+      schemaName: 'Array<object>',
+      issues: [
+        {
+          input: 42,
+          schemaName: 'Array<object>',
+          path: [],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 
@@ -36,15 +41,28 @@ describe('array', () => {
     const result = person.parse(input)
     expect(result).toEqual({
       success: false,
-      error: {
-        input,
-        schemaName: 'Array<object>',
-        issues: [
-          { path: [0], input: 42, schemaName: 'object' },
-          { path: [1, 'name'], input: 42, schemaName: 'string' },
-          { path: [1, 'age'], input: 'hello', schemaName: 'number' },
-        ],
-      },
+      input,
+      schemaName: 'Array<object>',
+      issues: [
+        {
+          path: [0],
+          input: 42,
+          schemaName: 'object',
+          message: expect.any(String),
+        },
+        {
+          path: [1, 'name'],
+          input: 42,
+          schemaName: 'string',
+          message: expect.any(String),
+        },
+        {
+          path: [1, 'age'],
+          input: 'hello',
+          schemaName: 'number',
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })
