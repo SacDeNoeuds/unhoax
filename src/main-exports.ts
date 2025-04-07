@@ -12,6 +12,7 @@ export { array, type ArraySchema } from './array'
 export { bigint } from './bigint'
 export { date } from './date'
 export { Enum } from './enum'
+export { coerce } from './coerce'
 export {
   fromGuard as fromPredicate,
   type Guard as Predicate,
