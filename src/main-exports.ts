@@ -4,19 +4,18 @@
  * @document ../guides/getting-started.md
  * @document ../guides/custom-type-email.md
  * @document ../guides/custom-type-first-name.md
- * @document ../guides/migrating-from-x.md
+ * @document ../guides/migrating-from-zod-yup.md
  */
-// @document ../guides/coercing-a-date-from-json.md
-// @document ../guides/coercing-a-bigint-from-json.md
+// * @document ../guides/migrating-from-x.md
+// * @document ../guides/coercing-a-date-from-json.md
+// * @document ../guides/coercing-a-bigint-from-json.md
 export { array, type ArraySchema } from './array'
 export { bigint } from './bigint'
 export { date } from './date'
 export { Enum } from './enum'
 export { coerce } from './coerce'
-export {
-  fromGuard as fromPredicate,
-  type Guard as Predicate,
-} from './fromGuard'
+export { numberFromString } from './numberFromString'
+export { fromGuard, type Guard } from './fromGuard'
 export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
 export { Map, type MapKey, type MapSchema, type MapValue } from './Map'
@@ -55,7 +54,7 @@ export {
   nonEmpty,
   pattern,
   refine,
-  guardAs as refineAs,
+  guardAs,
   size,
 } from './refine'
 export {

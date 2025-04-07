@@ -7,6 +7,25 @@ category: Guide
 
 It is very common to bring your own, I built this library specifically for that actually ; because we all have our concepts which vary on the industry we work in and how our business models are defined.
 
+The "email" concept may be extraordinarily different from one environment to another:
+
+In some cases you will brand your email type: `type Email = Branded<string, 'Email'>`, in some other a simple `string` will do.
+
+In some cases, you will use more accurate sub-types:
+
+```ts
+type DisguisedEmail = Branded<string, 'DisguisedEmail'> // ie: me+disguisement@gmail.com
+type UniqueEmail = Branded<string, 'UniqueEmail'>
+type Email = DisguisedEmail | UniqueEmail
+
+// accept only non-disguised emails at sign up.
+type SignUp = (email: UniqueEmail) => …
+```
+
+There is **no way** I will know about any of that. It’s all up to you.
+
+I can recommend using [`is-email`](https://www.npmjs.com/package/is-email) though.
+
 ## Without branded types
 
 ```ts

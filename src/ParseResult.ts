@@ -20,7 +20,7 @@ export interface Failure extends ParseError {
  * const result = x.string.parse(someInput)
  * result:
  *  | { success: true, value: T }
- *  | { success: false, error: ParseError }
+ *  | { success: false, schemaName, input, issues }
  * ```
  */
 export type ParseResult<T> = Extract<

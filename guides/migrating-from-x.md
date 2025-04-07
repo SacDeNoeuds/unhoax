@@ -5,42 +5,6 @@ category: Guide
 
 ## The Example
 
-Foreword: I use **a domain-driven & type-driven approach** to development. I write types before anything else.<br>
-Then I use them to define schemas, use-cases, etc…
-
-All the libraries I will mention are very nice, usually with good type inference and large API surface, so I will stick to the differences.
-
-In general, `unhoax` proposes **less** features, and that is because we all have our development environment and there is no way for me to know about your requirements.
-
-Typically, I will **never** provide any `email` refinement/schema.
-
-<details>
-<summary>See why</summary>
-
-<div style="padding-left: 1em; margin-left: 3px; margin-top: 0.5em; border-left: 1px solid currentColor; border-color: color-mix(in srgb, currentColor, var(--color-background) 80%)">
-
-The "email" concept may be extraordinarily different from one environment to another:
-
-In some cases you will brand your email type: `type Email = Branded<string, 'Email'>`, in some other a simple `string` will do.
-
-In some cases, you will use more accurate sub-types:
-
-```ts
-type DisguisedEmail = Branded<string, 'DisguisedEmail'> // ie: me+disguisement@gmail.com
-type UniqueEmail = Branded<string, 'UniqueEmail'>
-type Email = DisguisedEmail | UniqueEmail
-
-// accept only non-disguised emails at sign up.
-type SignUp = (email: UniqueEmail) => …
-```
-
-There is **NO WAY** I will know about any of that. It’s all up to you.
-
-I can recommend using [`is-email`](https://www.npmjs.com/package/is-email) though.
-
-</div>
-</details>
-
 I took the same example as valibot’s [announcement post](https://www.builder.io/blog/introducing-valibot)
 
 ```ts
@@ -55,7 +19,7 @@ type LoginData = {
 
 ## unhoax
 
-![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[*])
+![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[x])
 
 [NPM](https://www.npmjs.com/package/unhoax) | [Website](..) | tree-shakeable
 
