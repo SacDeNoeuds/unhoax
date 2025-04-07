@@ -63,7 +63,6 @@
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.1",
-    "@standard-schema/spec": "^1.0.0",
     "@types/node": "^22.10.1",
     "@vitest/coverage-istanbul": "^2.1.8",
     "prettier": "^3.4.1",
@@ -73,5 +72,8 @@
     "typedoc-unhoax-theme": "^0.4.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@standard-schema/spec": "^1.0.0"
   }
 }
