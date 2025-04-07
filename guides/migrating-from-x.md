@@ -73,7 +73,7 @@ const emailSchema = pipe(
   x.refine('Email', isEmail),
   x.map((value) => value as Email),
   // equivalent to:
-  x.refineAs('Email', isEmailGuard),
+  x.guardAs('Email', isEmailGuard),
 )
 
 const emailSchema: x.Schema<Email, unknown>

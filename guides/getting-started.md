@@ -147,5 +147,5 @@ import pipe from 'just-pipe'
 
 declare function isEmail(value: string): value is Email
 
-const email = pipe(x.string, x.refineAs('Email', isEmail)) // Schema<Email>
+const email = pipe(x.string, x.guardAs('Email', isEmail)) // Schema<Email>
 ```

@@ -40,18 +40,18 @@ Now let’s build the schema:
 ```ts
 import { x } from 'unhoax'
 
-const refineAsEmail = x.refineAs('Email', isEmail)
-const emailSchema = refineAsEmail(x.string)
+const guardAsEmail = x.guardAs('Email', isEmail)
+const emailSchema = guardAsEmail(x.string)
 // x.Schema<Email>
 
 // or, using pipe
 import pipe from 'just-pipe'
 
-const emailSchema = pipe(x.string, x.refineAs('Email', isEmail))
+const emailSchema = pipe(x.string, x.guardAs('Email', isEmail))
 // x.Schema<Email>
 ```
 
-## Summing up – `x.refine` vs `x.refineAs`
+## Summing up – `x.refine` vs `x.guardAs`
 
 - `x.refine` does **not** change the schema type: `x.refine(schema<T>, isX) => schema<T>`
-- `x.refineAs` **does** change the schema type: `x.refineAs(schema<T>, isU) => schema<U>`
+- `x.guardAs` **does** change the schema type: `x.guardAs(schema<T>, isU) => schema<U>`
