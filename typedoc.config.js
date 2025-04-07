@@ -36,6 +36,7 @@ const config = {
     '*',
   ],
   sort: ['documents-first', 'alphabetical'],
+  customJs: './typedoc-analytics.js',
 }
 
 export default config
