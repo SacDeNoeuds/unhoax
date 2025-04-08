@@ -56,6 +56,10 @@ try {
 }
 ```
 
+## Generating random fixtures from your schemas
+
+Visit [unhoax-chance](https://sacdenoeuds.github.io/unhoax-chance/) to see how to generate random fixtures from your schemas using [ChanceJS](https://chancejs.com/).
+
 ## The purpose of this library – Why yet-another?
 
 See [here](https://sacdenoeuds.github.io/unhoax/documents/5._Why_yet-another_schema_library__.html)
