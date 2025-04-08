@@ -55,3 +55,7 @@ try {
   err.cause // x.ParseError
 }
 ```
+
+## The purpose of this library – Why yet-another?
+
+See [here](https://sacdenoeuds.github.io/unhoax/documents/5._Why_yet-another_schema_library__.html)

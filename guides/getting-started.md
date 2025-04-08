@@ -14,6 +14,8 @@ npm install --save unhoax
 This library is intended for use with **a domain-driven & type-driven approach** to development. Writing types before anything else.<br>
 Then using types to define schemas, use-cases, etc…
 
+For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
+
 All the libraries are great, usually with good type inference and large API surface – thus making choices on your behalf (see the [email example](./custom-type-email.md) to see what I mean).
 
 In general, `unhoax` proposes **less** features, and that is because we all have our development environment and there is no way for me to know about your requirements.
