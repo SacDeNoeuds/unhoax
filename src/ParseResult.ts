@@ -37,7 +37,7 @@ export type ParseError = Extract<
   {
     readonly schemaName: string
     readonly input: unknown
-    readonly issues: ReadonlyArray<StandardSchemaV1.Issue>
+    readonly issues: ReadonlyArray<ParseIssue>
   },
   StandardSchemaV1.FailureResult
 >
