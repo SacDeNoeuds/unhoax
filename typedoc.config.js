@@ -1,11 +1,9 @@
-const isGithubActions = process.env.GITHUB_ACTIONS === 'true'
-
 /** @type {Partial<import('typedoc').TypeDocOptions>} */
 const config = {
-  basePath: isGithubActions ? './unhoax' : './docs',
   name: 'unhoax',
   entryPoints: ['./src/main-exports.ts'],
-  plugin: ['typedoc-unhoax-theme'],
+  // plugin: ['typedoc-unhoax-theme'],
+  plugin: ['typedoc-plugin-markdown', 'typedoc-vitepress-theme'],
   navigationLinks: {
     GitHub: 'https://github.com/SacDeNoeuds/unhoax',
   },
@@ -37,6 +35,11 @@ const config = {
   ],
   sort: ['documents-first', 'alphabetical'],
   customJs: './typedoc-analytics.js',
+  // vitepress theme
+  docsRoot: './guides',
+  indexFormat: 'table',
+  useCodeBlocks: true,
+  disableSources: true,
 }
 
 export default config

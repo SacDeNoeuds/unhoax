@@ -1,5 +1,5 @@
 ---
-title: 5. Why yet-another schema library ?
+title: 5. Why yet-another schema library
 category: Guide
 ---
 
