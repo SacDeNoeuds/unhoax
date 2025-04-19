@@ -22,14 +22,10 @@ const person = x.object('Person', {
   age: x.number,
 })
 
-const footballer = x.object({
-  preferredFoot: x.literal('left', 'right'),
-  maxScoredGamePerSeason: x.number,
+const developer = x.object({
+  preferredKeyboardType: x.literal('compact', 'external', '…'),
+  codingStyle: x.literal('functional', 'object-oriented', 'data-oriented'),
 })
-
-// It works the same for named objects:
-const person = x.object('Person', { … })
-const footballer = x.object('Footballer', { … })
 ```
 
 ### Intersection – merging 2 objects
@@ -37,31 +33,25 @@ const footballer = x.object('Footballer', { … })
 ```ts
 import { x } from "unhoax";
 
-const footballerPerson = x.object({
+const developerPerson = x.object({
   ...person.props,
-  ...footballer.props,
+  ...developer.props,
 })
 
-// it works the same for named objects:
-const footballerPerson = x.object('FootballerPerson', {
-  ...person.props,
-  ...footballer.props,
-})
-
-const result = footballerPerson.parse({
-  name: 'toto',
+const result = developerPerson.parse({
+  name: 'Jack',
   age: 21,
-  preferredFoot: 'left',
-  maxScoredGamePerSeason: 5,
+  preferredKeyboardType: 'compact',
+  codingStyle: 'functional',
 })
 
 typeof result: {
   success: true,
   value: {
-    name: 'toto',
+    name: 'Jack',
     age: 21,
-    preferredFoot: 'left',
-    maxScoredGamePerSeason: 5
+    preferredKeyboardType: 'compact',
+    codingStyle: 'functional',
   }
 }
 ```
@@ -70,16 +60,14 @@ typeof result: {
 
 ```ts
 import { x } from "unhoax"
-import pick from "just-pick"
+import pipe from 'just-pipe'
 
-const nameOnlyProps = pick(person.props, ["name"])
-const withNameOnly = x.object(nameOnlyProps)
+// bring your `pick` function from your std:
+declare const pick: <Obj, Prop>(...props: Prop[]) => (obj: Obj) => Pick<Obj, Prop>
 
-// it works with named objects too:
-const withNameOnly = x.object('PersonWithNameOnly', nameOnlyProps)
+const schema = pipe(person.props, pick('name'), x.object)
 
-const result = withNameOnly.parse({ name: 'toto', age: 21 })
-
+const result = schema.parse({ name: 'toto' })
 typeof result: {
   success: true,
   value: { name: 'toto' },
@@ -90,12 +78,14 @@ typeof result: {
 
 ```ts
 import { x } from "unhoax";
-import omit from "just-omit";
+import pipe from 'just-pipe'
 
-const withoutAgeProps = omit(person.props, ["age"])
-const withoutAge = x.object(withoutAgeProps);
+// bring your `omit` function from your std:
+declare const omit: <Obj, Prop>(...props: Prop[]) => (obj: Obj) => Omit<Obj, Prop>
 
-const result = withoutAge.parse({ name: 'toto', age: 21 })
+
+const schema = pipe(person.props, omit('age'), x.object)
+const result = schema.parse({ name: 'toto' })
 
 typeof result: {
   success: true,
