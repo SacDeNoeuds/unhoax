@@ -6,11 +6,16 @@ export type Guard<Input, T extends Input> = (input: Input) => input is T
 
 /**
  * Utility to create schemas.<br>
+ * Used to create most of the primitives.<br>
  * Can be used to create custom schemas like `Email`.
  * @category Schema Factory
  * @see {@link string}
  * @see {@link number}
+ * @see {@link integer}
  * @see {@link boolean}
+ * @see {@link bigInt}
+ * @see {@link instanceOf}
+ * @see {@link symbol}
  * @example
  * ```ts
  * import { x } from 'unhoax'

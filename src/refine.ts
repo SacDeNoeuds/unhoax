@@ -12,19 +12,21 @@ export interface Refinement {
  * @example
  * ```ts
  * import { x } from 'unhoax'
+ * import pipe from 'just-pipe'
  *
  * declare const isEmail: (input: string) => boolean
  *
- * const refineAsEmail = x.refine('Email', isEmail)
- * const emailSchema = refineAsEmail(x.string) // Schema<string>
- *
- * // or, using pipe:
- * import pipe from 'just-pipe'
- *
- * const emailSchema: Schema<string> = pipe(
+ * const emailSchema = pipe(
  *   x.string,
  *   x.refine('Email', isEmail),
- * )
+ * ) // Schema<string>
+ * ```
+ * @example not using pipe
+ * ```ts
+ * import { x } from 'unhoax'
+ *
+ * const refineAsEmail = x.refine('Email', isEmail)
+ * const emailSchema = refineAsEmail(x.string) // Schema<string>
  * ```
  */
 export function refine<S extends Schema<any, unknown>>(

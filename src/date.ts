@@ -16,24 +16,22 @@ const unsafeDate = mapDateFromInput(inputSchema)
 /**
  * It can parse anything the `Date` constructor can take as single parameter.
  *
- * If you need to accept `Date` only, use `x.instanceOf(Date)`
+ * If you need to accept `Date` only, use `x.instanceOf(Date)` @see {@link instanceOf}
  *
  * @category Schema
  * @example
  * ```ts
  * import { x } from 'unhoax'
  *
- * const schema = x.date
+ * // parses a Date
+ * x.date.parse(new Date()) // { success: true, value: Date }
  *
- * // Date
- * x.date.parse(new Date()) // succeeds
+ * // parses a string
+ * x.date.parse('2021-01-02T03:04:05.123Z') // { success: true, value: Date }
+ * x.date.parse('2021-01-02') // { success: true, value: Date }
  *
- * // string
- * x.date.parse('2021-01-02T03:04:05.123Z') // succeeds
- * x.date.parse('2021-01-02') // succeeds
- *
- * // number
- * x.date.parse(Date.now()) // succeeds
+ * // parses a number
+ * x.date.parse(Date.now()) // { success: true, value: Date }
  * ```
  */
 export const date = refineToValidDate(unsafeDate)

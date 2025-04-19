@@ -12,10 +12,10 @@
 // * @document ../guides/coercing-a-bigint-from-json.md
 export { array, type ArraySchema } from './array'
 export { bigint } from './bigint'
+export { coerce } from './coerce'
+export { coerceNumber } from './coerceNumber'
 export { date } from './date'
 export { Enum } from './enum'
-export { coerce } from './coerce'
-export { numberFromString } from './numberFromString'
 export { fromGuard, type Guard } from './fromGuard'
 export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
@@ -50,12 +50,12 @@ export { record, type RecordSchema } from './record'
 export { fallback, recover } from './recover'
 export {
   between,
+  guardAs,
   max,
   min,
   nonEmpty,
   pattern,
   refine,
-  guardAs,
   size,
 } from './refine'
 export {

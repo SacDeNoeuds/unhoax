@@ -14,6 +14,11 @@ export interface ArraySchema<T, Input = unknown> extends Schema<T[], Input> {
 /**
  * @category Schema
  * @see {@link ArraySchema}
+ * @see {@link tuple}
+ * @see {@link Set}
+ * @see {@link Map}
+ * @see {@link object}
+ * @see {@link record}
  * @example
  * ```ts
  * import { x } from 'unhoax'

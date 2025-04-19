@@ -27,8 +27,10 @@ export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
  *
  * @category Schema
  * @see {@link record}
- * @see {@link Map}
  * @see {@link partial}
+ * @see {@link Map}
+ * @see {@link array}
+ * @see {@link Set}
  * @example Type Inference – Named Schema
  * ```ts
  * import { x } from 'unhoax'
@@ -49,9 +51,11 @@ export function object<T extends Record<string, Schema<any>>, Input = unknown>(
 ): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
 /**
  * @category Schema
- * @see {@link partial}
  * @see {@link record}
+ * @see {@link partial}
  * @see {@link Map}
+ * @see {@link array}
+ * @see {@link Set}
  * @example Type-Driven – Named Schema
  * ```ts
  * import { x } from 'unhoax'

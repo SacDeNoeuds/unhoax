@@ -11,19 +11,10 @@ interface Enum {
  * ```ts
  * import { x } from 'unhoax'
  *
- * const Direction = {
- *   Left: 'LEFT',
- *   Right: 'RIGHT',
- * } as const;
+ * const Direction = { Left: 'LEFT', Right: 'RIGHT' } as const;
+ * enum Direction { Left = 'LEFT', Right = 'RIGHT' }
+ * enum Direction { Left, Right }
  *
- * enum Direction {
- *   Left = 'LEFT',
- *   Right = 'RIGHT',
- * }
- * enum Direction {
- *   Left,
- *   Right,
- * }
  * const schema = x.Enum(Direction)
  * const result = schema.parse(Direction.Left)
  * result // { success: true, value: Direction.Left })

@@ -14,6 +14,11 @@ export { Set_ as Set }
 
 /**
  * @category Schema
+ * @see {@link array}
+ * @see {@link Map}
+ * @see {@link record}
+ * @see {@link object}
+ * @see {@link tuple}
  * @example
  * ```ts
  * import { x } from 'unhoax'

@@ -20,6 +20,9 @@ export { Map_ as Map }
  * @category Schema
  * @see {@link object}
  * @see {@link record}
+ * @see {@link array}
+ * @see {@link Set}
+ * @see {@link tuple}
  * @example
  * ```ts
  * import { x } from 'unhoax'
@@ -29,7 +32,7 @@ export { Map_ as Map }
  * const input = new Map([[1, 'Jack'], [2, 'Mary']])
  *
  * const result = nameByIdSchema.parse(input)
- * result // Map { 1 => 'Jack', 2 => 'Mary' }
+ * // { success: true, value: Map { 1 => 'Jack', 2 => 'Mary' } }
  * ```
  */
 function Map_<T extends Map<PropertyKey, any>, Input = unknown>(

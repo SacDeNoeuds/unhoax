@@ -12,13 +12,20 @@ export interface TupleSchema<T, Input = unknown> extends Schema<T, Input> {
 
 /**
  * @category Schema
+ * @see {@link array}
+ * @see {@link Set}
+ * @see {@link Map}
+ * @see {@link object}
  * @example
  * ```ts
  * import { x } from 'unhoax'
  *
  * const schema = x.tuple(x.string, x.number)
- * const result = schema.parse(['a', 1])
- * result // ['a', 1]
+ * schema.parse(['a', 1])
+ * // { success: true, value: ['a', 1] }
+ *
+ * schema.parse(['a', 1, 2, 3, 4, 5])
+ * // { success: true, value: ['a', 1] }
  * ```
  */
 export function tuple<T extends [any, ...any[]], Input = unknown>(
@@ -30,10 +37,10 @@ export function tuple<T extends [any, ...any[]], Input = unknown>(
     items,
     parse: (input, context = createParseContext(name, input)) => {
       if (!Array.isArray(input)) return failure(context, name, input)
-      if (input.length !== items.length) return failure(context, name, input)
+      if (input.length < items.length) return failure(context, name, input)
 
-      const tuple = input.flatMap((value, index) => {
-        const itemSchema = items[index]!
+      const tuple = items.flatMap((itemSchema, index) => {
+        const value = input[index]!
         const ctx = withPathSegment(context, index)
         const result = itemSchema.parse(value, ctx)
         // if undefined, an issue will be added to the context

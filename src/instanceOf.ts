@@ -11,11 +11,11 @@ function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
  * ```ts
  * import { x } from 'unhoax'
  *
- * const schema = x.instanceOf(Date)
+ * x.instanceOf(Date).parse(new Date()) // { success: true, value: Date }
  *
  * class User { … }
  *
- * x.instanceOf(User).parse(new User()) // succeeds
+ * x.instanceOf(User).parse(new User()) // { success: true, value: User }
  * ```
  */
 export function instanceOf<T extends Input, Input = unknown>(

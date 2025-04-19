@@ -17,15 +17,13 @@ export interface RecordSchema<Key extends PropertyKey, Value, Input = unknown>
  * @category Schema
  * @see {@link object}
  * @see {@link Map}
+ * @see {@link array}
+ * @see {@link Set}
+ * @see {@link tuple}
  * @example
  * ```ts
  * import { x } from 'unhoax'
  *
- * // Type-Driven
- * type MyRecord = Record<string, number>
- * const schema = x.record<MyRecord>(x.string, x.number)
- *
- * // Infer-Driven
  * const schema = x.record(x.string, x.number)
  * type MyRecord = x.TypeOf<typeof schema>
  *

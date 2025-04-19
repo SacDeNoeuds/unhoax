@@ -69,4 +69,10 @@ describe('tuple', () => {
       ],
     })
   })
+
+  it('parses only known members', () => {
+    const input = ['hello', 42, true, 'foo', 'bar']
+    const result = schema.parse(input)
+    expect(result).toEqual({ success: true, value: ['hello', 42, true] })
+  })
 })

@@ -12,10 +12,10 @@
   "module": "lib/esm/main.js",
   "exports": {
     ".": {
-      "import": "./lib/esm/main.js",
-      "require": "./lib/cjs/main.js",
       "node": "./lib/cjs/main.js",
-      "types": "./lib/esm/main.d.ts"
+      "types": "./lib/esm/main.d.ts",
+      "import": "./lib/esm/main.js",
+      "require": "./lib/cjs/main.js"
     }
   },
   "scripts": {

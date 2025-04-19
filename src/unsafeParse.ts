@@ -7,7 +7,7 @@ import type { Schema } from './Schema'
  * import { x } from 'unhoax'
  *
  * const result = x.unsafeParse(x.string, 'hello')
- * result // 'hello'
+ * // 'hello'
  *
  * try {
  *   x.unsafeParse(x.number, 'hello')
