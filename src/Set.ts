@@ -1,6 +1,5 @@
-import { createParseContext, withPathSegment } from './ParseContext'
-import { failure, success } from './ParseResult'
-import { standardize, type Schema } from './Schema'
+import { array } from './array'
+import { map, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -23,26 +22,29 @@ export { Set_ as Set }
  * ```ts
  * import { x } from 'unhoax'
  *
- * const schema = x.Set(x.string)
- * const result = schema.parse(new Set(['a', 'b']))
- * result // { success: true, value: Set { 'a', 'b' } }
+ * x.Set(x.string).parse(new Set(['a', 'b']))
+ * // { success: true, value: Set { 'a', 'b' } }
+ *
+ * x.Set(x.string).parse(['a', 'b'])
+ * // { success: true, value: Set { 'a', 'b' } }
  * ```
  */
 function Set_<T, Input = unknown>(item: Schema<T>) {
   const name = `Set<${item.name}>`
-  return standardize<SetSchema<T, Input>>({
+  const arraySchema = array(item)
+  const toSet = map<T[], Set<T>>(
+    (array) => new Set(array),
     name,
-    item,
-    parse: (input, context = createParseContext(name, input)) => {
-      if (!(input instanceof Set)) return failure(context, name, input)
-      const array = Array.from(input).flatMap((value, index) => {
-        const ctx = withPathSegment(context, index)
-        const result = item.parse(value, ctx)
-        // if undefined, an issue will be added to the context
-        // and the error will be taken from context at `success()` step.
-        return result.success ? [result.value] : []
-      })
-      return success(context, new Set(array))
-    },
-  })
+    (failure) => ({
+      success: false,
+      schemaName: name,
+      input: failure.input,
+      issues: failure.issues.map((issue) => {
+        return issue.schemaName === arraySchema.name
+          ? { ...issue, schemaName: name }
+          : issue
+      }),
+    }),
+  )
+  return toSet(arraySchema)
 }

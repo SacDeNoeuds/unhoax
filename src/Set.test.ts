@@ -10,6 +10,13 @@ describe('Set schema', () => {
     expect(result).toEqual({ success: true, value: input })
   })
 
+  it('parses an iterable input', () => {
+    const schema = S.Set(string)
+    const input = ['a', 'b']
+    const result = schema.parse(input)
+    expect(result).toEqual({ success: true, value: new Set(input) })
+  })
+
   it('fails parsing an invalid item', () => {
     const schema = S.Set(string)
     const input = new Set([1, 2])
@@ -35,7 +42,7 @@ describe('Set schema', () => {
     })
   })
 
-  it('fails parsing an non-set', () => {
+  it('fails parsing an non-iterable', () => {
     const schema = S.Set(string)
     const input = 42
     const result = schema.parse(input)

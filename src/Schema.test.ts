@@ -61,4 +61,19 @@ describe('flatMap', () => {
     const numberFromString = stringToNumber(string)
     expect(numberFromString.name).toBe('string')
   })
+
+  it('maps the failure', () => {
+    let callCount = 0
+    const stringToNumber = flatMap(
+      (input: string) => number.parse(Number(input)),
+      'numberFromString',
+      (failure) => {
+        callCount++
+        return failure
+      },
+    )
+    const numberFromString = stringToNumber(string)
+    numberFromString.parse(12)
+    expect(callCount).toBe(1)
+  })
 })

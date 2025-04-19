@@ -12,7 +12,7 @@ describe('array', () => {
     }),
   )
 
-  it('parses a valid input', () => {
+  it('parses an array input', () => {
     const input = [{ name: 'hello', age: 42 }]
     expect(person.parse(input)).toEqual({
       success: true,
@@ -63,6 +63,23 @@ describe('array', () => {
           message: expect.any(String),
         },
       ],
+    })
+  })
+
+  it('fails parsing a string', () => {
+    const input = 'test'
+    expect(array(string).parse(input).success).toBe(false)
+  })
+
+  it('parses an iterable object', () => {
+    function* input() {
+      yield 1
+      yield 2
+      yield 3
+    }
+    expect(array(number).parse(input())).toEqual({
+      success: true,
+      value: [1, 2, 3],
     })
   })
 })

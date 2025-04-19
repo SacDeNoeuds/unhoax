@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { createParseContext, type ParseContext } from './ParseContext'
-import { type ParseResult } from './ParseResult'
+import type { Failure, ParseResult } from './ParseResult'
 import type { Refinement } from './refine'
 
 const vendor = 'unhoax'
@@ -91,10 +91,12 @@ export type InputOfSchema<T> = T extends Schema<any, infer U> ? U : never
 export function map<Input, Output>(
   mapper: (input: Input) => Output,
   name?: string,
+  mapFailure: (failure: Failure) => ParseResult<Output> = (failure) => failure,
 ) {
   return flatMap<Input, Output>(
     (value) => ({ success: true, value: mapper(value) }),
     name,
+    mapFailure,
   )
 }
 
@@ -110,20 +112,22 @@ export function map<Input, Output>(
  * @example
  * ```ts
  * import { x } from 'unhoax'
- *
- * const mapNumberFromString = x.flatMap((value: string) => x.number.parse(Number(value)))
- * const numberFromString = mapNumberFromString(string)
- *
- * numberFromString.parse('12') // { success: true, value: 12 }
- *
- * // or, using pipe
- * import pipe from 'just-pipe'
+ * import pipe from 'just-pipe' // or elsewhere
  *
  * const numberFromString = pipe(
  *   x.string,
  *   x.map(Number),
  *   x.flatMap(x.number.parse),
  * )
+ * ```
+ * @example not using pipe
+ * ```ts
+ * import { x } from 'unhoax'
+ *
+ * const mapNumberFromString = x.flatMap((value: string) => x.number.parse(Number(value)))
+ * const numberFromString = mapNumberFromString(string)
+ *
+ * numberFromString.parse('12') // { success: true, value: 12 }
  * ```
  */
 // export function flatMap<S extends Schema<any>, Output>(
@@ -140,6 +144,10 @@ export function map<Input, Output>(
 export function flatMap<Input, Output>(
   mapper: (input: Input, context: ParseContext) => ParseResult<Output>,
   name?: string,
+  mapFailure: (
+    failure: Failure,
+    context: ParseContext,
+  ) => ParseResult<Output> = (failure) => failure,
 ) {
   return function flatMapSchema<I = unknown>(
     schema: Schema<Input, I>,
@@ -150,7 +158,9 @@ export function flatMap<Input, Output>(
       name: schemaName,
       parse: (input: any, context = createParseContext(schemaName, input)) => {
         const result = schema.parse(input, context)
-        return result.success ? mapper(result.value, context) : result
+        return result.success
+          ? mapper(result.value, context)
+          : mapFailure(result, context)
       },
     } as any
   }

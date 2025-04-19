@@ -11,6 +11,13 @@ export interface ArraySchema<T, Input = unknown> extends Schema<T[], Input> {
   readonly item: Schema<T, Input>
 }
 
+function isIterableObject<T>(input: unknown): input is Iterable<T> {
+  return (
+    // @ts-ignore
+    typeof input === 'object' && typeof input?.[Symbol.iterator] === 'function'
+  )
+}
+
 /**
  * @category Schema
  * @see {@link ArraySchema}
@@ -33,15 +40,17 @@ export function array<T, Input = unknown>(itemSchema: Schema<T>) {
     name,
     item: itemSchema as any,
     parse: (input, context = createParseContext(name, input)) => {
-      if (!Array.isArray(input)) return failure(context, name, input)
+      if (!isIterableObject(input)) return failure(context, name, input)
 
       const parsed: T[] = []
-      input.forEach((value, index) => {
+      let index = 0
+      for (const value of input) {
         const nestedContext = withPathSegment(context, index)
         // schema.parse pushes an issue if it fails
         const result = itemSchema.parse(value, nestedContext)
         if (result.success) parsed.push(result.value)
-      })
+        index++
+      }
       return success(context, parsed)
     },
   })
