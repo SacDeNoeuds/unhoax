@@ -77,7 +77,7 @@ export const string = trim(untrimmedString)
  * Basically, it accepts anything passing the check `Number.isFinite`.
  *
  * @category Schema
- * @see {@link numberFromString}
+ * @see {@link coerceNumber}
  * @see {@link unsafeNumber}
  * @example
  * ```ts

@@ -20,7 +20,7 @@ z.date()          ➡  x.instanceOf(Date)
 z.coerce.date()   ➡  x.date
 z.bigint()        ➡  x.instanceOf(BigInt)
 z.coerce.bigint() ➡  x.bigint
-z.coerce.number() ➡  x.numberFromString
+z.coerce.number() ➡  x.coerceNumber
 
 // min/max for sized values: Set, Map, Array, String
 z.string().min(n)                     ➡  pipe(x.string, x.size({ min: n }))
