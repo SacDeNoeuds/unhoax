@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="Package Size" src="https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}]">
   <img alt="Total coverage" src="https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/main/badges/coverage-total.svg">
-  <img alt="Dependency Count" src="https://badgen.net/bundlephobia/dependency-count/unhoax">
+  <!-- <img alt="Dependency Count" src="https://badgen.net/bundlephobia/dependency-count/unhoax"> -->
   <a href="https://www.npmjs.com/package/unhoax">
     <img alt="Downloads" src="https://img.shields.io/npm/dm/unhoax.svg">
   </a>
