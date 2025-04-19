@@ -32,8 +32,9 @@ Let’s start with a string.
 import { x } from 'unhoax'
 
 // parsing – safe by default.
-x.string.parse('Hello, World!') // => { result: true, value: 'Hello, World!' }
-x.string.parse(42) // => { result: false, error: x.ParseError }
+x.string.parse('Hello, World!') // => { success: true, value: 'Hello, World!' }
+x.string.parse(42)
+// => { success: false, schemaName: string, input: unknown, issues: x.ParseIssue[] }
 
 // unsafe parsing (throws if validation fails)
 x.unsafeParse(x.string, 'Hello, World!') // => 'Hello, World!'
