@@ -133,3 +133,68 @@ export function partial(
   })
   return object(copy)
 }
+
+const omitProps = <T extends Record<PropertyKey, any>, Prop extends keyof T>(
+  object: T,
+  props: Prop[],
+): Omit<T, Prop> => {
+  return Object.fromEntries(
+    Object.entries(object).filter(([key]) => !props.includes(key as any)),
+  ) as Omit<T, Prop>
+}
+
+/**
+ * @see {@link object}
+ * @see {@link pick}
+ * @example
+ * ```ts
+ * import { x } from 'unhoax'
+ * import pipe from 'just-pipe'
+ * 
+ * const personSchema = x.object({
+ *   name: x.string,
+ *   age: x.number,
+ * })
+ * 
+ * const schema = pipe(personSchema, x.omit('age'))
+ * schema.parse({ name: 'hello' })
+ * // { success: true, value: { name: 'hello' } }
+ })
+ */
+export const omit =
+  <T extends Record<string, any>, Prop extends keyof T>(...props: Prop[]) =>
+  (schema: ObjectSchema<T>): ObjectSchema<Omit<T, Prop>> =>
+    object(omitProps(schema.props, props))
+
+const pickProps = <T extends Record<PropertyKey, any>, Prop extends keyof T>(
+  object: T,
+  props: Prop[],
+): Pick<T, Prop> => {
+  return Object.fromEntries(
+    Object.entries(object).filter(([key]) => props.includes(key as any)),
+  ) as Pick<T, Prop>
+}
+
+/**
+ * @see {@link object}
+ * @see {@link omit}
+ * @example
+ * ```ts
+ * import { x } from 'unhoax'
+ * import pipe from 'just-pipe'
+ * 
+ * const personSchema = x.object({
+ *   name: x.string,
+ *   age: x.number,
+ * })
+ * 
+ * const schema = pipe(personSchema, x.pick('age'))
+ * schema.parse({ age: 42 })
+ * // { success: true, value: { age: 42 } }
+ })
+ * ```
+ */
+export const pick =
+  <T extends Record<string, any>, Prop extends keyof T>(...props: Prop[]) =>
+  (schema: ObjectSchema<T>): ObjectSchema<Pick<T, Prop>> =>
+    object(pickProps(schema.props, props))

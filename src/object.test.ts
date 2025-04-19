@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { object, partial, type ObjectSchema } from './object'
+import { object, omit, partial, pick, type ObjectSchema } from './object'
 import { number, string } from './primitives'
 
 type Person = {
@@ -94,6 +94,40 @@ describe('partial', () => {
     expect(result).toEqual({
       success: true,
       value: {},
+    })
+  })
+})
+
+describe('omit', () => {
+  type Person = { name: string; age: number }
+  const person = object<Person>({
+    name: string,
+    age: number,
+  })
+  const schema = omit<Person, 'age'>('age')(person)
+
+  it('parses a person without age', () => {
+    const result = schema.parse({ name: 'hello' })
+    expect(result).toEqual({
+      success: true,
+      value: { name: 'hello' },
+    })
+  })
+})
+
+describe('pick', () => {
+  type Person = { name: string; age: number }
+  const person = object<Person>({
+    name: string,
+    age: number,
+  })
+  const schema = pick<Person, 'age'>('age')(person)
+
+  it('parses a person without age', () => {
+    const result = schema.parse({ age: 42 })
+    expect(result).toEqual({
+      success: true,
+      value: { age: 42 },
     })
   })
 })

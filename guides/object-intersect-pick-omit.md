@@ -28,6 +28,36 @@ const developer = x.object({
 })
 ```
 
+### Pick – use only some properties
+
+```ts
+import { x } from "unhoax"
+import pipe from 'just-pipe'
+
+const schema = pipe(person, x.pick('name'))
+
+const result = schema.parse({ name: 'toto' })
+typeof result: {
+  success: true,
+  value: { name: 'toto' },
+}
+```
+
+### Omit – remove some properties
+
+```ts
+import { x } from "unhoax";
+import pipe from 'just-pipe'
+
+const schema = pipe(person, x.omit('age'))
+const result = schema.parse({ name: 'toto' })
+
+typeof result: {
+  success: true,
+  value: { name: 'toto' },
+}
+```
+
 ### Intersection – merging 2 objects
 
 ```ts
@@ -53,42 +83,5 @@ typeof result: {
     preferredKeyboardType: 'compact',
     codingStyle: 'functional',
   }
-}
-```
-
-### Pick – use only some properties
-
-```ts
-import { x } from "unhoax"
-import pipe from 'just-pipe'
-
-// bring your `pick` function from your std:
-declare const pick: <Obj, Prop>(...props: Prop[]) => (obj: Obj) => Pick<Obj, Prop>
-
-const schema = pipe(person.props, pick('name'), x.object)
-
-const result = schema.parse({ name: 'toto' })
-typeof result: {
-  success: true,
-  value: { name: 'toto' },
-}
-```
-
-### Omit – remove some properties
-
-```ts
-import { x } from "unhoax";
-import pipe from 'just-pipe'
-
-// bring your `omit` function from your std:
-declare const omit: <Obj, Prop>(...props: Prop[]) => (obj: Obj) => Omit<Obj, Prop>
-
-
-const schema = pipe(person.props, omit('age'), x.object)
-const result = schema.parse({ name: 'toto' })
-
-typeof result: {
-  success: true,
-  value: { name: 'toto' },
 }
 ```

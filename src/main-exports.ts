@@ -20,7 +20,14 @@ export { fromGuard, type Guard } from './fromGuard'
 export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
 export { Map, type MapKey, type MapSchema, type MapValue } from './Map'
-export { object, partial, type ObjectSchema, type PropsOf } from './object'
+export {
+  object,
+  omit,
+  partial,
+  pick,
+  type ObjectSchema,
+  type PropsOf,
+} from './object'
 export { nil, nullable, optional, or } from './or'
 export { createParseContext, type ParseContext } from './ParseContext'
 export {
