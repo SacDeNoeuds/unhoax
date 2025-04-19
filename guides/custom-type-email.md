@@ -30,18 +30,25 @@ I can recommend using [`is-email`](https://www.npmjs.com/package/is-email) thoug
 
 ```ts
 import { x } from 'unhoax'
+import pipe from 'just-pipe'
 
 declare const isEmail: (value: string) => boolean
+
+const emailSchema = pipe(x.string, x.refine('Email', isEmail))
+```
+
+<details>
+<summary>Without pipe</summary>
+
+```ts
+import { x } from 'unhoax'
 
 const refineAsEmail = x.refine('Email', isEmail)
 const emailSchema = refineAsEmail(x.string)
 // x.Schema<string>
-
-// or, using pipe
-import pipe from 'just-pipe'
-
-const emailSchema = pipe(x.string, x.refine('Email', isEmail))
 ```
+
+</details>
 
 ## With branded types
 
@@ -58,19 +65,27 @@ Now let’s build the schema:
 
 ```ts
 import { x } from 'unhoax'
-
-const guardAsEmail = x.guardAs('Email', isEmail)
-const emailSchema = guardAsEmail(x.string)
-// x.Schema<Email>
-
-// or, using pipe
 import pipe from 'just-pipe'
 
 const emailSchema = pipe(x.string, x.guardAs('Email', isEmail))
 // x.Schema<Email>
 ```
 
+<details>
+<summary>Without pipe</summary>
+
+```ts
+import { x } from 'unhoax'
+
+const guardAsEmail = x.guardAs('Email', isEmail)
+const emailSchema = guardAsEmail(x.string)
+// x.Schema<Email>
+```
+
+</details>
+
 ## Summing up – `x.refine` vs `x.guardAs`
 
-- `x.refine` does **not** change the schema type: `x.refine(schema<T>, isX) => schema<T>`
-- `x.guardAs` **does** change the schema type: `x.guardAs(schema<T>, isU) => schema<U>`
+`x.refine` **does not** change the schema type: `x.refine(name, isU) => (schema<T>) => schema<T>`
+
+`x.guardAs` **does** change the schema type: `x.guardAs(name, isU) => (schema<T>) => schema<U>`
