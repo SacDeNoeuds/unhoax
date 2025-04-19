@@ -11,7 +11,7 @@ npm install --save unhoax
 
 ## Foreword – Philosophy
 
-This library is intended for use with **a domain-driven & type-driven approach** to development. Writing types before anything else.<br>
+This library is intended for use with **a functional, domain-driven & type-driven approach** to development. Writing types before anything else.<br>
 Then using types to define schemas, use-cases, etc…
 
 For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
