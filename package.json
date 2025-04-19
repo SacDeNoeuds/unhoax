@@ -12,7 +12,6 @@
   "module": "lib/esm/main.js",
   "exports": {
     ".": {
-      "node": "./lib/cjs/main.js",
       "types": "./lib/esm/main.d.ts",
       "import": "./lib/esm/main.js",
       "require": "./lib/cjs/main.js"
