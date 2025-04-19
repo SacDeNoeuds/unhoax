@@ -107,12 +107,12 @@ export function object<T extends Record<string, any>, Input = unknown>(
  * })
  *
  * const fullyOptional = partial(personSchema)
- * const result = fullyOptional.parse({})
- * result // { success: true, value: {} }
+ * fullyOptional.parse({})
+ * // { success: true, value: {} }
  *
  * const ageOptional = partial(personSchema, ['age'])
- * const result = ageOptional.parse({ name: 'hello' })
- * result // { success: true, value: { name: 'hello' } }
+ * ageOptional.parse({ name: 'hello' })
+ * // { success: true, value: { name: 'hello' } }
  * ```
  */
 export function partial<T extends Record<string, any>>(

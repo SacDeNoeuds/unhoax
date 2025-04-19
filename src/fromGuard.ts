@@ -9,12 +9,12 @@ export type Guard<Input, T extends Input> = (input: Input) => input is T
  * Used to create most of the primitives.<br>
  * Can be used to create custom schemas like `Email`.
  * @category Schema Factory
- * @see {@link string}
- * @see {@link number}
- * @see {@link integer}
+ * @see {@link bigint}
  * @see {@link boolean}
- * @see {@link bigInt}
  * @see {@link instanceOf}
+ * @see {@link integer}
+ * @see {@link number}
+ * @see {@link string}
  * @see {@link symbol}
  * @example
  * ```ts

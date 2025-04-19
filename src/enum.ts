@@ -16,8 +16,8 @@ interface Enum {
  * enum Direction { Left, Right }
  *
  * const schema = x.Enum(Direction)
- * const result = schema.parse(Direction.Left)
- * result // { success: true, value: Direction.Left })
+ * schema.parse(Direction.Left)
+ * // { success: true, value: Direction.Left })
  * ```
  */
 export function Enum<T extends Enum, Input = unknown>(

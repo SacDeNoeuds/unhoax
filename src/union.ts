@@ -46,8 +46,8 @@ function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
  * import { x } from 'unhoax'
  *
  * const schema = x.union(x.string, x.number) // Schema<string | number>
- * const result = schema.parse('a')
- * result // { success: true, value: 'a' }
+ * schema.parse('a')
+ * // { success: true, value: 'a' }
  * ```
  */
 export function union<T extends [Schema<any, any>, ...Schema<any, any>[]]>(

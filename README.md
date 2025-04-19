@@ -50,8 +50,8 @@ else result.error // x.ParseError
 
 // parsing unsafely
 try {
-  const result = x.unsafeParse(personSchema, { name: …, age: … })
-  result // Person
+  x.unsafeParse(personSchema, { name: …, age: … })
+  // Person
 } catch (err) {
   // although `err` is typed as `unknown`, this is what you get inside:
   err // Error
