@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { object, omit, partial, pick, type ObjectSchema } from './object'
-import { number, string } from './primitives'
+import {
+  intersect,
+  object,
+  omit,
+  partial,
+  pick,
+  type ObjectSchema,
+} from './object'
+import { boolean, literal, number, string } from './primitives'
 
 type Person = {
   name: string
@@ -128,6 +135,43 @@ describe('pick', () => {
     expect(result).toEqual({
       success: true,
       value: { age: 42 },
+    })
+  })
+})
+
+describe('intersect', () => {
+  type Person = { name: string; kind: 'adult' | 'child' }
+  const person = object<Person>({
+    name: string,
+    kind: literal('adult', 'child'),
+  })
+  type Dev = { name: string; kind: boolean }
+  const dev = object<Dev>({ name: string, kind: boolean })
+  const andDev = intersect(dev)
+  const personAndDev = andDev(person)
+
+  it('parses "kind" as a boolean', () => {
+    const result = personAndDev.parse({ name: 'hello', kind: true })
+    expect(result).toEqual({
+      success: true,
+      value: { name: 'hello', kind: true },
+    })
+  })
+
+  it('fails parsing "kind" as "adult"', () => {
+    const result = personAndDev.parse({ name: 'hello', kind: 'adult' })
+    expect(result).toEqual({
+      success: false,
+      input: { name: 'hello', kind: 'adult' },
+      schemaName: 'object',
+      issues: [
+        {
+          schemaName: 'boolean',
+          input: 'adult',
+          path: ['kind'],
+          message: expect.any(String),
+        },
+      ],
     })
   })
 })

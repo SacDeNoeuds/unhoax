@@ -198,3 +198,32 @@ export const pick =
   <T extends Record<string, any>, Prop extends keyof T>(...props: Prop[]) =>
   (schema: ObjectSchema<T>): ObjectSchema<Pick<T, Prop>> =>
     object(pickProps(schema.props, props))
+
+/**
+ * @example
+ * ```ts
+ * import { x } from 'unhoax'
+ * import pipe from 'just-pipe'
+ * 
+ * const personSchema = x.object({
+ *   name: x.string,
+ *   kind: x.literal('adult', 'child'),
+ * })
+ * 
+ * const developerSchema = x.object({
+ *   name: x.string,
+ *   kind: x.boolean,
+ * })
+ * const schema = pipe(personSchema, x.intersect(developerSchema))
+ * schema.parse({ name: 'SacDeNoeuds', kind: true })
+ * // { success: true, value: { name: 'hello', age: 42 } }
+ *
+ * schema.parse({ name: 'SacDeNoeuds', kind: 'adult' })
+ * // Fails, expected `kind` to be `boolean` (from developerSchema)
+ })
+ * ```
+ */
+export const intersect =
+  <B extends Record<string, any>>(b: ObjectSchema<B>) =>
+  <A extends Record<string, any>>(a: ObjectSchema<A>) =>
+    object({ ...a.props, ...b.props })
