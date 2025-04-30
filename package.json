@@ -7,20 +7,13 @@
     "./lib",
     "./README.md"
   ],
-  "types": "./lib/esm/main.d.ts",
-  "main": "lib/cjs/main.js",
-  "module": "lib/esm/main.js",
-  "exports": {
-    ".": {
-      "types": "./lib/esm/main.d.ts",
-      "import": "./lib/esm/main.js",
-      "require": "./lib/cjs/main.js"
-    }
-  },
+  "types": "./dist/main.d.ts",
+  "main": "dist/main.cjs",
+  "module": "dist/main.js",
   "scripts": {
     "prebuild": "npm run check-ts && rm -rf ./lib",
     "check-ts": "tsc --noEmit",
-    "build": "rollup -c ./rollup.config.js",
+    "build": "npx tsup ./src/main.ts --dts --sourcemap --format cjs,esm --cjsInterop --minify",
     "doc": "typedoc",
     "doc:watch": "typedoc --watch",
     "prepack": "npm run build",
@@ -59,16 +52,13 @@
   },
   "homepage": "https://sacdenoeuds.github.io/unhoax/",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
     "@types/node": "^22.14.0",
     "@vitest/coverage-istanbul": "^3.1.1",
     "prettier": "^3.5.3",
-    "rollup": "^4.39.0",
     "tslib": "^2.8.1",
+    "tsup": "^8.4.0",
     "typedoc": "^0.28.2",
-    "typedoc-unhoax-theme": "^0.5.1",
+    "typedoc-unhoax-theme": "^0.5.2",
     "typescript": "^5.8.3",
     "vitest": "^3.1.1"
   },
