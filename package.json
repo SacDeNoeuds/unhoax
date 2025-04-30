@@ -4,12 +4,19 @@
   "description": "type/data-centric schema library. A schema library empower you, not constrain you with their types messy types.",
   "type": "module",
   "files": [
-    "./lib",
+    "./dist",
     "./README.md"
   ],
   "types": "./dist/main.d.ts",
   "main": "dist/main.cjs",
   "module": "dist/main.js",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.js",
+      "require": "./dist/main.cjs"
+    }
+  },
   "scripts": {
     "prebuild": "npm run check-ts && rm -rf ./lib",
     "check-ts": "tsc --noEmit",
