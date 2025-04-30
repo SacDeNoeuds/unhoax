@@ -19,18 +19,18 @@ const unsafeDate = mapDateFromInput(inputSchema)
  * If you need to accept `Date` only, use `x.instanceOf(Date)` @see {@link instanceOf}
  *
  * @category Schema
- * @example
+ * @example const schema = x.date
+ * @example parses a Date
  * ```ts
- * import { x } from 'unhoax'
- *
- * // parses a Date
  * x.date.parse(new Date()) // { success: true, value: Date }
- *
- * // parses a string
+ * ```
+ * @example parses a string
+ * ```ts
  * x.date.parse('2021-01-02T03:04:05.123Z') // { success: true, value: Date }
  * x.date.parse('2021-01-02') // { success: true, value: Date }
- *
- * // parses a number
+ * ```
+ * @example parses a number
+ * ```ts
  * x.date.parse(Date.now()) // { success: true, value: Date }
  * ```
  */

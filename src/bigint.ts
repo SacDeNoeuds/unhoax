@@ -23,13 +23,20 @@ const mapBigInt = flatMap((input: BigIntInput, context) => {
 
 /**
  * @category Schema
- * @example
- * ```ts
- * import { x } from 'unhoax'
  *
- * x.bigint.parse(12n) // { success: true, value: 12n }
- * x.bigint.parse(BigInt(12)) // { success: true, value: 12n }
- * x.bigint.parse(BigInt('12')) // { success: true, value: 12n }
+ * Accepts any input that can construct a BigInt.
+ *
+ * @example const schema = x.bigint
+ * @example Apply constraints using `x.min`, `x.max` and `x.between`
+ * ```ts
+ * const schema = pipe(x.bigint, x.min(1n))
+ * const schema = pipe(x.bigint, x.min(1n, 'Non-Zero'))
+ *
+ * const schema = pipe(x.bigint, x.max(10n))
+ * const schema = pipe(x.bigint, x.max(10n, 'small'))
+ *
+ * const schema = pipe(x.bigint, x.between(1n, 10n))
+ * const schema = pipe(x.bigint, x.between(1n, 10n, 'small but non-zero'))
  * ```
  */
 export const bigint = mapBigInt(inputSchema)

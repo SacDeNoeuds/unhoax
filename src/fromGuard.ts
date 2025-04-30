@@ -5,10 +5,11 @@ import { standardize, type Schema } from './Schema'
 export type Guard<Input, T extends Input> = (input: Input) => input is T
 
 /**
+ * @category Schema Factory
+ *
  * Utility to create schemas.<br>
  * Used to create most of the primitives.<br>
  * Can be used to create custom schemas like `Email`.
- * @category Schema Factory
  * @see {@link bigint}
  * @see {@link boolean}
  * @see {@link instanceOf}
@@ -16,16 +17,15 @@ export type Guard<Input, T extends Input> = (input: Input) => input is T
  * @see {@link number}
  * @see {@link string}
  * @see {@link symbol}
- * @example
+ * @example rebuilding `x.string`
  * ```ts
- * import { x } from 'unhoax'
- *
  * const string = x.fromGuard(
  *  'string',
  *  (input) => typeof input === 'string'
  * )
- *
- * // creating an email type:
+ * ```
+ * @example creating an email type
+ * ```ts
  * type Email = string & { _tag: 'Email' }
  * declare const isEmail: (input: unknown) => input is Email
  *

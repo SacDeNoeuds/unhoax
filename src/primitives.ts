@@ -4,12 +4,7 @@ import { map, standardize, type Schema } from './Schema'
 /**
  * Never-failing schema.
  * @category Schema
- * @example
- * ```ts
- * import { x } from 'unhoax'
- *
- * x.unknown.parse(true) // { success: true, value: true }
- * ```
+ * @example const schema = x.unknown
  */
 export const unknown = standardize<Schema<unknown>>({
   name: 'unknown',
@@ -18,12 +13,7 @@ export const unknown = standardize<Schema<unknown>>({
 
 /**
  * @category Schema
- * @example
- * ```ts
- * import { x } from 'unhoax'
- *
- * x.boolean.parse(true) // { success: true, value: true }
- * ```
+ * @example const schema = x.boolean
  */
 export const boolean = fromGuard(
   'boolean',
@@ -32,22 +22,20 @@ export const boolean = fromGuard(
 
 /**
  * @category Schema
+ * @example const schema = x.symbol
  * @example
  * ```ts
- * import { x } from 'unhoax'
- *
- * x.symbol.parse(Symbol.iterator)
- * // { success: true, value: Symbol.iterator }
+ * x.symbol.parse(Symbol.iterator) // { success: true, value: Symbol.iterator }
  * ```
  */
 export const symbol = fromGuard('symbol', (input) => typeof input === 'symbol')
 
 /**
  * @category Unsafe Schema
+ * @see {@link string} for a trimmed string.
+ * @example const schema = x.untrimmedString
  * @example
  * ```ts
- * import { x } from 'unhoax'
- *
  * x.untrimmedString.parse('  hello  ') // '  hello  '
  * ```
  */
@@ -57,15 +45,15 @@ export const untrimmedString = fromGuard(
 )
 
 const trim = map((str: string) => str.trim())
+
 /**
  * This also trims the string. If you do not want this behavior,
  * explicitly use {@link untrimmedString}
  * @category Schema
+ * @example const schema = x.string
  * @example
  * ```ts
- * import { x } from 'unhoax'
- *
- * x.untrimmedString.parse('  hello  ') // '  hello  '
+ * x.string.parse('  hello  ') // { success: true, value: 'hello' }
  * ```
  */
 export const string = trim(untrimmedString)
@@ -79,11 +67,12 @@ export const string = trim(untrimmedString)
  * @category Schema
  * @see {@link coerceNumber}
  * @see {@link unsafeNumber}
+ * @example const schema = x.number
  * @example
  * ```ts
- * import { x } from 'unhoax'
- *
  * x.number.parse(1) // { success: true, value: 1 }
+ * x.number.parse(Infinity) // { success: false, … }
+ * x.number.parse(NaN) // { success: false, … }
  * ```
  */
 export const number = fromGuard<number>(
@@ -97,6 +86,7 @@ export const number = fromGuard<number>(
  *
  * @category Unsafe Schema
  * @see {@link number}
+ * @example const schema = x.unsafeNumber
  */
 export const unsafeNumber = fromGuard<number>(
   'number',
@@ -110,12 +100,7 @@ export const unsafeNumber = fromGuard<number>(
  * @see {@link number}
  * @see {@link unsafeInteger}
  * @see {@link unsafeNumber}
- * @example
- * ```ts
- * import { x } from 'unhoax'
- *
- * x.integer.parse(1) // { success: true, value: 1 }
- * ```
+ * @example const schema = x.integer
  */
 export const integer = fromGuard<number>(
   'integer',
@@ -128,6 +113,7 @@ export const integer = fromGuard<number>(
  * @see {@link integer}
  * @see {@link number}
  * @see {@link unsafeNumber}
+ * @example const schema = x.unsafeInteger
  */
 export const unsafeInteger = fromGuard<number>(
   'unsafeInteger',
@@ -150,15 +136,8 @@ export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
 
 /**
  * @category Schema
- * @example
- * ```ts
- * import { x } from 'unhoax'
- *
- * const schema = x.literal('a') // Schema<'a'>
- *
- * const schema = x.literal('a', 42, true, null, undefined)
- * // Schema<'a' | 42 | true | null | undefined>
- * ```
+ * @see {@link LiteralSchema}
+ * @example const schema = x.literal('a', 42, true, null, undefined, …)
  */
 export function literal<L extends [Literal, ...Literal[]], Input = unknown>(
   ...literals: L

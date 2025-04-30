@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { bigint } from './bigint'
 import { number, string } from './primitives'
-import { between, max, min, nonEmpty, pattern, guardAs, size } from './refine'
+import { between, guardAs, max, min, nonEmpty, pattern, size } from './refine'
 import type { Schema } from './Schema'
 import { Set as setOf } from './Set'
 
@@ -37,9 +38,9 @@ describe('refineAs', () => {
 
 describe.each<{
   name: string
-  schema: Schema<number>
-  validInputs: number[]
-  invalidInputs: number[]
+  schema: Schema<number | bigint>
+  validInputs: (number | bigint)[]
+  invalidInputs: (number | bigint)[]
 }>([
   {
     name: 'max(42)',
@@ -48,16 +49,34 @@ describe.each<{
     invalidInputs: [42.01, 100],
   },
   {
+    name: 'max(42n)',
+    schema: max(42n)(bigint),
+    validInputs: [42n, 0n],
+    invalidInputs: [43n, 100n],
+  },
+  {
     name: 'min(42)',
     schema: min(42)(number),
     validInputs: [42, 100],
     invalidInputs: [41.99, 10, -10],
   },
   {
+    name: 'min(42n)',
+    schema: min(42n)(bigint),
+    validInputs: [42n, 100n],
+    invalidInputs: [41n, 10n],
+  },
+  {
     name: 'between(-2, 42)',
     schema: between(-2, 42)(number),
     validInputs: [-2, 42],
     invalidInputs: [-2.01, 42.01, -10, 100],
+  },
+  {
+    name: 'between(2n, 42n)',
+    schema: between(2n, 42n)(bigint),
+    validInputs: [2n, 42n],
+    invalidInputs: [1n, 43n],
   },
 ])('$name', ({ schema, validInputs, invalidInputs }) => {
   it.each(validInputs)('succeeds with %s', (input) => {
@@ -69,10 +88,10 @@ describe.each<{
     expect(result).toEqual({
       success: false,
       input: invalidInput,
-      schemaName: 'number',
+      schemaName: schema.name,
       issues: [
         {
-          schemaName: 'number',
+          schemaName: schema.name,
           input: invalidInput,
           path: [],
           refinement: expect.any(String),

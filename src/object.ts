@@ -4,8 +4,9 @@ import { failure, success } from './ParseResult'
 import { standardize, type Schema, type TypeOfSchema } from './Schema'
 
 export type PropsOf<T extends Record<string, any>> = {
-  [Key in keyof T]: Schema<T[Key]>
+  readonly [Key in keyof T]: Schema<T[Key]>
 }
+type Writable<T> = { -readonly [Key in keyof T]: T[Key] }
 
 export function isObject(input: unknown): input is Record<string, unknown> {
   return (
@@ -48,7 +49,7 @@ export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
  */
 export function object<T extends Record<string, Schema<any>>, Input = unknown>(
   ...args: [props: T] | [name: string, props: T]
-): ObjectSchema<{ [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
+): ObjectSchema<{ readonly [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
 /**
  * @category Schema
  * @see {@link record}
@@ -56,17 +57,31 @@ export function object<T extends Record<string, Schema<any>>, Input = unknown>(
  * @see {@link Map}
  * @see {@link array}
  * @see {@link Set}
- * @example Type-Driven – Named Schema
+ * @see {@link omit}
+ * @see {@link pick}
+ * @see {@link intersect}
+ * @example Type-Driven
  * ```ts
- * import { x } from 'unhoax'
- *
  * type Person = { name: string, age: number }
  * const personSchema = x.object<Person>({
  *   name: x.string,
  *   age: x.number,
  * })
+ * ```
+ * @example Naming a schema
+ * ```ts
  * // you can also name the schema for better error readability
  * const personSchema = x.object<Person>('Person', { … })
+ * ```
+ * @example Circular objects with lazy getters
+ * ```ts
+ * type Person = { name: string, friends: Person[] }
+ * const schema = x.object<Person>({
+ *   name: x.string,
+ *   get friends(): x.Schema<Person[]> {
+ *     return x.array(schema)
+ *   }
+ * })
  * ```
  */
 export function object<T extends Record<string, any>, Input = unknown>(
@@ -99,20 +114,16 @@ export function object<T extends Record<string, any>, Input = unknown>(
  * @see {@link object}
  * @example
  * ```ts
- * import { x } from 'unhoax'
- *
  * const personSchema = x.object({
  *   name: x.string,
  *   age: x.number,
  * })
  *
  * const fullyOptional = partial(personSchema)
- * fullyOptional.parse({})
- * // { success: true, value: {} }
+ * fullyOptional.parse({}) // { success: true, value: {} }
  *
  * const ageOptional = partial(personSchema, ['age'])
- * ageOptional.parse({ name: 'hello' })
- * // { success: true, value: { name: 'hello' } }
+ * ageOptional.parse({ name: 'hello' }) // { success: true, value: { name: 'hello' } }
  * ```
  */
 export function partial<T extends Record<string, any>>(
@@ -127,7 +138,7 @@ export function partial(
   keys?: string[],
 ): ObjectSchema<Record<string, any>> {
   const keySet = new Set(keys ?? Object.keys(schema.props))
-  const copy = {} as typeof schema.props
+  const copy = {} as Writable<typeof schema.props>
   Object.entries(schema.props).forEach(([key, schema]) => {
     copy[key] = keySet.has(key) ? optional(schema) : schema
   })
@@ -146,20 +157,13 @@ const omitProps = <T extends Record<PropertyKey, any>, Prop extends keyof T>(
 /**
  * @see {@link object}
  * @see {@link pick}
+ * @see {@link intersect}
  * @example
  * ```ts
- * import { x } from 'unhoax'
- * import pipe from 'just-pipe'
- * 
- * const personSchema = x.object({
- *   name: x.string,
- *   age: x.number,
- * })
- * 
+ * const personSchema = x.object({ name: x.string, age: x.number })
+ *
  * const schema = pipe(personSchema, x.omit('age'))
- * schema.parse({ name: 'hello' })
- * // { success: true, value: { name: 'hello' } }
- })
+ * schema.parse({ name: 'hello' }) // { success: true, value: { name: 'hello' } }
  */
 export const omit =
   <T extends Record<string, any>, Prop extends keyof T>(...props: Prop[]) =>
@@ -178,19 +182,13 @@ const pickProps = <T extends Record<PropertyKey, any>, Prop extends keyof T>(
 /**
  * @see {@link object}
  * @see {@link omit}
+ * @see {@link intersect}
  * @example
  * ```ts
- * import { x } from 'unhoax'
- * import pipe from 'just-pipe'
- * 
- * const personSchema = x.object({
- *   name: x.string,
- *   age: x.number,
- * })
+ * const personSchema = x.object({ name: x.string, age: x.number })
  * 
  * const schema = pipe(personSchema, x.pick('age'))
- * schema.parse({ age: 42 })
- * // { success: true, value: { age: 42 } }
+ * schema.parse({ age: 42 }) // { success: true, value: { age: 42 } }
  })
  * ```
  */
@@ -200,26 +198,23 @@ export const pick =
     object(pickProps(schema.props, props))
 
 /**
+ * @see {@link object}
+ * @see {@link pick}
+ * @see {@link omit}
  * @example
  * ```ts
- * import { x } from 'unhoax'
- * import pipe from 'just-pipe'
- * 
- * const personSchema = x.object({
+ * const person = x.object({
  *   name: x.string,
- *   kind: x.literal('adult', 'child'),
+ *   kind: x.literal('adult', 'child')
  * })
- * 
- * const developerSchema = x.object({
- *   name: x.string,
- *   kind: x.boolean,
- * })
- * const schema = pipe(personSchema, x.intersect(developerSchema))
- * schema.parse({ name: 'SacDeNoeuds', kind: true })
- * // { success: true, value: { name: 'hello', age: 42 } }
+ * const developer = x.object({ name: x.string, kind: x.boolean })
  *
- * schema.parse({ name: 'SacDeNoeuds', kind: 'adult' })
- * // Fails, expected `kind` to be `boolean` (from developerSchema)
+ * const schema = pipe(person, x.intersect(developer))
+ * schema.parse({ name: 'Me', kind: true })
+ * // { success: true, value: { name: 'Me', kind: true } }
+ *
+ * schema.parse({ name: 'Me', kind: 'adult' })
+ * // Fails, expected `kind` to be `boolean` (from developer)
  })
  * ```
  */

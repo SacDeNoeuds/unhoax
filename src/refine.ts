@@ -141,7 +141,7 @@ export const guardAs = refine as <T, U extends T>(
  * ) // Schema<number>
  * ```
  */
-export function min<T extends { valueOf(): number }>(
+export function min<T extends { valueOf(): number | bigint }>(
   min: T,
   reason = `>= ${min}`,
 ) {
@@ -209,7 +209,7 @@ export function min<T extends { valueOf(): number }>(
  * ) // Schema<number>
  * ```
  */
-export function max<T extends { valueOf(): number }>(
+export function max<T extends { valueOf(): number | bigint }>(
   max: T,
   reason = `<= ${max}`,
 ) {
@@ -245,7 +245,7 @@ export function max<T extends { valueOf(): number }>(
  * ) // Schema<number>
  * ```
  */
-export function between<T extends { valueOf(): number }>(
+export function between<T extends { valueOf(): number | bigint }>(
   min: T,
   max: T,
   reason = `${min} <= T <= ${max}`,

@@ -7,14 +7,13 @@ function isInstanceOf<T>(constructor: new (...args: any[]) => T) {
 
 /**
  * @category Schema
- * @example
+ * @example parsing a Date
  * ```ts
- * import { x } from 'unhoax'
- *
  * x.instanceOf(Date).parse(new Date()) // { success: true, value: Date }
- *
+ * ```
+ * @example parsing a custom `User` class
+ * ```ts
  * class User { … }
- *
  * x.instanceOf(User).parse(new User()) // { success: true, value: User }
  * ```
  */

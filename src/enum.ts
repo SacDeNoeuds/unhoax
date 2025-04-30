@@ -7,17 +7,14 @@ interface Enum {
 
 /**
  * @category Schema
- * @example
+ * @example Parses any enum-like
  * ```ts
- * import { x } from 'unhoax'
- *
- * const Direction = { Left: 'LEFT', Right: 'RIGHT' } as const;
- * enum Direction { Left = 'LEFT', Right = 'RIGHT' }
+ * const Direction = { Left: 'Left', Right: 'Right' } as const;
+ * enum Direction { Left = 'Left', Right = 'Right' }
  * enum Direction { Left, Right }
  *
  * const schema = x.Enum(Direction)
- * schema.parse(Direction.Left)
- * // { success: true, value: Direction.Left })
+ * schema.parse(Direction.Left) // { success: true, value: Direction.Left })
  * ```
  */
 export function Enum<T extends Enum, Input = unknown>(

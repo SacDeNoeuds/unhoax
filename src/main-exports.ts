@@ -21,6 +21,7 @@ export { instanceOf } from './instanceOf'
 export { lazy } from './lazy'
 export { Map, type MapKey, type MapSchema, type MapValue } from './Map'
 export {
+  intersect,
   object,
   omit,
   partial,

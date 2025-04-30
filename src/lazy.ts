@@ -4,15 +4,28 @@ import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema
- * @example
+ * @example Prefer getters when possible
  * ```ts
- * import { x } from 'unhoax'
+ * type Tree = { left: Leaf | Tree, right: Leaf | Tree }
+ * type Leaf = string;
  *
- * type Tree = { left: Tree | null, right: Tree | null }
+ * const tree = x.object<Tree>({
+ *   get left(): x.Schema<Leaf | Tree> {
+ *     return x.union(x.string, tree)
+ *   },
+ *   get right(): x.Schema<Leaf | Tree> {
+ *     return x.union(x.string, tree)
+ *   },
+ * })
+ * ```
+ * @example using `x.lazy()`
+ * ```ts
+ * type Tree = { left: Tree | Leaf, right: Tree | Leaf }
+ * type Leaf = string;
  *
  * const tree: x.ObjectSchema<Tree> = x.object({
- *   left: x.nullable(x.lazy(() => tree)),
- *   right: x.nullable(x.lazy(() => tree)),
+ *   left: x.lazy(() => x.union(x.string, tree)),
+ *   right: x.lazy(() => x.union(x.string, tree)),
  * })
  * ```
  */

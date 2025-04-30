@@ -26,12 +26,35 @@ function isIterableObject<T>(input: unknown): input is Iterable<T> {
  * @see {@link Map}
  * @see {@link object}
  * @see {@link record}
- * @example
+ * @example const schema = x.array(x.string)
+ * @example Access the array content schema with `.item`
  * ```ts
- * import { x } from 'unhoax'
- *
  * const schema = x.array(x.string)
- * const result = schema.parse(['a', 'b'])
+ * schema.item // -> x.string
+ * ```
+ * @example Constrain the length using `x.size` or `x.nonEmpty`
+ * ```ts
+ * const schema = pipe(x.array(…), x.nonEmpty())
+ * const schema = pipe(x.array(…), x.nonEmpty('requires 1+ elements'))
+ *
+ * const schema = pipe(x.array(…), x.size({ min: 3 }))
+ * const schema = pipe(x.array(…), x.size({ min: 3, reason: '…' }))
+ * const schema = pipe(x.array(…), x.size({ max: 10 }))
+ * const schema = pipe(x.array(…), x.size({ max: 10, reason: '…' }))
+ *
+ * const schema = pipe(x.array(…), x.size({ min: 3, max: 10 }))
+ * const schema = pipe(x.array(…), x.size({ min: 3, max: 10, reason: '…' }))
+ * ```
+ *
+ * @example Thanks to the `pipe` notation, you can construct complex schemas easily
+ * ```ts
+ * const arrayOfMinimumFiveUpperCaseStrings = pipe(
+ *   x.string,
+ *   x.nonEmpty('this string must have some content'),
+ *   x.map((str) => str.toUpperCase()),
+ *   x.array,
+ *   x.size({ min: 5, reason: 'requires 5+ elements' }),
+ * )
  * ```
  */
 export function array<T, Input = unknown>(itemSchema: Schema<T>) {
