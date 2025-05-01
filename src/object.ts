@@ -97,12 +97,13 @@ export function object<T extends Record<string, any>, Input = unknown>(
       if (!isObject(input)) return failure(context, name, input)
 
       const parsed = {} as T
-      Object.entries(props).forEach(([key, schema]) => {
+      for (const key in props) {
+        const schema = props[key]
         const nestedContext = withPathSegment(context, key)
         // schema.parse pushes an issue if it fails
         const result = schema.parse(input[key], nestedContext)
         if (result.success) parsed[key as keyof T] = result.value
-      })
+      }
       return success(context, parsed)
     },
   })
