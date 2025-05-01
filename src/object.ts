@@ -9,9 +9,8 @@ export type PropsOf<T extends Record<string, any>> = {
 type Writable<T> = { -readonly [Key in keyof T]: T[Key] }
 
 export function isObject(input: unknown): input is Record<string, unknown> {
-  return (
-    typeof input === 'object' && input !== null && input.constructor === Object
-  )
+  // input.constructor is `undefined` for null-proto objects.
+  return !!input && (input.constructor === Object || !input.constructor)
 }
 
 /**
@@ -139,9 +138,10 @@ export function partial(
 ): ObjectSchema<Record<string, any>> {
   const keySet = new Set(keys ?? Object.keys(schema.props))
   const copy = {} as Writable<typeof schema.props>
-  Object.entries(schema.props).forEach(([key, schema]) => {
-    copy[key] = keySet.has(key) ? optional(schema) : schema
-  })
+  for (const key in schema.props) {
+    const propSchema = schema.props[key]
+    copy[key] = keySet.has(key) ? optional(propSchema) : propSchema
+  }
   return object(copy)
 }
 

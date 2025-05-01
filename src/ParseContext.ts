@@ -31,5 +31,10 @@ export function withPathSegment(
   segment: PropertyKey,
 ): ParseContext {
   // explicitly DO NOT CLONE context.issues because errors are **pushed** to the same array.
-  return { ...context, path: [...context.path, segment] }
+  return {
+    issues: context.issues,
+    rootInput: context.rootInput,
+    rootSchemaName: context.rootSchemaName,
+    path: [...context.path, segment],
+  }
 }

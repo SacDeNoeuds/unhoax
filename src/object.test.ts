@@ -29,8 +29,17 @@ describe.each<{ case: string; schema: ObjectSchema<Person>; name: string }>([
     expect(person.name).toBe(schemaName)
   })
 
-  it('parses a valid input', () => {
+  it('parses a plain object', () => {
     expect(person.parse({ name: 'hello', age: 42 })).toEqual({
+      success: true,
+      value: { name: 'hello', age: 42 },
+    })
+  })
+
+  it('parses a null-proto object', () => {
+    const input = { name: 'hello', age: 42 }
+    Object.setPrototypeOf(input, null)
+    expect(person.parse(input)).toEqual({
       success: true,
       value: { name: 'hello', age: 42 },
     })
