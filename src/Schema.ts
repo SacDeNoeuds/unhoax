@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { createParseContext, type ParseContext } from './ParseContext'
-import type { Failure, ParseResult } from './ParseResult'
+import type { ParseResult } from './ParseResult'
 import type { Refinement } from './refine'
 
 const vendor = 'unhoax'
@@ -127,10 +127,6 @@ export function map<Input, Output>(
 export function flatMap<Input, Output>(
   mapper: (input: Input, context: ParseContext) => ParseResult<Output>,
   name?: string,
-  mapFailure: (
-    failure: Failure,
-    context: ParseContext,
-  ) => ParseResult<Output> = (failure) => failure,
 ) {
   return function flatMapSchema(schema: Schema<Input>): Schema<Output> {
     const schemaName = name ?? schema.name
@@ -139,9 +135,7 @@ export function flatMap<Input, Output>(
       name: schemaName,
       parse: (input: any, context = createParseContext(schemaName, input)) => {
         const result = schema.parse(input, context)
-        return result.success
-          ? mapper(result.value, context)
-          : mapFailure(result, context)
+        return result.success ? mapper(result.value, context) : result
       },
     } as any
   }
