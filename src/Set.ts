@@ -1,5 +1,5 @@
 import { array } from './array'
-import { map, type Schema } from './Schema'
+import { standardize, type Schema } from './Schema'
 
 /**
  * @category Schema Definition
@@ -32,19 +32,22 @@ export { Set_ as Set }
 function Set_<T>(item: Schema<T>) {
   const name = `Set<${item.name}>`
   const arraySchema = array(item)
-  const toSet = map<T[], Set<T>>(
-    (array) => new Set(array),
+  return standardize<SetSchema<T>>({
     name,
-    (failure) => ({
-      success: false,
-      schemaName: name,
-      input: failure.input,
-      issues: failure.issues.map((issue) => {
-        return issue.schemaName === arraySchema.name
-          ? { ...issue, schemaName: name }
-          : issue
-      }),
-    }),
-  )
-  return toSet(arraySchema)
+    item,
+    parse(input, context) {
+      const result = arraySchema.parse(input, context)
+      if (result.success) return { success: true, value: new Set(result.value) }
+      return {
+        success: false,
+        schemaName: name,
+        input: result.input,
+        issues: result.issues.map((issue) => {
+          return issue.schemaName === arraySchema.name
+            ? { ...issue, schemaName: name }
+            : issue
+        }),
+      }
+    },
+  })
 }

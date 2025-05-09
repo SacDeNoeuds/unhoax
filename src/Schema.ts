@@ -76,12 +76,10 @@ export type TypeOfSchema<T> = T extends Schema<infer U> ? U : never
 export function map<Input, Output>(
   mapper: (input: Input) => Output,
   name?: string,
-  mapFailure: (failure: Failure) => ParseResult<Output> = (failure) => failure,
 ) {
   return flatMap<Input, Output>(
     (value) => ({ success: true, value: mapper(value) }),
     name,
-    mapFailure,
   )
 }
 
