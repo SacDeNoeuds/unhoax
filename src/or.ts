@@ -20,8 +20,8 @@ import { union } from './union'
  * const schema = orString(x.number) // Schema<number | string>
  * ```
  */
-export function or<B, InputB = unknown>(b: Schema<B, InputB>) {
-  return <A, InputA = unknown>(a: Schema<A, InputA>) => union(a, b)
+export function or<B>(b: Schema<B>) {
+  return <A>(a: Schema<A>) => union(a, b)
 }
 
 /**

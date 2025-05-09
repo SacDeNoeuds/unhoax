@@ -29,10 +29,10 @@ import { standardize, type Schema } from './Schema'
  * })
  * ```
  */
-export function lazy<T, Input = unknown>(getSchema: () => Schema<T, Input>) {
+export function lazy<T>(getSchema: () => Schema<T>) {
   let name = 'lazy'
   let refinements: Refinement[] | undefined
-  return standardize<Schema<T, Input>>({
+  return standardize<Schema<T>>({
     get name() {
       return name
     },

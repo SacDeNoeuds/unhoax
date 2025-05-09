@@ -6,7 +6,7 @@ import type { Refinement } from './refine'
 const vendor = 'unhoax'
 const version = 1 as const
 
-export function standardize<S extends Schema<any, any>>(
+export function standardize<S extends Schema<any>>(
   config: Omit<S, keyof StandardSchemaV1>,
 ): S {
   return Object.assign(config as any, {
@@ -22,14 +22,14 @@ export function standardize<S extends Schema<any, any>>(
  * @category Schema Definition
  * @see {@link TypeOf}
  */
-export interface Schema<T, Input = unknown> extends StandardSchemaV1<Input, T> {
+export interface Schema<T> extends StandardSchemaV1<T> {
   readonly name: string
   readonly refinements?: Refinement[]
   /**
    * @category Parsing
    * @see {@link ParseResult}
    */
-  readonly parse: (input: Input, context?: ParseContext) => ParseResult<T>
+  readonly parse: (input: unknown, context?: ParseContext) => ParseResult<T>
 }
 
 /**
@@ -43,22 +43,7 @@ export interface Schema<T, Input = unknown> extends StandardSchemaV1<Input, T> {
  * x.TypeOf<typeof schema> // { name: string }
  * ```
  */
-export type TypeOfSchema<T> = T extends Schema<infer U, any> ? U : never
-
-/**
- * @category Schema Definition
- * @see {@link Schema}
- * @example
- * ```ts
- * import { x } from 'unhoax'
- *
- * // reminder: type Schema<T, Input = unknown> = …
- * declare const stringFromNumber = Schema<string, number>
- *
- * x.InputOf<typeof schema> // number
- * ```
- */
-export type InputOfSchema<T> = T extends Schema<any, infer U> ? U : never
+export type TypeOfSchema<T> = T extends Schema<infer U> ? U : never
 
 /**
  * @category Modifier
@@ -149,9 +134,7 @@ export function flatMap<Input, Output>(
     context: ParseContext,
   ) => ParseResult<Output> = (failure) => failure,
 ) {
-  return function flatMapSchema<I = unknown>(
-    schema: Schema<Input, I>,
-  ): Schema<Output, I> {
+  return function flatMapSchema(schema: Schema<Input>): Schema<Output> {
     const schemaName = name ?? schema.name
     return {
       ...schema,

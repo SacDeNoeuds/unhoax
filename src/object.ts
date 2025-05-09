@@ -17,8 +17,7 @@ export function isObject(input: unknown): input is Record<string, unknown> {
  * @category Schema Definition
  * @see {@link object}
  */
-export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
-  extends Schema<T, Input> {
+export interface ObjectSchema<T extends Record<string, any>> extends Schema<T> {
   readonly props: PropsOf<T>
 }
 
@@ -46,9 +45,9 @@ export interface ObjectSchema<T extends Record<string, any>, Input = unknown>
  * type Person = x.TypeOf<typeof personSchema>
  * ```
  */
-export function object<T extends Record<string, Schema<any>>, Input = unknown>(
+export function object<T extends Record<string, Schema<any>>>(
   ...args: [props: T] | [name: string, props: T]
-): ObjectSchema<{ readonly [Key in keyof T]: TypeOfSchema<T[Key]> }, Input>
+): ObjectSchema<{ readonly [Key in keyof T]: TypeOfSchema<T[Key]> }>
 /**
  * @category Schema
  * @see {@link record}
@@ -83,14 +82,14 @@ export function object<T extends Record<string, Schema<any>>, Input = unknown>(
  * })
  * ```
  */
-export function object<T extends Record<string, any>, Input = unknown>(
+export function object<T extends Record<string, any>>(
   ...args: [props: PropsOf<T>] | [name: string, props: PropsOf<T>]
-): ObjectSchema<T, Input>
-export function object<T extends Record<string, any>, Input = unknown>(
+): ObjectSchema<T>
+export function object<T extends Record<string, any>>(
   ...args: [name: string, props: PropsOf<T>] | [props: PropsOf<T>]
 ) {
   const [name, props] = args.length === 1 ? ['object', args[0]] : args
-  return standardize<ObjectSchema<T, Input>>({
+  return standardize<ObjectSchema<T>>({
     name,
     props,
     parse: (input, context = createParseContext(name, input)) => {

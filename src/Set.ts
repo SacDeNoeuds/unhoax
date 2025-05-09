@@ -5,7 +5,7 @@ import { map, type Schema } from './Schema'
  * @category Schema Definition
  * @see {@link Set}
  */
-export interface SetSchema<T, Input = unknown> extends Schema<Set<T>, Input> {
+export interface SetSchema<T> extends Schema<Set<T>> {
   readonly item: Schema<T>
 }
 
@@ -29,7 +29,7 @@ export { Set_ as Set }
  * // { success: true, value: Set { 'a', 'b' } }
  * ```
  */
-function Set_<T, Input = unknown>(item: Schema<T>) {
+function Set_<T>(item: Schema<T>) {
   const name = `Set<${item.name}>`
   const arraySchema = array(item)
   const toSet = map<T[], Set<T>>(

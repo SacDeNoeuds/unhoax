@@ -130,7 +130,7 @@ const isLiteral =
 /**
  * @category Schema Definition
  */
-export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
+export interface LiteralSchema<L> extends Schema<L> {
   literals: L[]
 }
 
@@ -139,10 +139,8 @@ export interface LiteralSchema<L, Input = unknown> extends Schema<L, Input> {
  * @see {@link LiteralSchema}
  * @example const schema = x.literal('a', 42, true, null, undefined, …)
  */
-export function literal<L extends [Literal, ...Literal[]], Input = unknown>(
-  ...literals: L
-) {
-  return standardize<LiteralSchema<L[number], Input>>({
+export function literal<L extends [Literal, ...Literal[]]>(...literals: L) {
+  return standardize<LiteralSchema<L[number]>>({
     ...fromGuard('literal', isLiteral(...literals)),
     literals,
   })

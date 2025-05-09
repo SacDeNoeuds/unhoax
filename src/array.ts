@@ -7,8 +7,8 @@ import { standardize, type Schema } from './Schema'
  * @category Schema Definition
  * @see {@link array}
  */
-export interface ArraySchema<T, Input = unknown> extends Schema<T[], Input> {
-  readonly item: Schema<T, Input>
+export interface ArraySchema<T> extends Schema<T[]> {
+  readonly item: Schema<T>
 }
 
 function isIterableObject<T>(input: unknown): input is Iterable<T> {
@@ -57,9 +57,9 @@ function isIterableObject<T>(input: unknown): input is Iterable<T> {
  * )
  * ```
  */
-export function array<T, Input = unknown>(itemSchema: Schema<T>) {
+export function array<T>(itemSchema: Schema<T>) {
   const name = `Array<${itemSchema.name}>`
-  return standardize<ArraySchema<T, Input>>({
+  return standardize<ArraySchema<T>>({
     name,
     item: itemSchema as any,
     parse: (input, context = createParseContext(name, input)) => {

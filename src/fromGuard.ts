@@ -2,7 +2,7 @@ import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
 import { standardize, type Schema } from './Schema'
 
-export type Guard<Input, T extends Input> = (input: Input) => input is T
+export type Guard<T> = (input: unknown) => input is T
 
 /**
  * @category Schema Factory
@@ -32,11 +32,8 @@ export type Guard<Input, T extends Input> = (input: Input) => input is T
  * const email = x.fromGuard('Email', isEmail)
  * ```
  */
-export function fromGuard<T extends Input, Input = unknown>(
-  name: string,
-  guard: Guard<Input, T>,
-) {
-  return standardize<Schema<T, Input>>({
+export function fromGuard<T>(name: string, guard: Guard<T>) {
+  return standardize<Schema<T>>({
     name,
     parse: (input, context = createParseContext(name, input)) =>
       guard(input) ? success(context, input) : failure(context, name, input),

@@ -2,28 +2,21 @@ import type { ObjectSchema } from './object'
 import { createParseContext } from './ParseContext'
 import { failure, success } from './ParseResult'
 import type { LiteralSchema } from './primitives'
-import {
-  standardize,
-  type InputOfSchema,
-  type Schema,
-  type TypeOfSchema,
-} from './Schema'
+import { standardize, type Schema, type TypeOfSchema } from './Schema'
 
 /**
  * @category Schema Definition
  * @see {@link union}
  * @see {@link variant}
  */
-export interface UnionSchema<T, Input = unknown> extends Schema<T, Input> {
+export interface UnionSchema<T> extends Schema<T> {
   readonly schemas: Schema<unknown>[]
 }
-function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
+function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
   name: string,
   schemas: T,
 ) {
-  return standardize<
-    UnionSchema<TypeOfSchema<T[number]>, InputOfSchema<T[number]>>
-  >({
+  return standardize<UnionSchema<TypeOfSchema<T[number]>>>({
     name,
     schemas,
     refinements: [],
@@ -50,9 +43,9 @@ function namedUnion<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
  * // { success: true, value: 'a' }
  * ```
  */
-export function union<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
+export function union<T extends [Schema<any>, ...Schema<any>[]]>(
   ...schemas: T
-): UnionSchema<TypeOfSchema<T[number]>, InputOfSchema<T[number]>> {
+): UnionSchema<TypeOfSchema<T[number]>> {
   const name = schemas.map((schema) => schema.name).join(' | ')
   return namedUnion(name, schemas)
 }
@@ -75,12 +68,10 @@ export function union<T extends [Schema<any, any>, ...Schema<any, any>[]]>(
  * // { success: true, value: { type: 'a', a: 'Hello' } }
  * ```
  */
-export function variant<
-  T extends [ObjectSchema<any, any>, ...ObjectSchema<any, any>[]],
->(
+export function variant<T extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
   discriminant: keyof T[number]['props'],
   schemas: T,
-): UnionSchema<TypeOfSchema<T[number]>, InputOfSchema<T[number]>> {
+): UnionSchema<TypeOfSchema<T[number]>> {
   const name = schemas
     .map(
       (schema) =>

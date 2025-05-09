@@ -23,9 +23,7 @@ import type { Schema } from './Schema'
  * ```
  */
 export function recover<U>(getFallback: () => U) {
-  return function recover<T, Input = unknown>(
-    schema: Schema<T, Input>,
-  ): Schema<T | U, Input> {
+  return function recover<T>(schema: Schema<T>): Schema<T | U> {
     return {
       ...schema,
       parse: (input) => {

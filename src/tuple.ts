@@ -6,7 +6,7 @@ import { standardize, type Schema } from './Schema'
  * @category Schema Definition
  * @see {@link tuple}
  */
-export interface TupleSchema<T, Input = unknown> extends Schema<T, Input> {
+export interface TupleSchema<T> extends Schema<T> {
   readonly items: { [Key in keyof T]: Schema<T> }
 }
 
@@ -28,11 +28,11 @@ export interface TupleSchema<T, Input = unknown> extends Schema<T, Input> {
  * // { success: true, value: ['a', 1] }
  * ```
  */
-export function tuple<T extends [any, ...any[]], Input = unknown>(
+export function tuple<T extends [any, ...any[]]>(
   ...items: { [K in keyof T]: Schema<T[K]> }
 ) {
   const name = `[${items.map((schema) => schema.name).join(', ')}]`
-  return standardize<TupleSchema<T, Input>>({
+  return standardize<TupleSchema<T>>({
     name,
     items,
     parse: (input, context = createParseContext(name, input)) => {

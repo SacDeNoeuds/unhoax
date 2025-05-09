@@ -24,11 +24,11 @@ import { union } from './union'
  * ```
  */
 export function coerce<T, Input>(
-  schema: Schema<T, Input>,
+  schema: Schema<T>,
   coercer: (input: Input) => T,
 ) {
   const mapped = map<any, any>(coercer)
   const flatMapped = flatMap(schema.parse)
-  return <S extends Schema<Input, unknown>>(inputSchema: S) =>
+  return <S extends Schema<Input>>(inputSchema: S) =>
     union(schema, flatMapped(mapped(inputSchema)))
 }

@@ -3,9 +3,12 @@ import { failure, success } from './ParseResult'
 import type { Schema, TypeOfSchema } from './Schema'
 
 export interface Refinement {
-  name: string
-  meta?: Record<string, unknown>
+  readonly name: string
+  readonly meta?: Record<string, unknown>
 }
+
+// export type RefinementMeta = Record<string, unknown>
+// export type Refinements = Map<string, RefinementMeta>
 
 /**
  * @category Refinement
@@ -29,17 +32,17 @@ export interface Refinement {
  * const emailSchema = refineAsEmail(x.string) // Schema<string>
  * ```
  */
-export function refine<S extends Schema<any, unknown>>(
+export function refine<S extends Schema<any>>(
   name: string,
   refine: (value: TypeOfSchema<S>) => boolean,
   meta?: unknown,
 ): (schema: S) => S
-export function refine<T, S extends Schema<T, unknown>>(
+export function refine<T, S extends Schema<T>>(
   name: string,
   refine: (value: T) => boolean,
   meta?: unknown,
 ): (schema: S) => S
-export function refine<S extends Schema<any, unknown>>(
+export function refine<S extends Schema<any>>(
   name: string,
   refine: (value: TypeOfSchema<S>) => boolean,
   meta?: unknown,
@@ -82,7 +85,7 @@ export const guardAs = refine as <T, U extends T>(
   name: string,
   guard: (value: T) => value is U,
   meta?: unknown,
-) => <Input = unknown>(schema: Schema<T, Input>) => Schema<U, Input>
+) => (schema: Schema<T>) => Schema<U>
 
 /**
  * @category Refinement

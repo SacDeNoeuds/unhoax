@@ -17,9 +17,7 @@ interface Enum {
  * schema.parse(Direction.Left) // { success: true, value: Direction.Left })
  * ```
  */
-export function Enum<T extends Enum, Input = unknown>(
-  Enum: T,
-): Schema<T[keyof T], Input> {
+export function Enum<T extends Enum>(Enum: T): Schema<T[keyof T]> {
   // @ts-ignore
   return literal(...Object.values(Enum))
 }

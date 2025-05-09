@@ -7,8 +7,8 @@ import { standardize, type Schema } from './Schema'
  * @category Schema Definition
  * @see {@link record}
  */
-export interface RecordSchema<Key extends PropertyKey, Value, Input = unknown>
-  extends Schema<Record<Key, Value>, Input> {
+export interface RecordSchema<Key extends PropertyKey, Value>
+  extends Schema<Record<Key, Value>> {
   readonly key: Schema<Key>
   readonly value: Schema<Value>
 }
@@ -30,12 +30,12 @@ export interface RecordSchema<Key extends PropertyKey, Value, Input = unknown>
  * schema.parse({ hello: 42 }) // { success: true, value: { hello: 42 } }
  * ```
  */
-export function record<Key extends PropertyKey, Value, Input = unknown>(
+export function record<Key extends PropertyKey, Value>(
   key: Schema<Key>,
   value: Schema<Value>,
 ) {
   const name = `Record<${key.name}, ${value.name}>`
-  return standardize<RecordSchema<Key, Value, Input>>({
+  return standardize<RecordSchema<Key, Value>>({
     name,
     refinements: [],
     key,

@@ -69,7 +69,6 @@ export {
 export {
   flatMap,
   map,
-  type InputOfSchema as InputOf,
   type Schema,
   type TypeOfSchema as TypeOf,
 } from './Schema'
