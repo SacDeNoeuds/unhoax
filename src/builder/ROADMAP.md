@@ -1,9 +1,0 @@
-- [x] write an `ok(value)` function helper for simpler `success(context, value)`
-- [x] `Map`
-- [x] `Set`
-- [x] `Record`
-- [x] `Tuple`
-- [x] Test the `standard-schema` integration.
-- [ ] Add secure defaults to remove cardinality attacks.
-- [ ] Add examples on sized for arrays, sets and maps
-- [ ] Add examples on numeric for dates and bigints.
