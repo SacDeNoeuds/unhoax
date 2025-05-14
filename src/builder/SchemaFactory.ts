@@ -199,7 +199,8 @@ export class Factory implements Interface {
       'size',
       (value: any, config: { min?: number; max?: number }) => {
         const size = value.length ?? value.size
-        return size >= (config.min ?? 0) && size <= (config.max ?? Infinity)
+        // There is always a max, because no infinite stuff.
+        return size >= (config.min ?? 0) && size <= config.max!
       },
       {
         min: options.min,
