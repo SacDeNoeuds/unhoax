@@ -22,10 +22,9 @@ const mapBigInt = flatMap((input: BigIntInput, context) => {
 }, 'bigint')
 
 /**
- * @category Schema
- *
  * Accepts any input that can construct a BigInt.
  *
+ * @category Schema
  * @example const schema = x.bigint
  * @example Apply constraints using `x.min`, `x.max` and `x.between`
  * ```ts

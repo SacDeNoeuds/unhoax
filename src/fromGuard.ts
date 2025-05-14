@@ -5,11 +5,11 @@ import { standardize, type Schema } from './Schema'
 export type Guard<T> = (input: unknown) => input is T
 
 /**
- * @category Schema Factory
- *
  * Utility to create schemas.<br>
  * Used to create most of the primitives.<br>
  * Can be used to create custom schemas like `Email`.
+ *
+ * @category Schema Factory
  * @see {@link bigint}
  * @see {@link boolean}
  * @see {@link instanceOf}
