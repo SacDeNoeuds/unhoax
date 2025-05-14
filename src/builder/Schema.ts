@@ -175,8 +175,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    * @example with default value
    * ```ts
    * const schema = x.string.nullable(42)
-   * assert(schema.parse(null).success === true)
-   * assert(schema.parse(null).value === 42)
+   * assert.deepEqual(schema.parse(null), { success: true, value: 42 })
    * ```
    */
   nullable<U = null>(defaultValue?: U): Schema<T | U>
