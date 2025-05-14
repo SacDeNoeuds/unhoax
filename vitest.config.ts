@@ -8,7 +8,7 @@ export default defineConfig({
       ...(isCI && { reporter: ['json-summary'] }),
       provider: 'istanbul',
       include: ['src'],
-      exclude: ['./src/main.ts', '**/*.test.ts'],
+      exclude: ['./src/main.ts', '**/*.test.ts', '**/test-utils.ts'],
     },
   },
 })
