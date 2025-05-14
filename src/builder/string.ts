@@ -1,0 +1,74 @@
+import { fromGuard } from './from-guard'
+import type { BaseSchema } from './Schema'
+import type { SizedBuilder } from './SizedSchema'
+
+export interface StringSchema extends BaseSchema<string>, SizedBuilder<string> {
+  // /**
+  //  * Allows to configure the default max length of strings.
+  //  *
+  //  * The default value is intentionally low because safety-first.
+  //  *
+  //  * If you need to increase it, I recommend increasing it _locally_ at schema level:
+  //  * `x.string.size({ max: 10_000 })`
+  //  *
+  //  * If you need to loosen it globally, use `x.string = unsafeString.size({ max: 10_000 })`
+  //  *
+  //  * @category Config
+  //  * @default 1_000
+  //  * @see {@link string}
+  //  * @see {@link untrimmedString}
+  //  *
+  //  * @example
+  //  * ```ts
+  //  * x.string = x.unsafeString.size({ max: 20 })
+  //  *
+  //  * assert(x.string.parse('x'.repeat(20)).success === true)
+  //  * assert(x.string.parse('x'.repeat(21)).success === false)
+  //  * ```
+  //  * @example override string default max length locally
+  //  * ```ts
+  //  * x.string = x.unsafeString.size({ max: 20 })
+  //  * const schema = x.string.size({ min: 4, max: 25 })
+  //  * assert(schema.parse('x'.repeat(24)).success === true)
+  //  * ```
+  //  *
+  //  * @example it keeps max when applying min:
+  //  * ```ts
+  //  * x.string = x.unsafeString.size({ max: 20 })
+  //  * const schema = x.string.size({ min: 3 })
+  //  *
+  //  * assert(schema.parse('x'.repeat(12)).success === true)
+  //  *
+  //  * assert(schema.parse('xx').success === false)
+  //  * assert(schema.parse('x'.repeat(21)).success === false)
+  //  * ```
+  //  */
+  // defaultMaxLength: number
+}
+
+/**
+ * @category Unsafe Schema
+ * @see {@link string} for a trimmed string.
+ * @example const schema = x.untrimmedString
+ * @example
+ * ```ts
+ * assert(x.untrimmedString.parse(' hello ').value === ' hello ')
+ * ```
+ */
+export const untrimmedString = Object.assign(
+  fromGuard('string', (value) => typeof value === 'string'),
+  { defaultMaxLength: 1_000 },
+)
+
+/**
+ * This also trims the string. If you do not want this behavior,
+ * explicitly use {@link untrimmedString}
+ * @category Schema
+ * @example
+ * ```ts
+ * assert(x.string.parse('  hello  ').value === 'hello')
+ * ```
+ */
+export const string = untrimmedString.map((s) => s.trim()) // .size({ max: 1_000 })
+
+// export const unsafeString = untrimmedString.map((s) => s.trim())

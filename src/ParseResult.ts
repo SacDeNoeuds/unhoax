@@ -130,3 +130,5 @@ export function success<T>(context: ParseContext, value: T): ParseResult<T> {
         issues: context.issues,
       }
 }
+
+export const ok = <T>(value: T): ParseResult<T> => ({ success: true, value })
