@@ -21,6 +21,7 @@ export {
   type Schema,
   type TypeOfSchema as TypeOf,
 } from './Schema'
+export { unknown } from './SchemaFactory'
 export { setOf, type SetSchema } from './Set'
 export { string, untrimmedString, type StringSchema } from './string'
 export { tuple, type TupleSchema } from './tuple'

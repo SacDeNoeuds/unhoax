@@ -44,7 +44,7 @@ export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
     itemSchema,
     () => [] as T[],
     (acc, item) => acc.push(item),
-    array.defaultMaxLength,
+    array.defaultMaxSize,
   ) as ArraySchema<T>
 }
 
@@ -56,7 +56,7 @@ export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
  * If you need to increase it, I recommend increasing it _locally_ at schema level:
  * `x.array(x.string).size({ max: 10_000 })`
  *
- * If you need to loosen it globally, use `x.array.defaultMaxLength = 10_000`
+ * If you need to loosen it globally, use `x.array.defaultMaxSize = 10_000`
  *
  * @category Config
  * @see {@link array}
@@ -64,7 +64,7 @@ export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
  *
  * @example
  * ```ts
- * x.array.defaultMaxLength = 20
+ * x.array.defaultMaxSize = 20
  * const schema = x.array(x.string)
  *
  * assert(schema.parse(new Array(20).fill('x')).success === true)
@@ -72,14 +72,14 @@ export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
  * ```
  * @example override array default max length locally
  * ```ts
- * x.array.defaultMaxLength = 20
+ * x.array.defaultMaxSize = 20
  * const schema = x.array(x.string).size({ min: 4, max: 25 })
  * assert(schema.parse(new Array(24).fill('x')).success === true)
  * ```
  *
  * @example it keeps max when applying min:
  * ```ts
- * x.array.defaultMaxLength = 20
+ * x.array.defaultMaxSize = 20
  * const schema = x.array(x.string).size({ min: 3 })
  *
  * assert(schema.parse(new Array(12).fill('x')).success === true)
@@ -88,4 +88,4 @@ export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
  * assert(schema.parse(new Array(21).fill('x')).success === false)
  * ```
  */
-array.defaultMaxLength = 100
+array.defaultMaxSize = 100

@@ -1,14 +1,17 @@
 import { createParseContext } from '../ParseContext'
 import { failure, ok, success } from '../ParseResult'
+import { literal } from './literal'
 import type { NumericBuilder } from './NumericSchema'
 import type { ObjectBuilder, ObjectSchema } from './object'
 import type {
   BaseBuilder,
   BaseSchema,
   Refinement,
+  Schema,
   SchemaConfig,
 } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
+import { union } from './union'
 
 interface Interface
   extends BaseBuilder<any>,
@@ -16,13 +19,24 @@ interface Interface
     SizedBuilder<any>,
     ObjectBuilder<any> {}
 
-const propIfValueIsDefined = (key: string, value: unknown) =>
-  value && { [key]: value }
+const propsIfDefined = (
+  a: Record<string, any>,
+  b: Record<string, any>,
+  props: string[],
+) => {
+  const acc: Record<string, any> = {}
+  for (const prop of props) {
+    const value = a[prop] ?? b[prop]
+    if (value !== undefined) acc[prop] = value
+  }
+  return acc
+}
 export class Factory implements Interface {
   readonly name!: SchemaConfig<any>['name']
   readonly parser!: SchemaConfig<any>['parser']
   readonly meta: NonNullable<SchemaConfig<any>['meta']> = {}
   readonly refinements: NonNullable<SchemaConfig<any>['refinements']> = {}
+  readonly defaultMaxSize?: number
 
   constructor(config: SchemaConfig<any>) {
     Object.assign(this, config)
@@ -42,14 +56,13 @@ export class Factory implements Interface {
       parser: config.parser ?? this.parser,
       meta: config.meta ?? this.meta,
       refinements: config.refinements ?? this.refinements,
-      // @ts-expect-error it comes from iterable schemas.
-      ...propIfValueIsDefined('item', config.item ?? this.item),
-      // @ts-expect-error it comes from object schemas.
-      ...propIfValueIsDefined('props', config.props ?? this.props),
-      // @ts-expect-error it comes from record schemas.
-      ...propIfValueIsDefined('key', config.key ?? this.key),
-      // @ts-expect-error it comes from record schemas.
-      ...propIfValueIsDefined('value', config.value ?? this.value),
+      ...propsIfDefined(config, this, [
+        'item', // for iterable schemas
+        'props', // for object schemas
+        'key', // for record schemas
+        'value', // for record schemas
+        'defaultMaxSize', // for sized schemas
+      ]),
     })
   }
 
@@ -118,29 +131,23 @@ export class Factory implements Interface {
     })
   }
   recover(getFallback: () => any): any {
-    return this.#evolve({
-      parser: (input) => {
-        const result = this.parse(input)
-        return result.success ? result : ok(getFallback())
-      },
-    })
+    return union(
+      this as BaseSchema<any>,
+      unknown.map('recovered', getFallback as any),
+    )
   }
   optional(defaultValue = undefined): any {
-    return this.#evolve({
-      parser: (input, context) => {
-        if (input === undefined) return ok(defaultValue)
-        return this.parse(input, context)
-      },
-    })
+    return union(
+      literal(undefined).map(() => defaultValue),
+      this as BaseSchema<any>,
+    )
   }
   // @ts-ignore
   nullable(defaultValue = null): any {
-    return this.#evolve({
-      parser: (input, context) => {
-        if (input === null) return ok(defaultValue)
-        return this.parse(input, context)
-      },
-    })
+    return union(
+      literal(null).map(() => defaultValue),
+      this as BaseSchema<any>,
+    )
   }
 
   // NumericBuilder
@@ -194,7 +201,11 @@ export class Factory implements Interface {
         const size = value.length ?? value.size
         return size >= (config.min ?? 0) && size <= (config.max ?? Infinity)
       },
-      options,
+      {
+        min: options.min,
+        max: options.max ?? this.defaultMaxSize,
+        description: options.description,
+      },
     )
   }
 
@@ -226,3 +237,8 @@ export class Factory implements Interface {
     })
   }
 }
+
+export const unknown = new Factory({
+  name: 'unknown',
+  parser: ok,
+}) as Schema<unknown>
