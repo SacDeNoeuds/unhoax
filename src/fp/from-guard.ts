@@ -1,6 +1,5 @@
 import { failure, ok } from '../common/ParseResult'
-import type { Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import { defineSchema, type Schema } from './Schema'
 
 export type Guard<T> = (value: unknown) => value is T
 
@@ -32,11 +31,11 @@ export type Guard<T> = (value: unknown) => value is T
  * const email = x.fromGuard('Email', isEmail)
  * ```
  */
-export const fromGuard = <T>(name: string, guard: Guard<T>) => {
-  return new Factory({
+export const fromGuard = <T>(name: string, guard: Guard<T>): Schema<T> => {
+  return defineSchema<T>({
     name,
     parser: (input, context) => {
       return guard(input) ? ok(input) : failure(context, name, input)
     },
-  }) as unknown as Schema<T>
+  })
 }

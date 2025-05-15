@@ -1,9 +1,5 @@
 import { failure, ok } from '../common/ParseResult'
-import type { NumericBuilder } from './NumericSchema'
-import type { Schema } from './Schema'
-import { Factory } from './SchemaFactory'
-
-export interface BigIntSchema extends NumericBuilder<bigint> {}
+import { defineSchema } from './Schema'
 
 const name = 'bigint'
 
@@ -23,7 +19,7 @@ const name = 'bigint'
  * assert(x.bigint.parse({}).success === false)
  * ```
  */
-export const bigint = new Factory({
+export const bigint = defineSchema<bigint>({
   name,
   parser: (input, context) => {
     try {
@@ -32,4 +28,4 @@ export const bigint = new Factory({
       return failure(context, 'bigint', input)
     }
   },
-}) as unknown as Schema<bigint>
+})

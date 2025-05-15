@@ -1,13 +1,12 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import { type Schema, defineSchema } from './Schema'
 
 /**
  * @category Schema Definition
  * @see {@link tuple}
  */
-export interface TupleSchema<T> extends BaseSchema<T> {
+export interface TupleSchema<T> extends Schema<T> {
   readonly items: { [Key in keyof T]: Schema<T[Key]> }
 }
 
@@ -46,10 +45,10 @@ export interface TupleSchema<T> extends BaseSchema<T> {
  * ```
  */
 export function tuple<T extends [any, ...any[]]>(
-  ...items: { [K in keyof T]: BaseSchema<T[K]> }
+  ...items: { [K in keyof T]: Schema<T[K]> }
 ): TupleSchema<T> {
   const name = `[${items.map((schema) => schema.name).join(', ')}]`
-  const schema = new Factory({
+  const schema = defineSchema<T>({
     name,
     parser: (input, context) => {
       if (!Array.isArray(input)) return failure(context, name, input)

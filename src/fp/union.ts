@@ -1,14 +1,13 @@
 import { failure } from '../common/ParseResult'
 import type { TypeOf } from '../common/Schema'
 import type { ObjectSchema } from './object'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import { type Schema, defineSchema } from './Schema'
 
-function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
+function namedUnion<T extends [Schema<any>, ...Schema<any>[]]>(
   name: string,
   schemas: T,
 ): Schema<TypeOf<T[number]>> {
-  return new Factory({
+  return defineSchema<TypeOf<T[number]>>({
     name,
     meta: { union: { schemas } },
     parser: (input, context) => {
@@ -18,7 +17,7 @@ function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
       }
       return failure(context, name, input)
     },
-  }) as unknown as Schema<TypeOf<T[number]>>
+  })
 }
 
 /**
@@ -34,13 +33,11 @@ function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
  * assert(schema.parse({}).success === false)
  * ```
  */
-export function union<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
+export function union<T extends [Schema<any>, ...Schema<any>[]]>(
   ...schemas: T
-): BaseSchema<TypeOf<T[number]>> {
+): Schema<TypeOf<T[number]>> {
   const name = schemas.map((schema) => schema.name).join(' | ')
-  return namedUnion(name, schemas as any) as unknown as BaseSchema<
-    TypeOf<T[number]>
-  >
+  return namedUnion(name, schemas as any) as Schema<TypeOf<T[number]>>
 }
 
 /**
@@ -69,12 +66,10 @@ export function union<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
 export function variant<T extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
   discriminant: keyof T[number]['props'],
   schemas: T,
-): BaseSchema<TypeOf<T[number]>> {
+): Schema<TypeOf<T[number]>> {
   const name = schemas
-    .map(
-      (schema) => (schema.props[discriminant] as any).meta.literal.literals[0],
-    )
+    .map((schema) => (schema.props[discriminant] as any).literals[0])
     .filter((value, index, self) => self.indexOf(value) === index)
     .join(' | ')
-  return namedUnion(name, schemas as any) as BaseSchema<TypeOf<T[number]>>
+  return namedUnion(name, schemas as any) as Schema<TypeOf<T[number]>>
 }

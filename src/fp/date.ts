@@ -1,10 +1,6 @@
 import { failure, ok } from '../common/ParseResult'
 import { instanceOf } from './instance-of'
-import type { NumericBuilder } from './NumericSchema'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
-
-export interface DateSchema extends BaseSchema<Date>, NumericBuilder<Date> {}
+import { defineSchema } from './Schema'
 
 const name = 'date'
 
@@ -49,7 +45,7 @@ const name = 'date'
  * assert(x.date.parse(() => {}).success === false)
  * ```
  */
-export const date = new Factory({
+export const date = defineSchema<Date>({
   name,
   parser: (input, context) => {
     const value = new Date(input as any)
@@ -57,4 +53,4 @@ export const date = new Factory({
       ? failure(context, name, input)
       : ok(value)
   },
-}) as unknown as Schema<Date>
+})
