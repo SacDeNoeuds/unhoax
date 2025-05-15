@@ -1,15 +1,10 @@
-import { createParseContext } from '../ParseContext'
-import { failure, ok, success } from '../ParseResult'
+import { createParseContext } from '../common/ParseContext'
+import { failure, ok, success } from '../common/ParseResult'
+import type { Refinement } from '../common/Schema'
 import { literal } from './literal'
 import type { NumericBuilder } from './NumericSchema'
 import type { ObjectBuilder, ObjectSchema } from './object'
-import type {
-  BaseBuilder,
-  BaseSchema,
-  Refinement,
-  Schema,
-  SchemaConfig,
-} from './Schema'
+import type { BaseBuilder, BaseSchema, Schema, SchemaConfig } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
 import { union } from './union'
 
@@ -80,13 +75,13 @@ export class Factory implements Interface {
   refine(
     name: string,
     refine: Refinement<any>['refine'],
-    meta?: Omit<Refinement<any>, 'refine'>,
+    config?: Omit<Refinement<any>, 'refine'>,
   ): any {
     const schema = this
     return this.#evolve({
       refinements: {
         ...schema.refinements,
-        [name]: { refine, ...meta },
+        [name]: { refine, ...config },
       },
     })
   }

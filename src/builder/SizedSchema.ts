@@ -1,8 +1,5 @@
+import type { Sized } from '../common/Sized'
 import type { Schema } from './Schema'
-
-export type Sized =
-  | { length: number; size?: undefined }
-  | { size: number; length?: undefined }
 
 export interface SizedBuilder<T extends Sized> {
   /**

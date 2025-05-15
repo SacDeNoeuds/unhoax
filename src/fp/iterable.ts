@@ -1,9 +1,8 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
 import type { Sized } from '../common/Sized'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
-import type { SizedBuilder } from './SizedSchema'
+import { size } from './refine-sized'
+import { defineSchema, type Schema } from './Schema'
 
 function isIterableObject<T>(input: unknown): input is Iterable<T> {
   return (
@@ -14,12 +13,12 @@ function isIterableObject<T>(input: unknown): input is Iterable<T> {
 
 export const defineIterableSchema = <T, Acc extends Sized>(
   name: string,
-  itemSchema: BaseSchema<T>,
+  itemSchema: Schema<T>,
   createAcc: () => Acc,
   addToAcc: (acc: Acc, item: T) => void,
   maxLength: number,
 ) => {
-  const schema = new Factory({
+  const schema = defineSchema<Acc>({
     name,
     // @ts-expect-error it is effectively taken into account.
     item: itemSchema,
@@ -36,6 +35,6 @@ export const defineIterableSchema = <T, Acc extends Sized>(
       }
       return success(context, acc)
     },
-  }) as unknown as Schema<Acc> & SizedBuilder<Acc>
-  return schema.size({ max: maxLength })
+  })
+  return size({ max: maxLength })(schema)
 }

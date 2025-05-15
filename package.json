@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "gen-tests": "npx gen-jet ./src/builder --header 'import { test } from \"vitest\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
+    "gen-tests": "npx gen-jet ./src/fp,./src/builder --header 'import { test } from \"vitest\"' --header 'import pipe from \"just-pipe\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
     "prebuild": "npm run check-ts && rm -rf ./lib",
     "check-ts": "tsc --noEmit",
     "build": "npx tsup ./src/main.ts --dts --sourcemap --format cjs,esm --cjsInterop --minify",
@@ -62,7 +62,8 @@
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitest/coverage-istanbul": "^3.1.1",
-    "generate-jsdoc-example-tests": "^0.2.3",
+    "generate-jsdoc-example-tests": "^0.2.4",
+    "just-pipe": "^1.0.0",
     "prettier": "^3.5.3",
     "tslib": "^2.8.1",
     "tsup": "^8.4.0",

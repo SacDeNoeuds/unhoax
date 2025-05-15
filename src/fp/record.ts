@@ -1,7 +1,6 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import { type Schema, defineSchema } from './Schema'
 import { isObject } from './object'
 
 /**
@@ -9,7 +8,7 @@ import { isObject } from './object'
  * @see {@link record}
  */
 export interface RecordSchema<Key extends PropertyKey, Value>
-  extends BaseSchema<Record<Key, Value>> {
+  extends Schema<Record<Key, Value>> {
   readonly key: Schema<Key>
   readonly value: Schema<Value>
 }
@@ -23,7 +22,8 @@ export interface RecordSchema<Key extends PropertyKey, Value>
  * @see {@link tuple}
  * @example
  * ```ts
- * const schema = x.record(x.string.convertTo(x.number, Number), x.string)
+ * const numberFromString = pipe(x.string, x.convertTo(x.number, Number))
+ * const schema = x.record(numberFromString, x.string)
  * type MyRecord = x.TypeOf<typeof schema>
  *
  * assert.deepEqual(
@@ -43,11 +43,11 @@ export interface RecordSchema<Key extends PropertyKey, Value>
  * ```
  */
 export function record<Key extends PropertyKey, Value>(
-  key: BaseSchema<Key>,
-  value: BaseSchema<Value>,
+  key: Schema<Key>,
+  value: Schema<Value>,
 ): RecordSchema<Key, Value> {
   const name = `Record<${key.name}, ${value.name}>`
-  const schema = new Factory({
+  const schema = defineSchema<Record<Key, Value>>({
     name,
     parser: (input, context) => {
       if (!isObject(input)) return failure(context, name, input)
@@ -65,8 +65,5 @@ export function record<Key extends PropertyKey, Value>(
       return success(context, acc)
     },
   })
-  return Object.assign(schema, { key, value }) as unknown as RecordSchema<
-    Key,
-    Value
-  >
+  return Object.assign(schema, { key, value }) as RecordSchema<Key, Value>
 }

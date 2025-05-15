@@ -1,6 +1,7 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import { type ParseContext } from '../ParseContext'
-import { type ParseResult } from '../ParseResult'
+import type { ParseContext } from '../common/ParseContext'
+import type { ParseResult } from '../common/ParseResult'
+import type { Refinement, SchemaMeta } from '../common/Schema'
 import type { ArraySchema } from './array'
 import type { BigIntSchema } from './bigint'
 import type { DateSchema } from './date'
@@ -12,12 +13,6 @@ import type { SetSchema } from './Set'
 import type { StringSchema } from './string'
 import type { TupleSchema } from './tuple'
 import type { IsTuple, IsUnion } from './types'
-
-export type TypeOfSchema<T> = T extends {
-  parse: (...args: any[]) => ParseResult<infer U>
-}
-  ? U
-  : never
 
 export type Schema<T> =
   IsUnion<T> extends true // literal or union, no way of knowing reliably.
@@ -63,12 +58,6 @@ export interface SchemaConfig<T> {
  * @category Schema
  */
 export interface BaseSchema<T> extends SchemaConfig<T>, BaseBuilder<T> {}
-
-export type SchemaMeta = Record<string, Record<string, unknown>>
-export interface Refinement<T> {
-  refine: (value: T, config: Omit<Refinement<T>, 'refine'>) => boolean
-  [Key: string]: unknown
-}
 
 export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
   parse(input: unknown, context?: ParseContext): ParseResult<T>

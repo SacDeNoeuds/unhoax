@@ -1,6 +1,5 @@
+import type { Numeric } from '../common/Numeric'
 import type { Schema } from './Schema'
-
-export type Numeric = { valueOf(): number | bigint }
 
 export interface NumericBuilder<T extends Numeric> {
   /**

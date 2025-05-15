@@ -1,5 +1,5 @@
 /**
- * @module
+ * @module fp
  * @document ../guides/object-intersect-pick-omit.md
  * @document ../guides/getting-started.md
  * @document ../guides/custom-type-email.md
@@ -12,26 +12,42 @@
 // * @document ../guides/coercing-a-bigint-from-json.md
 export type { TypeOf } from '../common/Schema'
 export { array, type ArraySchema } from './array'
-export { bigint, type BigIntSchema } from './bigint'
+export { bigint } from './bigint'
 export { boolean } from './boolean'
-export { date, type DateSchema } from './date'
+export { convertTo } from './convert-to'
+export { date } from './date'
 export { Enum } from './Enum'
-export { fromGuard, type Guard } from './from-guard'
+export { fromGuard } from './from-guard'
 export { instanceOf } from './instance-of'
 export { literal } from './literal'
-export { mapOf, type MapSchema } from './Map'
+export { map } from './map'
+export { mapOf, type MapSchema } from './map-of'
+export { integer, number, unsafeInteger, unsafeNumber } from './number'
 export {
-  integer,
-  number,
-  unsafeInteger,
-  unsafeNumber,
-  type NumberSchema,
-} from './number'
-export { object, type ObjectSchema } from './object'
+  intersect,
+  isObject,
+  object,
+  omit,
+  pick,
+  type ObjectSchema,
+  type PropsOf,
+} from './object'
 export { record, type RecordSchema } from './record'
-export type { BaseSchema, Schema } from './Schema'
-export { unknown } from './SchemaFactory'
-export { setOf, type SetSchema } from './Set'
-export { string, untrimmedString, type StringSchema } from './string'
+export { refine } from './refine'
+export { nullable, optional, recover } from './refine-base'
+export {
+  greaterThan,
+  gt,
+  gte,
+  lowerThan,
+  lt,
+  lte,
+  max,
+  min,
+} from './refine-numeric'
+export { size } from './refine-sized'
+export { defineSchema, unknown, type Schema } from './Schema'
+export { setOf, type SetSchema } from './set-of'
+export { string, untrimmedString } from './string'
 export { tuple, type TupleSchema } from './tuple'
 export { union, variant } from './union'
