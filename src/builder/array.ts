@@ -4,7 +4,7 @@ import type { BaseSchema, Schema } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
 
 /**
- * @category Schema Definition
+ * @category Reference
  * @see {@link array}
  */
 export interface ArraySchema<T> extends BaseSchema<T[]>, SizedBuilder<T[]> {
@@ -14,7 +14,7 @@ export interface ArraySchema<T> extends BaseSchema<T[]>, SizedBuilder<T[]> {
 /**
  * Parses any iterable to an array.
  *
- * @category Schema
+ * @category Reference
  * @see {@link ArraySchema}
  * @see {@link tuple}
  * @see {@link Set}
@@ -58,7 +58,7 @@ export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
  *
  * If you need to loosen it globally, use `x.array.defaultMaxSize = 10_000`
  *
- * @category Config
+ * @category Config – Safety Guards
  * @see {@link array}
  * @default 100
  *

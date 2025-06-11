@@ -16,6 +16,8 @@ type ObjectShape = Record<PropertyKey, any>
 
 export interface ObjectBuilder<T extends ObjectShape> {
   /**
+   * @category Reference
+   * @see {@link object}
    * @example
    * ```ts
    * const a = x.object({ name: x.string })
@@ -29,6 +31,8 @@ export interface ObjectBuilder<T extends ObjectShape> {
     otherSchema: ObjectSchema<U>,
   ): ObjectSchema<Omit<T, keyof U> & U>
   /**
+   * @category Reference
+   * @see {@link object}
    * @example
    * ```ts
    * const schema = x.object({ name: x.string, age: x.number }).pick('name')
@@ -41,6 +45,8 @@ export interface ObjectBuilder<T extends ObjectShape> {
    */
   pick<Prop extends keyof T>(...props: Prop[]): ObjectSchema<Pick<T, Prop>>
   /**
+   * @category Reference
+   * @see {@link object}
    * @example
    * ```ts
    * const schema = x.object({ name: x.string, age: x.number }).omit('age')
@@ -54,7 +60,7 @@ export interface ObjectBuilder<T extends ObjectShape> {
   omit<Prop extends keyof T>(...props: Prop[]): ObjectSchema<Omit<T, Prop>>
 }
 /**
- * @category Schema
+ * @category Reference
  * @see {@link object}
  */
 export interface ObjectSchema<T extends ObjectShape>
@@ -64,7 +70,7 @@ export interface ObjectSchema<T extends ObjectShape>
 }
 
 /**
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * const person = x.object({ name: x.string })
@@ -91,7 +97,7 @@ export function object<T extends ObjectShape>(
   props: PropsOf<T>,
 ): ObjectSchema<T>
 /**
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * const person = x.object('Person', { name: x.string })

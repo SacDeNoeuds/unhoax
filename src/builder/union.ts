@@ -1,7 +1,7 @@
 import { failure } from '../common/ParseResult'
 import type { TypeOf } from '../common/Schema'
 import type { ObjectSchema } from './object'
-import type { BaseSchema, Schema } from './Schema'
+import type { BaseSchema, Schema, SchemaLike } from './Schema'
 import { Factory } from './SchemaFactory'
 
 function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
@@ -24,7 +24,7 @@ function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
 /**
  * If you want to use a discriminated union, checkout {@link variant}
  *
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * const schema = x.union(x.string, x.number)
@@ -34,7 +34,7 @@ function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
  * assert(schema.parse({}).success === false)
  * ```
  */
-export function union<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
+export function union<T extends [SchemaLike<any>, ...SchemaLike<any>[]]>(
   ...schemas: T
 ): BaseSchema<TypeOf<T[number]>> {
   const name = schemas.map((schema) => schema.name).join(' | ')
@@ -46,7 +46,7 @@ export function union<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
 /**
  * If you need to use a simple union, checkout {@link union}
  *
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * const a = x.object({ type: x.literal('a'), a: x.string }),
@@ -76,5 +76,7 @@ export function variant<T extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
     )
     .filter((value, index, self) => self.indexOf(value) === index)
     .join(' | ')
-  return namedUnion(name, schemas as any) as BaseSchema<TypeOf<T[number]>>
+  return namedUnion(name, schemas as any) as unknown as BaseSchema<
+    TypeOf<T[number]>
+  >
 }

@@ -1,7 +1,7 @@
 import { fromGuard } from './from-guard'
 
 /**
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * const schema = x.boolean

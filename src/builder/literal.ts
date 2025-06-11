@@ -7,7 +7,7 @@ const isLiteral =
     literals.some((literal) => value === literal)
 
 /**
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * const schema = x.literal('a', 42, true, null, undefined)

@@ -12,9 +12,10 @@ export interface NumberSchema
  *
  * Basically, it accepts anything passing the check `Number.isFinite`.
  *
- * @category Schema
- * @see {@link coerceNumber}
+ * @category Reference
  * @see {@link unsafeNumber}
+ * @see {@link integer}
+ * @see {@link unsafeInteger}
  * @example
  * ```ts
  * assert(x.number.parse(1).success === true)
@@ -36,7 +37,7 @@ export const number = fromGuard<number>(
  * ⚠️ valid inputs are `Infinity`, `NaN` and unsafe integers.<br>
  * Basically, anything which passes the check `typeof x = 'number'`.
  *
- * @category Unsafe Schema
+ * @category Reference
  * @see {@link number}
  * @example
  * ```ts
@@ -58,7 +59,7 @@ export const unsafeNumber = fromGuard<number>(
 /**
  * it accepts anything passing the check `Number.isSafeInteger`.
  *
- * @category Schema
+ * @category Reference
  * @see {@link number}
  * @see {@link unsafeInteger}
  * @see {@link unsafeNumber}
@@ -81,9 +82,9 @@ export const integer = fromGuard<number>(
   Number.isSafeInteger as (input: unknown) => input is number,
 )
 /**
- * it accepts anything passing the check `Number.isInteger`.
+ * it accepts anything passing the check `Number.isInteger` (not `Number.isSafeInteger`).
  *
- * @category Unsafe Schema
+ * @category Reference
  * @see {@link integer}
  * @see {@link number}
  * @see {@link unsafeNumber}

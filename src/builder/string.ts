@@ -2,7 +2,25 @@ import { fromGuard } from './from-guard'
 import type { BaseSchema } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
 
-export interface StringSchema extends BaseSchema<string>, SizedBuilder<string> {
+export interface StringBuilder {
+  /**
+   * @category Reference
+   * @see {@link string}
+   * @example accepting only alpha letters
+   * ```ts
+   * const schema = x.string.pattern(/^[a-zA-Z]+$/)
+   *
+   * assert(schema.parse('abc').success === true)
+   * assert(schema.parse('ab3').success === false)
+   * ```
+   */
+  pattern(pattern: RegExp): StringSchema
+}
+
+export interface StringSchema
+  extends BaseSchema<string>,
+    StringBuilder,
+    SizedBuilder<string> {
   /**
    * Allows to configure the default max length of strings.
    *
@@ -13,7 +31,7 @@ export interface StringSchema extends BaseSchema<string>, SizedBuilder<string> {
    *
    * If you need to loosen it globally, use `x.string = x.untrimmedString.size({ max: 10_000 })`
    *
-   * @category Config
+   * @category Config – Safety Guards
    * @default 1_000
    * @see {@link string}
    * @see {@link untrimmedString}
@@ -47,7 +65,7 @@ export interface StringSchema extends BaseSchema<string>, SizedBuilder<string> {
 }
 
 /**
- * @category Unsafe Schema
+ * @category Reference
  * @see {@link string} for a trimmed string.
  * @example const schema = x.untrimmedString
  * @example
@@ -64,7 +82,7 @@ let defaultMaxSize = 1_000
 /**
  * This also trims the string. If you do not want this behavior,
  * explicitly use {@link untrimmedString}
- * @category Schema
+ * @category Reference
  * @example
  * ```ts
  * assert(x.string.parse('  hello  ').value === 'hello')

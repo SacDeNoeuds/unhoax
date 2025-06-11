@@ -4,7 +4,7 @@ import type { BaseSchema, Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
 /**
- * @category Schema Definition
+ * @category Reference
  * @see {@link tuple}
  */
 export interface TupleSchema<T> extends BaseSchema<T> {
@@ -12,7 +12,7 @@ export interface TupleSchema<T> extends BaseSchema<T> {
 }
 
 /**
- * @category Schema
+ * @category Reference
  * @see {@link array}
  * @see {@link setOf}
  * @see {@link mapOf}

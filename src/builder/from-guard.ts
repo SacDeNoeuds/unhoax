@@ -9,7 +9,7 @@ export type Guard<T> = (value: unknown) => value is T
  * Used to create most of the primitives.<br>
  * Can be used to create custom schemas like `Email`.
  *
- * @category Schema Factory
+ * @category Reference
  * @see {@link bigint}
  * @see {@link boolean}
  * @see {@link instanceOf}

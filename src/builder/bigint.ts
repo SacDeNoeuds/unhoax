@@ -1,16 +1,19 @@
 import { failure, ok } from '../common/ParseResult'
 import type { NumericBuilder } from './NumericSchema'
-import type { Schema } from './Schema'
+import type { BaseSchema, Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
-export interface BigIntSchema extends NumericBuilder<bigint> {}
+export interface BigIntSchema
+  extends BaseSchema<bigint>,
+    NumericBuilder<bigint> {}
 
 const name = 'bigint'
 
+//  * @category bigint
 /**
- * Accepts any input that can construct a BigInt.
+ * It accepts any input that can construct a BigInt. You can use it to decode JSON coming from a `JSON.parse`
  *
- * @category Schema
+ * @group Reference
  * @example
  * ```ts
  * assert.deepEqual(x.bigint.parse(1), { success: true, value: 1n })
