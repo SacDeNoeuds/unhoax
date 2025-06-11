@@ -4,6 +4,10 @@ import type { NumericBuilder } from './NumericSchema'
 import type { BaseSchema, Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
+/**
+ * @category Reference
+ * @see {@link date}
+ */
 export interface DateSchema extends BaseSchema<Date>, NumericBuilder<Date> {}
 
 const name = 'date'
@@ -13,7 +17,7 @@ const name = 'date'
  *
  * If you need to accept `Date` only, use `x.instanceOf(Date)` @see {@link instanceOf}
  *
- * @category Schema
+ * @category Reference
  * @example const schema = x.date
  * @example parses a Date
  * ```ts

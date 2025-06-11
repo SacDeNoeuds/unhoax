@@ -3,6 +3,7 @@ import type { Schema } from './Schema'
 
 export interface SizedBuilder<T extends Sized> {
   /**
+   * @category Reference
    * @example min size, no description
    * ```ts
    * const sized = x.string.size({ min: 3 })
@@ -57,6 +58,7 @@ export interface SizedBuilder<T extends Sized> {
    */
   size(options: { min: number; max?: number; description?: string }): Schema<T>
   /**
+   * @category Reference
    * @example Max size, no description
    * ```ts
    * const sized = x.string.size({ max: 3 })

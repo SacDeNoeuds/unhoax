@@ -71,14 +71,20 @@ export function array<T>(itemSchema: Schema<T>): ArraySchema<T> {
  * @example override array default max length locally
  * ```ts
  * x.array.defaultMaxSize = 20
- * const schema = x.array(x.string).size({ min: 4, max: 25 })
+ * const schema = pipe(
+ *   x.array(x.string),
+ *   x.size({ min: 4, max: 25 }),
+ * )
  * assert(schema.parse(new Array(24).fill('x')).success === true)
  * ```
  *
  * @example it keeps max when applying min:
  * ```ts
  * x.array.defaultMaxSize = 20
- * const schema = x.array(x.string).size({ min: 3 })
+ * const schema = pipe(
+ *   x.array(x.string),
+ *   x.size({ min: 3 }),
+ * )
  *
  * assert(schema.parse(new Array(12).fill('x')).success === true)
  *

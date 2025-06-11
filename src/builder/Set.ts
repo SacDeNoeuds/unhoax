@@ -4,7 +4,7 @@ import type { BaseSchema, Schema } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
 
 /**
- * @category Schema Definition
+ * @category Reference
  * @see {@link setOf}
  */
 export interface SetSchema<T> extends BaseSchema<Set<T>>, SizedBuilder<Set<T>> {
@@ -14,7 +14,7 @@ export interface SetSchema<T> extends BaseSchema<Set<T>>, SizedBuilder<Set<T>> {
 /**
  * Parses any iterable to an array.
  *
- * @category Schema
+ * @category Reference
  * @see {@link SetSchema}
  * @see {@link tuple}
  * @see {@link array}
@@ -58,7 +58,7 @@ export function setOf<T>(itemSchema: BaseSchema<T>): SetSchema<T> {
  *
  * If you need to loosen it globally, use `x.setOf.defaultMaxSize = 10_000`
  *
- * @category Config
+ * @category Config – Safety Guards
  * @see {@link setOf}
  * @default 100
  *

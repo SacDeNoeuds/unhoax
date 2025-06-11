@@ -14,8 +14,9 @@ import type { StringSchema } from './string'
 import type { TupleSchema } from './tuple'
 import type { IsTuple, IsUnion } from './types'
 
-export type Schema<T> =
-  IsUnion<T> extends true // literal or union, no way of knowing reliably.
+export type Schema<T> = [unknown] extends [T]
+  ? BaseSchema<unknown>
+  : IsUnion<T> extends true // literal or union, no way of knowing reliably.
     ? BaseSchema<T>
     : T extends any[]
       ? IsTuple<T> extends true
@@ -27,18 +28,20 @@ export type Schema<T> =
           ? MapSchema<Key, Value>
           : T extends new (...args: any[]) => infer U
             ? BaseSchema<U>
-            : [T] extends [string]
+            : string extends T
               ? StringSchema
-              : [T] extends [number]
+              : number extends T
                 ? NumberSchema
-                : [T] extends [Date]
+                : Date extends T
                   ? DateSchema
-                  : [T] extends [bigint]
+                  : bigint extends T
                     ? BigIntSchema
-                    : T extends Record<string, any>
-                      ? IsUnion<keyof T> extends true
-                        ? ObjectSchema<T>
-                        : RecordSchema<keyof T, T[keyof T]>
+                    : [T] extends [Record<string, any>]
+                      ? T extends string | number | Date | bigint | boolean
+                        ? BaseSchema<T> // avoid to type branded type as ObjectSchema
+                        : IsUnion<keyof T> extends true
+                          ? ObjectSchema<T>
+                          : RecordSchema<keyof T, T[keyof T]>
                       : BaseSchema<T>
 
 export interface SchemaConfig<T> {
@@ -46,22 +49,28 @@ export interface SchemaConfig<T> {
   readonly parser: (
     input: unknown,
     context: ParseContext,
-    self: Schema<T>,
+    self: any,
   ) => ParseResult<T>
   readonly meta?: SchemaMeta
   readonly refinements?: Record<string, Refinement<T>>
 }
 
+export interface SchemaLike<T> {
+  readonly name: string
+  parse(input: unknown, context?: ParseContext): ParseResult<T>
+}
+
 /**
  * This interface contains all the global utilities of any schema.
  *
- * @category Schema
+ * @category Reference
  */
 export interface BaseSchema<T> extends SchemaConfig<T>, BaseBuilder<T> {}
 
 export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
   parse(input: unknown, context?: ParseContext): ParseResult<T>
   /**
+   * @category Reference
    * @example
    * ```ts
    * import { isCapitalized } from './test-utils'
@@ -77,6 +86,24 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
     config?: Omit<Refinement<T>, 'refine'>,
   ): Schema<T>
   /**
+   * @category Reference
+   * @example
+   * ```ts
+   * type Email = string & { _tag: 'Email' }
+   * const isEmail = (s: string): s is Email => s.includes('@')
+   *
+   * const schema = x.string.guardAs('Email', isEmail)
+   * assert(schema.parse('hey').success === false)
+   * assert(schema.parse('hey@yo').success === true)
+   * ```
+   */
+  guardAs<U extends T>(
+    name: string,
+    refine: (value: T) => value is U,
+    config?: Omit<Refinement<T>, 'refine'>,
+  ): Schema<U>
+  /**
+   * @category Reference
    * @example
    * ```ts
    * import { capitalize } from './test-utils'
@@ -87,6 +114,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    */
   map<U>(mapper: (value: T) => U): Schema<U>
   /**
+   * @category Reference
    * @example
    * ```ts
    * import { capitalize } from './test-utils'
@@ -110,6 +138,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    */
   convertTo<U>(schema: BaseSchema<U>, coerce: (input: T) => U): Schema<U>
   /**
+   * @category Reference
    * @example provide a name to the generated schema:
    * ```ts
    * const numberFromString = x.string.convertTo(
@@ -128,6 +157,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
     coerce: (input: T) => U,
   ): Schema<U>
   /**
+   * @category Reference
    * @example
    * ```ts
    * const schema = x.string.recover(() => 42)
@@ -137,6 +167,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    */
   recover<U>(getFallback: () => U): Schema<T | U>
   /**
+   * @category Reference
    * @example
    * ```ts
    * const schema = x.string.optional()
@@ -153,6 +184,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    */
   optional<U = undefined>(defaultValue?: U): Schema<T | U>
   /**
+   * @category Reference
    * @example
    * ```ts
    * const schema = x.string.nullable()

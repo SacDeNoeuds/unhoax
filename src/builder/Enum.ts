@@ -6,7 +6,7 @@ interface Enum {
 }
 
 /**
- * @category Schema
+ * @category Reference
  * @example Parses as-const enum
  * ```ts
  * const Direction = { Left: 'Left', Right: 'Right' } as const;

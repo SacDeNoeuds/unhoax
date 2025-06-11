@@ -1,8 +1,14 @@
 import type { Numeric } from '../common/Numeric'
 import type { Schema } from './Schema'
 
+/**
+ * @see {@link bigint}
+ * @see {@link date}
+ * @see {@link number}
+ */
 export interface NumericBuilder<T extends Numeric> {
   /**
+   * @category Reference
    * @alias of {@link gte}
    * @example number
    * ```ts
@@ -34,7 +40,10 @@ export interface NumericBuilder<T extends Numeric> {
    */
   min(min: T, description?: string): Schema<T>
 
-  /** @alias of {@link min} */
+  /**
+   * @category Reference
+   * @alias of {@link min}
+   */
   gte(number: T, description?: string): Schema<T>
   /**
    * @alias of {@link gt}
@@ -67,9 +76,13 @@ export interface NumericBuilder<T extends Numeric> {
    * ```
    */
   greaterThan(number: T, description?: string): Schema<T>
-  /** * @alias of {@link greaterThan} */
+  /**
+   * @category Reference
+   * @alias of {@link greaterThan}
+   */
   gt(number: T, description?: string): Schema<T>
   /**
+   * @category Reference
    * @alias of {@link lte}
    * @example number
    * ```ts
@@ -100,9 +113,13 @@ export interface NumericBuilder<T extends Numeric> {
    * ```
    */
   max(max: T, description?: string): Schema<T>
-  /** * @alias of {@link max} */
+  /**
+   * @category Reference
+   * @alias of {@link max}
+   */
   lte(number: T, description?: string): Schema<T>
   /**
+   * @category Reference
    * @alias of {@link lt}
    * @example number
    * ```ts
@@ -133,6 +150,9 @@ export interface NumericBuilder<T extends Numeric> {
    * ```
    */
   lowerThan(number: T, description?: string): Schema<T>
-  /** @alias of {@link lowerThan} */
+  /**
+   * @category Reference
+   * @alias of {@link lowerThan}
+   */
   lt(number: T, description?: string): Schema<T>
 }

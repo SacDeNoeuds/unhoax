@@ -6,7 +6,7 @@ const isInstanceOf = <T>(constructor: new (...args: any[]) => T) => {
 }
 
 /**
- * @category Schema
+ * @category Reference
  * @example parsing a Date
  * ```ts
  * const schema = x.instanceOf(Date)

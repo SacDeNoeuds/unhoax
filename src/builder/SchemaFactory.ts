@@ -6,12 +6,14 @@ import type { NumericBuilder } from './NumericSchema'
 import type { ObjectBuilder, ObjectSchema } from './object'
 import type { BaseBuilder, BaseSchema, Schema, SchemaConfig } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
+import type { StringBuilder } from './string'
 import { union } from './union'
 
 interface Interface
   extends BaseBuilder<any>,
     NumericBuilder<any>,
     SizedBuilder<any>,
+    StringBuilder,
     ObjectBuilder<any> {}
 
 const propsIfDefined = (
@@ -32,9 +34,11 @@ export class Factory implements Interface {
   readonly meta: NonNullable<SchemaConfig<any>['meta']> = {}
   readonly refinements: NonNullable<SchemaConfig<any>['refinements']> = {}
   readonly defaultMaxSize?: number
+  readonly guardAs!: Schema<any>['guardAs']
 
   constructor(config: SchemaConfig<any>) {
     Object.assign(this, config)
+    this.guardAs = this.refine.bind(this)
   }
 
   get ['~standard']() {
@@ -202,6 +206,14 @@ export class Factory implements Interface {
         max: options.max ?? this.defaultMaxSize,
         description: options.description,
       },
+    )
+  }
+
+  pattern(pattern: RegExp): any {
+    return this.refine(
+      'pattern',
+      (value, config: any) => config.pattern.test(value),
+      { pattern },
     )
   }
 

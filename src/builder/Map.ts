@@ -4,7 +4,7 @@ import type { SizedBuilder } from './SizedSchema'
 import { tuple } from './tuple'
 
 /**
- * @category Schema Definition
+ * @category Reference
  * @see {@link mapOf}
  */
 export interface MapSchema<Key, Value>
@@ -14,7 +14,7 @@ export interface MapSchema<Key, Value>
 }
 
 /**
- * @category Schema
+ * @category Reference
  * @see {@link object}
  * @see {@link record}
  * @see {@link array}
@@ -64,7 +64,7 @@ export function mapOf<Key, Value>(
  *
  * If you need to loosen it globally, use `x.mapOf.defaultMaxSize = 10_000`
  *
- * @category Config
+ * @category Config – Safety Guards
  * @see {@link mapOf}
  * @default 100
  *

@@ -5,7 +5,7 @@ import { Factory } from './SchemaFactory'
 import { isObject } from './object'
 
 /**
- * @category Schema Definition
+ * @category Reference
  * @see {@link record}
  */
 export interface RecordSchema<Key extends PropertyKey, Value>
@@ -15,16 +15,15 @@ export interface RecordSchema<Key extends PropertyKey, Value>
 }
 
 /**
- * @category Schema
+ * @category Reference
  * @see {@link object}
- * @see {@link Map}
+ * @see {@link mapOf}
  * @see {@link array}
- * @see {@link Set}
+ * @see {@link setOf}
  * @see {@link tuple}
  * @example
  * ```ts
  * const schema = x.record(x.string.convertTo(x.number, Number), x.string)
- * type MyRecord = x.TypeOf<typeof schema>
  *
  * assert.deepEqual(
  *   schema.parse({ 42: 'hello' }),
