@@ -1,6 +1,6 @@
 node_modules/
 dist/
-docs/
 coverage/
 *.example.test.ts
 .DS_Store
+docs/.vitepress/cache

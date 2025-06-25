@@ -1,11 +1,9 @@
----
-title: 5. Why yet-another schema library ?
-category: Guide
----
+# Why yet-another schema library ?
 
 ### Philosophy
 
 Unhoax encourages **type-driven** and **domain-driven** approach of schemas.
+
 - Type-Driven by making the types and function generics as simple as possible.
 - Domain-driven by not making choices on your behalf.
 - Domain-driven by making it easy to use Branded Types.
@@ -40,38 +38,26 @@ type UniqueEmail = Branded<string, 'UniqueEmail'>
 type Email = DisguisedEmail | UniqueEmail
 ```
 
-### Unhoax  – [NPM](https://www.npmjs.com/package/unhoax)
+### Unhoax – [NPM](https://www.npmjs.com/package/unhoax)
 
 ![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}])
 
 ```ts
 import { x } from 'unhoax'
-import pipe from 'just-pipe' // pick your pkg
 import isEmail from 'is-email' // pick your pkg
 
 declare const isEmailGuard: (value: string) => value is Email
 
-const emailSchema = pipe(
-  x.string,
+const emailSchema = x.string.guardAs('Email', isEmailGuard)
+// const emailSchema: x.BaseSchema<Email>
+// Quite a simple type, isn't it?
 
-  x.refine('Email', isEmail),
-  x.map((value) => value as Email),
-  // equivalent to:
-  x.guardAs('Email', isEmailGuard),
-)
-
-// when you hover `emailSchema`, that's what you get:
-const emailSchema: x.Schema<Email, unknown>
-// Quite simple, isn't it?
-// NB: `unknown` in `Schema<…, unknown>` is the input of the parse function.
-// emailSchema.parse(input <- unknown)
 
 const loginDataSchema = x.object<LoginData>({
   email: emailSchema,
   password: passwordSchema,
 })
-// when you hover `loginDataSchema`, that's what you get:
-const loginDataSchema: x.ObjectSchema<LoginData, unknown>
+// const loginDataSchema: x.ObjectSchema<LoginData>
 
 const data = x.unsafeParse(loginDataSchema, { … })
 const data: LoginData // 🙌
@@ -84,14 +70,11 @@ const data: LoginData // 🙌
 I’ll cover Zod only, considering Yup is likely to be the same.
 
 ```ts
-const emailSchema = z
-  .string()
-  .refine(isEmail)
-  .transform((value) => value as Email)
-  // equivalent to:
-  .refine(isEmailGuard)
-  satisfies z.Schema<Email, any, unknown>
-// I get away with an `any`, which is not super satisfying
+const emailSchema = z.string().refine(isEmailGuard) satisfies z.Schema<
+  Email,
+  any, // I get away with an `any`, which is not super satisfying
+  unknown
+>
 
 const loginDataSchema = z.object({
   email: emailSchema,
@@ -123,11 +106,13 @@ const emailSchema = v.pipe(
   v.transform((value) => value as Email),
 )
 
-const emailSchema: v.SchemaWithPipe<[
-  v.StringSchema<undefined>,
-  v.EmailAction<string, undefined>,
-  v.TransformAction<string, Email>,
-]>
+const emailSchema: v.SchemaWithPipe<
+  [
+    v.StringSchema<undefined>,
+    v.EmailAction<string, undefined>,
+    v.TransformAction<string, Email>,
+  ]
+>
 // Quite complex, isn’t it ?
 ```
 
@@ -157,18 +142,19 @@ const data: {
 }
 ```
 
-### RunTypes  – [NPM](https://www.npmjs.com/package/runtypes)
+### RunTypes – [NPM](https://www.npmjs.com/package/runtypes)
 
 ![Bundle Size](https://deno.bundlejs.com/badge?q=runtypes&treeshake=[*])
-
 
 I did not know this library before writing this one, and quite frankly if I'd choose another it would be the one.
 
 Relevant goodies:
+
 - Template literals
 - Various integrations with tools like json-schema, property-based testing, typing db schemas, and more – Create an issue if you ever want any of that.
 
 Missing:
+
 - Transforming the output: `x.map`, `z.transform`, `v.transform()`
 
 That being said, IMO the library does too much for a schema library:
@@ -176,7 +162,6 @@ That being said, IMO the library does too much for a schema library:
 - Function Contract
 - Branding
 - Pattern matching
-
 
 ```ts
 import * as r from 'runtypes'
@@ -197,7 +182,7 @@ const data: {
 }
 ```
 
-### Superstruct  – [NPM](https://www.npmjs.com/package/superstruct)
+### Superstruct – [NPM](https://www.npmjs.com/package/superstruct)
 
 ![Bundle Size](https://deno.bundlejs.com/badge?q=superstruct&treeshake=[*])
 

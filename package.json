@@ -7,23 +7,23 @@
     "./dist",
     "./README.md"
   ],
-  "types": "./dist/main.d.ts",
-  "main": "dist/main.cjs",
-  "module": "dist/main.js",
+  "types": "./dist/builder.d.ts",
+  "main": "dist/builder.js",
   "exports": {
-    ".": {
-      "types": "./dist/main.d.ts",
-      "import": "./dist/main.js",
-      "require": "./dist/main.cjs"
+    "./fp": {
+      "types": "./dist/fp.d.ts",
+      "default": "./dist/fp.js"
     }
   },
   "scripts": {
     "gen-tests": "npx gen-jet ./src/fp,./src/builder --header 'import { test } from \"vitest\"' --header 'import pipe from \"just-pipe\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
+    "clean-tests": "rm -rf src/**/*.example.test.*",
     "prebuild": "npm run check-ts && rm -rf ./lib",
     "check-ts": "tsc --noEmit",
-    "build": "npx tsup ./src/main.ts --dts --sourcemap --format cjs,esm --cjsInterop --minify",
-    "doc": "typedoc",
-    "doc:watch": "typedoc --watch",
+    "build": "npx tsup --entry.builder ./src/builder/main.ts --entry.fp ./src/fp/main.ts -d dist/ --dts --sourcemap --format esm --minify",
+    "doc:gen": "npx tsx ./src/generate-documentation.ts",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "prepack": "npm run build",
     "test": "vitest",
     "coverage": "vitest --coverage"
@@ -53,7 +53,10 @@
     "validation",
     "validator"
   ],
-  "author": "SacDeNoeuds <sacdenoeuds.dev@gmail.com>",
+  "author": {
+    "name": "SacDeNoeuds",
+    "email": "sacdenoeuds.dev@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SacDeNoeuds/unhoax/issues"
@@ -63,13 +66,13 @@
     "@types/node": "^22.14.0",
     "@vitest/coverage-istanbul": "^3.1.1",
     "generate-jsdoc-example-tests": "^0.2.4",
+    "heedoc": "file:../heedoc/heedoc-0.1.0.tgz",
     "just-pipe": "^1.0.0",
     "prettier": "^3.5.3",
     "tslib": "^2.8.1",
     "tsup": "^8.4.0",
-    "typedoc": "^0.28.2",
-    "typedoc-unhoax-theme": "^0.5.2",
     "typescript": "^5.8.3",
+    "vitepress": "^1.6.3",
     "vitest": "^3.1.1"
   },
   "peerDependencies": {
