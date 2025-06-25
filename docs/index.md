@@ -1,28 +1,20 @@
----
-title: 1. Getting Started
-category: Guide
----
+# Getting Started
 
-## Installing unhoax
+This library is intended for **data safety** and leverages **concise & elegant types** to prevent unreadable 100+ lines TypeScript error messages.
+
+For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
+
+Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#with-predicates-–-isx-value-t-boolean).
+
+## Installation
 
 ```sh
 npm install --save unhoax
 ```
 
-## Foreword – Philosophy
-
-This library is intended for use with **a functional, domain-driven & type-driven approach** to development. Writing types before anything else.<br>
-Then using types to define schemas, use-cases, etc…
-
-For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
-
-All the libraries are great, usually with good type inference and large API surface – thus making choices on your behalf (see the [email example](./custom-type-email.md) to see what I mean).
-
-In general, `unhoax` proposes **less** features, and that is because we all have our development environment and there is no way for me to know about your requirements.
-
 ## Basic Usage
 
-This section only describes trivial how tos, see the [reference](../modules.html) for a list of available schemas and modifiers.
+This section only describes trivial how tos, see the [reference](/reference) for a list of available schemas and modifiers.
 
 ### Simple schemas (primitives)
 
@@ -59,6 +51,8 @@ const userSchema = x.object<User>({
   email: x.string,
 })
 userSchema.parse({ … }) // { result: true, value: User } <- `User` is properly named via intellisense
+const userSchema: x.ObjectSchema<User>
+// simple type, right?
 
 // infer-driven:
 const userSchema = x.object({
@@ -70,6 +64,13 @@ type User = x.TypeOf<typeof userSchema>
 
 userSchema.parse({ … })
 // { result: true, value: { id: number, … } } <- `User` is not properly named
+
+const userSchema: x.ObjectSchema<{
+    id: number;
+    name: string;
+    email: string;
+}>
+// simple type, right?
 ```
 
 ## Inference
@@ -87,37 +88,31 @@ declare const test: Test // { name: string }
 Use the `x.map(mapper)` function:
 
 ```ts
-import pipe from 'just-pipe'
 import { x } from 'unhoax'
 
-const upperCaseString = pipe(
-  x.string,
-  x.map((string) => string.toUpperCase()),
-)
+const upperCaseString = x.string.map((string) => string.toUpperCase())
 ```
 
 ## Refinements
 
-Checkout the [reference](../modules.html) for built-in refinements.
+Checkout the [reference](/reference) for built-in refinements.
 
 ### With predicates – `isX(value: T): boolean`
 
 ```ts
 import { x } from 'unhoax'
-import pipe from 'just-pipe'
+import { isEmail } from 'is-email'
 
-declare function isEmail(value: string): boolean
-
-const email = pipe(x.string, x.refine('Email', isEmail))
+const emailSchema = x.string.refine('Email', isEmail)
 ```
 
 ### With guards – `isX(value: …): value is T`
 
 ```ts
 import { x } from 'unhoax'
-import pipe from 'just-pipe'
 
+type Email = …
 declare function isEmail(value: string): value is Email
 
-const email = pipe(x.string, x.guardAs('Email', isEmail)) // Schema<Email>
+const emailSchema = x.string.guardAs('Email', isEmail) // Schema<Email>
 ```

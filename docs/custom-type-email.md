@@ -1,11 +1,8 @@
----
-title: 3a. Custom Type – Email
-category: Guide
----
+# Custom Type – Email
 
 ## Introduction
 
-It is very common to bring your own, I built this library specifically for that actually ; because we all have our concepts which vary on the industry we work in and how our business models are defined.
+It is very common to bring your own types, I built this library specifically because of that actually ; because we all have our concepts which vary on the industry we work in and how our business models are defined.
 
 The "email" concept may be extraordinarily different from one environment to another:
 
@@ -30,25 +27,11 @@ I can recommend using [`is-email`](https://www.npmjs.com/package/is-email) thoug
 
 ```ts
 import { x } from 'unhoax'
-import pipe from 'just-pipe'
 
 declare const isEmail: (value: string) => boolean
 
-const emailSchema = pipe(x.string, x.refine('Email', isEmail))
+const emailSchema = x.string.refine('Email', isEmail)
 ```
-
-<details>
-<summary>Without pipe</summary>
-
-```ts
-import { x } from 'unhoax'
-
-const refineAsEmail = x.refine('Email', isEmail)
-const emailSchema = refineAsEmail(x.string)
-// x.Schema<string>
-```
-
-</details>
 
 ## With branded types
 
@@ -65,27 +48,13 @@ Now let’s build the schema:
 
 ```ts
 import { x } from 'unhoax'
-import pipe from 'just-pipe'
 
-const emailSchema = pipe(x.string, x.guardAs('Email', isEmail))
+const emailSchema = x.string.guardAs('Email', isEmail)
 // x.Schema<Email>
 ```
-
-<details>
-<summary>Without pipe</summary>
-
-```ts
-import { x } from 'unhoax'
-
-const guardAsEmail = x.guardAs('Email', isEmail)
-const emailSchema = guardAsEmail(x.string)
-// x.Schema<Email>
-```
-
-</details>
 
 ## Summing up – `x.refine` vs `x.guardAs`
 
-`x.refine` **does not** change the schema type: `x.refine(name, isU) => (schema<T>) => schema<T>`
+`x.string.refine` **does not** change the schema type: `x.string.refine(name, isU) => Schema<T>`
 
-`x.guardAs` **does** change the schema type: `x.guardAs(name, isU) => (schema<T>) => schema<U>`
+`x.string.guardAs` **does** change the schema type: `x.string.guardAs(name, isU) => Schema<U>`

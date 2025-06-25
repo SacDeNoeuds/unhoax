@@ -33,8 +33,7 @@ type Email = DisguisedEmail | UniqueEmail
 
 ![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}])
 
-[NPM](https://www.npmjs.com/package/unhoax) | [Website](..) | tree-shakeable
-
+[NPM](https://www.npmjs.com/package/unhoax) | [Website](/) | tree-shakeable
 
 ```ts
 import { x } from 'unhoax'
@@ -66,7 +65,6 @@ const loginDataSchema: x.ObjectSchema<LoginData, unknown>
 const data = x.unsafeParse(loginDataSchema, { … })
 const data: LoginData // 🙌
 ```
-
 
 ## Zod / Yup
 
@@ -120,11 +118,13 @@ const emailSchema = v.pipe(
   v.transform((value) => value as Email),
 )
 
-const emailSchema: v.SchemaWithPipe<[
-  v.StringSchema<undefined>,
-  v.EmailAction<string, undefined>,
-  v.TransformAction<string, Email>,
-]>
+const emailSchema: v.SchemaWithPipe<
+  [
+    v.StringSchema<undefined>,
+    v.EmailAction<string, undefined>,
+    v.TransformAction<string, Email>,
+  ]
+>
 // Quite complex, isn’t it ?
 ```
 
