@@ -1,6 +1,6 @@
 # Getting Started
 
-This library is intended for **data safety** and leverages **concise & elegant types** to prevent unreadable 100+ lines TypeScript error messages.
+A [Standard Schema](https://standardschema.dev/)-compliant library intended for **data safety**, leveraging **concise & elegant types** to prevent unreadable 100+ lines TypeScript error messages.
 
 For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
 
@@ -14,30 +14,11 @@ npm install --save unhoax
 
 ## Basic Usage
 
-This section only describes trivial how tos, see the [reference](/reference) for a list of available schemas and modifiers.
-
-### Simple schemas (primitives)
-
-Let’s start with a string.
+This section only describes trivial how tos, see the [reference](/schemas) for a list of available schemas and utilities.
 
 ```ts
 import { x } from 'unhoax'
 
-// parsing – safe by default.
-x.string.parse('Hello, World!') // => { success: true, value: 'Hello, World!' }
-x.string.parse(42)
-// => { success: false, schemaName: string, input: unknown, issues: x.ParseIssue[] }
-
-// unsafe parsing (throws if validation fails)
-x.unsafeParse(x.string, 'Hello, World!') // => 'Hello, World!'
-x.unsafeParse(x.string, 42) // => throws
-```
-
-### Composite schemas – like object/struct/array/Map/…
-
-Let’s start with a simple User object:
-
-```ts
 // type-driven:
 interface User {
   id: number
@@ -50,9 +31,11 @@ const userSchema = x.object<User>({
   name: x.string,
   email: x.string,
 })
-userSchema.parse({ … }) // { result: true, value: User } <- `User` is properly named via intellisense
+userSchema.parse({ … })
+// { result: true, value: User } <- `User` is properly named via intellisense
+
+// hovering on `userSchema` prompts this ; simple type, right?
 const userSchema: x.ObjectSchema<User>
-// simple type, right?
 
 // infer-driven:
 const userSchema = x.object({
@@ -65,12 +48,12 @@ type User = x.TypeOf<typeof userSchema>
 userSchema.parse({ … })
 // { result: true, value: { id: number, … } } <- `User` is not properly named
 
+// hovering on `userSchema` prompts this ; simple type, right?
 const userSchema: x.ObjectSchema<{
     id: number;
     name: string;
     email: string;
 }>
-// simple type, right?
 ```
 
 ## Inference
@@ -83,7 +66,7 @@ type Test = x.TypeOf<typeof schema>
 declare const test: Test // { name: string }
 ```
 
-## Transforming Data
+<!-- ## Transforming Data
 
 Use the `x.map(mapper)` function:
 
@@ -115,4 +98,4 @@ type Email = …
 declare function isEmail(value: string): value is Email
 
 const emailSchema = x.string.guardAs('Email', isEmail) // Schema<Email>
-```
+``` -->
