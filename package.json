@@ -63,8 +63,13 @@
   },
   "homepage": "https://sacdenoeuds.github.io/unhoax/",
   "devDependencies": {
+    "@arrirpc/schema": "^0.80.3",
+    "@ts-rest/core": "^3.52.1",
+    "@ts-rest/serverless": "^3.52.1",
     "@types/node": "^22.14.0",
     "@vitest/coverage-istanbul": "^3.1.1",
+    "decoders": "^2.7.0",
+    "effect": "^3.16.10",
     "generate-jsdoc-example-tests": "^0.2.4",
     "heedoc": "^0.1.0",
     "just-pipe": "^1.0.0",
@@ -72,8 +77,10 @@
     "tslib": "^2.8.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
+    "valibot": "^1.1.0",
     "vitepress": "^1.6.3",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.1",
+    "zod": "^3.25.67"
   },
   "peerDependencies": {
     "@standard-schema/spec": "^1.0.0"
@@ -82,5 +89,8 @@
     "@standard-schema/spec": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "ts.data.json": "^3.1.0"
   }
 }
