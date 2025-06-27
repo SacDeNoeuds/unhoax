@@ -8,9 +8,11 @@
 </p>
 
 <p align="center">
-A safe-by-default schema library that is functional and type/data-driven rather than schema-centric: you bring your entity types, we provide simple schema typings.
-<br>
-Particularly lightweight and extendible by design.
+
+A [Standard Schema](https://standardschema.dev/)-compliant library intended for **data safety**, leveraging **concise & elegant types** to prevent unreadable 100+ lines TypeScript error messages.
+
+Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#with-predicates-–-isx-value-t-boolean).
+
 <p>
 
 ---
@@ -21,42 +23,97 @@ Particularly lightweight and extendible by design.
 npm i -S unhoax
 ```
 
-Although not required, I recommend using the library with a `pipe` function, like `pipe` from [`just-pipe`](https://github.com/angus-c/just?tab=readme-ov-file#just-pipe) or `pipeWith` from [`pipe-ts`](https://github.com/unsplash/pipe-ts)
-
 ## Getting Started
 
-Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/), you may want to start with the [getting started guide](https://sacdenoeuds.github.io/unhoax/documents/1._Getting_Started.html) 😊
+Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/), you may want to start with the [getting started guide](https://sacdenoeuds.github.io/unhoax/) 😊
 
-## Quick Sample – we want code!
+## Basic Usage
+
+This section only describes trivial how tos, see the [reference](/schemas) for a list of available schemas and utilities.
 
 ```ts
 import { x } from 'unhoax'
 
-// Type-Driven:
-type Person = { name: string; age: number }
-const personSchema = x.object<Person>({
-  name: x.string,
-  age: x.number,
-})
-
-// or using type inference
-type Person = x.TypeOf<typeof personSchema>
-
-// parsing safely
-const result = personSchema.parse({ name: …, age: … })
-
-if (result.success) result.value // Person
-else result.error // x.ParseError
-
-// parsing unsafely
-try {
-  x.unsafeParse(personSchema, { name: …, age: … })
-  // Person
-} catch (err) {
-  // although `err` is typed as `unknown`, this is what you get inside:
-  err // Error
-  err.cause // x.ParseError
+// type-driven:
+interface User {
+  id: number
+  name: string
+  email: string
 }
+
+const userSchema = x.object<User>({
+  id: x.number,
+  name: x.string,
+  email: x.string,
+})
+userSchema.parse({ … })
+// { result: true, value: User } <- `User` is properly named via intellisense
+
+// hovering on `userSchema` prompts this ; simple type, right?
+const userSchema: x.ObjectSchema<User>
+
+// infer-driven:
+const userSchema = x.object({
+  id: x.number,
+  name: x.string,
+  email: x.string,
+})
+type User = x.TypeOf<typeof userSchema>
+
+userSchema.parse({ … })
+// { result: true, value: { id: number, … } } <- `User` is not properly named
+
+// hovering on `userSchema` prompts this ; simple type, right?
+const userSchema: x.ObjectSchema<{
+    id: number;
+    name: string;
+    email: string;
+}>
+```
+
+## Inference
+
+```ts
+import { x } from 'unhoax'
+
+const schema = x.object({ name: x.string })
+type Test = x.TypeOf<typeof schema>
+declare const test: Test // { name: string }
+```
+
+<!-- ## Transforming Data
+
+Use the `x.map(mapper)` function:
+
+```ts
+import { x } from 'unhoax'
+
+const upperCaseString = x.string.map((string) => string.toUpperCase())
+```
+
+## Refinements
+
+Checkout the [reference](/reference) for built-in refinements.
+
+### With predicates – `isX(value: T): boolean`
+
+```ts
+import { x } from 'unhoax'
+import { isEmail } from 'is-email'
+
+const emailSchema = x.string.refine('Email', isEmail)
+```
+-->
+
+### Custom Types
+
+```ts
+import { x } from 'unhoax'
+
+type Email = …
+declare function isEmail(value: string): value is Email
+
+const emailSchema = x.string.guardAs('Email', isEmail) // Schema<Email>
 ```
 
 ## Generating random fixtures from your schemas
@@ -65,4 +122,4 @@ Visit [unhoax-chance](https://sacdenoeuds.github.io/unhoax-chance/) to see how t
 
 ## The purpose of this library – Why yet-another?
 
-See [here](https://sacdenoeuds.github.io/unhoax/documents/5._Why_yet-another_schema_library__.html)
+See [here](https://sacdenoeuds.github.io/unhoax/why-yet-another.html)
