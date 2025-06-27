@@ -1,4 +1,5 @@
 import { generateReferenceMarkdown } from 'heedoc'
+import { x } from './builder/main'
 
 const basicSchemas = [
   'array',
@@ -30,9 +31,16 @@ const advancedSchemas = [
   'untrimmedString',
 ]
 
+const propertiesToOmit = new Set([
+  ...Object.getOwnPropertyNames(x.unknown),
+  ...Object.getOwnPropertyNames(Object.getPrototypeOf(x.unknown)),
+])
+
 Promise.all([
   generateReferenceMarkdown({
     output: './docs/schemas.md',
+    mainHeading: 'Schemas',
+    propertiesToOmit,
     entryPoints: {
       './src/builder/main-barrel.ts': {
         type: 'pick',
@@ -41,20 +49,35 @@ Promise.all([
     },
   }),
   generateReferenceMarkdown({
-    output: './docs/advanced-schemas.md',
+    output: './docs/utilities.md',
+    startHeadingLevel: 2,
+    mainHeading: 'Utilities',
+    propertiesToOmit: new Set(['~standard']),
+    renames: {
+      BaseBuilder: 'Schema',
+      SizedBuilder: 'SizedSchema',
+      NumericBuilder: 'NumericSchema',
+      ObjectBuilder: 'x.object',
+    },
     entryPoints: {
+      './src/builder/Schema.ts': {
+        type: 'pick',
+        exports: ['BaseBuilder'],
+      },
       './src/builder/main-barrel.ts': {
         type: 'pick',
-        exports: advancedSchemas,
+        exports: ['NumericBuilder', 'ObjectBuilder', 'SizedBuilder'],
       },
     },
   }),
   generateReferenceMarkdown({
-    output: './docs/reference.md',
+    output: './docs/advanced-schemas.md',
+    mainHeading: 'Advanced Schemas',
+    propertiesToOmit,
     entryPoints: {
       './src/builder/main-barrel.ts': {
         type: 'pick',
-        exports: [...basicSchemas, ...advancedSchemas],
+        exports: advancedSchemas,
       },
     },
   }),

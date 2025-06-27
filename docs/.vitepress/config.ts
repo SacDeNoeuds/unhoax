@@ -26,9 +26,14 @@ export default defineConfig({
     ],
     sidebar: [
       { text: 'Getting started', link: '/' },
-      { text: 'Schemas', link: '/schemas' },
-      { text: 'Advanced schemas', link: '/advanced-schemas' },
-      { text: 'Reference', link: '/reference' },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'Schemas', link: '/schemas' },
+          { text: 'Utilities', link: '/utilities' },
+          { text: 'Advanced schemas', link: '/advanced-schemas' },
+        ],
+      },
       { text: 'Why yet-another', link: '/why-yet-another' },
       { text: 'Why coercion instead of codec', link: '/why-coercion' },
     ],

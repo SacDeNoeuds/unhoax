@@ -2,6 +2,8 @@ import type { Numeric } from '../common/Numeric'
 import type { Schema } from './Schema'
 
 /**
+ * Utilities for every numeric schemas like `x.bigint`, `x.date` and `x.number`.
+ *
  * @see {@link bigint}
  * @see {@link date}
  * @see {@link number}
