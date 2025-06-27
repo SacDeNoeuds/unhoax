@@ -4,7 +4,7 @@ A [Standard Schema](https://standardschema.dev/)-compliant library intended for 
 
 For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
 
-Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#with-predicates-–-isx-value-t-boolean).
+Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#custom-types).
 
 ## Installation
 
@@ -88,8 +88,9 @@ import { isEmail } from 'is-email'
 
 const emailSchema = x.string.refine('Email', isEmail)
 ```
+-->
 
-### With guards – `isX(value: …): value is T`
+## Custom Types
 
 ```ts
 import { x } from 'unhoax'
@@ -98,4 +99,8 @@ type Email = …
 declare function isEmail(value: string): value is Email
 
 const emailSchema = x.string.guardAs('Email', isEmail) // Schema<Email>
-``` -->
+```
+
+## Generating fixtures
+
+Visit [unhoax-chance](https://sacdenoeuds.github.io/unhoax-chance/) to see how to **generate random fixtures from your schemas** using [ChanceJS](https://chancejs.com/).
