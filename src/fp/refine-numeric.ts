@@ -36,11 +36,9 @@ import { refine } from './refine'
  *   x.number,
  *   x.min(18, 'threshold in percent'),
  * )
- * assert.partialDeepStrictEqual(schema.refinements?.min, {
- *   value: 18,
- *   description: 'threshold in percent',
- *   exclusive: false,
- * })
+ * assert(schema.refinements?.min.value === 18)
+ * assert(schema.refinements?.min.description === 'threshold in percent')
+ * assert(schema.refinements?.min.exclusive === false)
  * ```
  */
 export const min = gte
@@ -88,11 +86,9 @@ export function gte<T extends Numeric>(number: T, description?: string) {
  *   x.number,
  *   x.greaterThan(22, 'threshold in percent'),
  * )
- * assert.partialDeepStrictEqual(schema.refinements?.min, {
- *   value: 22,
- *   description: 'threshold in percent',
- *   exclusive: true,
- * })
+ * assert(schema.refinements?.min.value === 22)
+ * assert(schema.refinements?.min.description === 'threshold in percent')
+ * assert(schema.refinements?.min.exclusive === true)
  * ```
  */
 export const greaterThan = gt
@@ -139,11 +135,9 @@ export function gt<T extends Numeric>(number: T, description?: string) {
  *   x.number,
  *   x.max(22, 'threshold in percent'),
  * )
- * assert.partialDeepStrictEqual(schema.refinements?.max, {
- *   value: 22,
- *   description: 'threshold in percent',
- *   exclusive: false,
- * })
+ * assert(schema.refinements?.max.value === 22)
+ * assert(schema.refinements?.max.description === 'threshold in percent')
+ * assert(schema.refinements?.max.exclusive === false)
  * ```
  */
 export const max = lte
@@ -190,11 +184,9 @@ export function lte<T extends Numeric>(number: T, description?: string) {
  *   x.number,
  *   x.lowerThan(22, 'threshold in percent'),
  * )
- * assert.partialDeepStrictEqual(schema.refinements?.max, {
- *   value: 22,
- *   description: 'threshold in percent',
- *   exclusive: true,
- * })
+ * assert(schema.refinements?.max.value === 22)
+ * assert(schema.refinements?.max.description === 'threshold in percent')
+ * assert(schema.refinements?.max.exclusive === true)
  * ```
  */
 export const lowerThan = lt
