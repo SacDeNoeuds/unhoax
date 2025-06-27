@@ -1,220 +1,131 @@
-# Why yet-another schema library ?
+# Why yet-another schema library?
 
-### Philosophy
+Because all the libraries out there have a terrible type mindset.
 
-Unhoax encourages **type-driven** and **domain-driven** approach of schemas.
+They all force _you_ to adapt your types to _them_. A good library should integrate with you, not force you to do things for them, getting the best of all worlds.
 
-- Type-Driven by making the types and function generics as simple as possible.
-- Domain-driven by not making choices on your behalf.
-- Domain-driven by making it easy to use Branded Types.
+This ends in making TypeScript intellisense and errors completely unreadable. It doesn't have to be that way.
 
-### Example
+## Types with terrible names
 
-I took the same example as valibot’s [announcement post](https://www.builder.io/blog/introducing-valibot).
+A great way of ensuring proper names for types in TypeScript is to use interfaces:
 
 ```ts
-type Email = Branded<string, 'Email'>
-type Password = Branded<string, 'Password'>
+import { z } from 'zod'
 
-type LoginData = {
-  email: Email
-  password: Password
-}
-```
-
-### The hidden choice: What is an email?
-
-It may sound like a dumb question, but emails can be primary – `toto@example.com` – or disguised – `toto+test@example.com`.
-
-Depending on your business, you may want one or the other. What should the `z.email()` accept?
-
-Additionally, you may want to exclude some emails from this list, because you know them as fake, typically `@example.com` emails.
-
-And finally, chances are that your project already has an `isEmail` function.
-
-```ts
-type DisguisedEmail = Branded<string, 'DisguisedEmail'> // ie: me+disguisement@gmail.com
-type UniqueEmail = Branded<string, 'UniqueEmail'>
-type Email = DisguisedEmail | UniqueEmail
-```
-
-### Unhoax – [NPM](https://www.npmjs.com/package/unhoax)
-
-![Bundle Size](https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}])
-
-```ts
-import { x } from 'unhoax'
-import isEmail from 'is-email' // pick your pkg
-
-declare const isEmailGuard: (value: string) => value is Email
-
-const emailSchema = x.string.guardAs('Email', isEmailGuard)
-// const emailSchema: x.BaseSchema<Email>
-// Quite a simple type, isn't it?
-
-
-const loginDataSchema = x.object<LoginData>({
-  email: emailSchema,
-  password: passwordSchema,
+const userSchema1 = z.object({
+  id: z.number(),
+  name: z.string(),
 })
-// const loginDataSchema: x.ObjectSchema<LoginData>
 
-const data = x.unsafeParse(loginDataSchema, { … })
-const data: LoginData // 🙌
-```
+type User1 = z.infer<typeof userSchema1>
+declare const getUser1: (value: User1) => void
+// Hovering on `value` gives:
+// (parameter) value: {
+//     id: number;
+//     name: string;
+// }
+// For 2 properties it is still fine, but for more…
 
-### Zod / Yup – [NPM (Zod)](https://www.npmjs.com/package/zod)
-
-![Bundle Size](https://deno.bundlejs.com/badge?q=zod&treeshake=[{+z+}])
-
-I’ll cover Zod only, considering Yup is likely to be the same.
-
-```ts
-const emailSchema = z.string().refine(isEmailGuard) satisfies z.Schema<
-  Email,
-  any, // I get away with an `any`, which is not super satisfying
-  unknown
->
-
-const loginDataSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-}) satisfies z.Schema<LoginData, any, unknown>
-
-const data = loginDataSchema.parse({ … })
-// This what gets inferred instead of `LoginData` 🤮
-const data: {
-  email: string & { [tag] … };
-  password: string & { [tag] … };
+interface User2 {
+  id: number
+  name: string
 }
+
+const userSchema2 = x.object<User2>({ … }) // x.ObjectSchema<User2>, a simple type!
+
+declare const getUser2: (value: User2) => void
+// Hovering on `value` gives:
+// (parameter) value: User2
 ```
 
-### Valibot – [NPM](https://www.npmjs.com/package/valibot)
-
-![Bundle Size](https://deno.bundlejs.com/badge?q=valibot&treeshake=[*])
-
-The types are not straightforward **at all** – despite the library being excellent in general.
-
-See for yourself, let’s see how to write the `Email` schema:
+## Another zod example
 
 ```ts
-import * as v from 'valibot'
+const userSchema = z.object({
+  id: z.number(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  prop1: z.string(),
+  // …
+  prop9: z.string(),
+})
 
-const emailSchema = v.pipe(
-  v.string(),
-  v.email(), // or v.check(isEmail),
-  v.transform((value) => value as Email),
-)
+// When I hover, here is the type I get:
+// I haven't even started anything, the type has already become unreadable.
+const userSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    firstName: z.ZodString;
+    lastName: z.ZodString;
+    email: z.ZodString;
+    prop1: z.ZodString;
+    prop2: z.ZodString;
+    prop3: z.ZodString;
+    prop4: z.ZodString;
+    ... 4 more ...;
+    prop9: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    ...;
+}, {
+    ...;
+}>
+```
 
-const emailSchema: v.SchemaWithPipe<
-  [
-    v.StringSchema<undefined>,
-    v.EmailAction<string, undefined>,
-    v.TransformAction<string, Email>,
-  ]
+If I already have my type and want to use it to get proper names, I can’t:
+
+```ts
+interface User { … }
+
+const userSchema = z.object<User>({ … })
+// fails -> Type `User` does not satisfy the constraint `ZodRawShape`
+```
+
+## A valibot example
+
+```ts
+const userSchema = v.object({
+  id: v.number(),
+  name: v.string(),
+})
+
+// hovering on `userSchema` gives:
+const userSchema: v.ObjectSchema<
+  {
+    readonly id: v.NumberSchema<undefined>
+    readonly name: v.StringSchema<undefined>
+  },
+  undefined
 >
-// Quite complex, isn’t it ?
+// With 2 properties it is fine, but I will have more.
+// And I haven't even transformed the output yet (those who know… they know).
+
+interface User { … }
+
+// If I try to give it an interface
+// It fails -> Type `User` does not satisfy the constraint `ObjectEntries`
+const userSchema = v.object<User>({ … })
 ```
 
-The same goes for the `LoginData` schema:
+## … and so on
 
-```ts
-const loginDataSchema = v.object({
-  email: emailSchema,
-  password: passwordSchema,
-}) satisfies TypeToSatisfy
+This applies for Effect, decoders, @arrirpc/schema, etc…
 
-type TypeToSatisfy = v.ObjectSchema<LoginData, unknown> // fails
-// fortunately for you I dug:
-type TypeToSatisfy = v.BaseSchema<unknown, LoginData, any>
-// … if you accept using any, otherwise:
-type TypeToSatisfy = v.BaseSchema<
-  unknown,
-  LoginData,
-  v.BaseIssue<unknown>
+When working on a production application, it means I have no choice but having doomed unreadable types. Needless to say it does not help my daily life.
+
+The only nice library I have seen regarding the type system is [ts.data.json](https://github.com/joanllenas/ts.data.json). `unhoax` brings the same goodies and a lot more utilities and safety-by-default for the same bundle size (~5kB).
+
+## What about ArkType, rescript schema & co?
+
+They _compile_ schemas instead of parsing at runtime. Which tends to delegate bundle size on you instead of the library and **requires** a compile step, while JavaScript is an interpreted language.
+
+Node now supports natively TypeScript by _stripping type annotations_, not _compiling the code_. So I'd rather avoid making a compile step necessary.
+
+Use those if you _absolutely **need**_ a lightning-fast super-quick library because your environment has some response time specificities. I would redirect you to the [runtime benchmarks](https://moltar.github.io/typescript-runtime-type-benchmarks/) to pick your best option, and get prepared to facade to interchange it as soon as a faster lib comes out.
+
+In other cases, libraries can leverage unsafe APIs like [`new Function`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function) or [`eval`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) to compile schemas.
+
+> **MDN excerpts**
 >
-
-const data = v.parse(loginDataSchema, { … })
-// This what gets inferred instead of `LoginData` 🤮
-const data: {
-  email: string & { [tag] … };
-  password: string & { [tag] … };
-}
-```
-
-### RunTypes – [NPM](https://www.npmjs.com/package/runtypes)
-
-![Bundle Size](https://deno.bundlejs.com/badge?q=runtypes&treeshake=[*])
-
-I did not know this library before writing this one, and quite frankly if I'd choose another it would be the one.
-
-Relevant goodies:
-
-- Template literals
-- Various integrations with tools like json-schema, property-based testing, typing db schemas, and more – Create an issue if you ever want any of that.
-
-Missing:
-
-- Transforming the output: `x.map`, `z.transform`, `v.transform()`
-
-That being said, IMO the library does too much for a schema library:
-
-- Function Contract
-- Branding
-- Pattern matching
-
-```ts
-import * as r from 'runtypes'
-
-const emailSchema = r.String.withGuard(isEmailGuard) satisfies r.Runtype<Email>
-const passwordSchema = r.String.withGuard(isPasswordGuard) satisfies r.Runtype<Password>
-
-const loginDataSchema = r.Record({
-  email: emailSchema,
-  password: passwordSchema,
-}) satisfies r.Runtype<LoginData>
-
-const data = loginDataSchema.check({ … })
-// runtypes is waaay better than the others at inference:
-const data: {
-  email: Email;
-  password: Password;
-}
-```
-
-### Superstruct – [NPM](https://www.npmjs.com/package/superstruct)
-
-![Bundle Size](https://deno.bundlejs.com/badge?q=superstruct&treeshake=[*])
-
-I have one tini-tiny problem with superstruct: either nested coercion is broken, either I did not get it. Or it is just that there's no transform/mapping mechanism. In both cases it is problematic for me.
-
-I tried digging into it to issue a PR, and I stopped out of tiredness.
-
-Maybe I got something wrong, anyway just by writing the example, I can say it is too complicated.
-
-The broken piece:
-
-```ts
-import * as S from 'superstruct'
-
-const TestName = S.coerce(
-  S.object({ value: S.string() }),
-  S.string(),
-  (name) => ({ value: name }),
-)
-
-S.mask('Test', TestName) // { value: 'Test' } ✅
-
-const TestSchema = S.object({ name: TestName })
-S.mask({ name: 'Test' }, TestSchema) // { name: { value: 'Test' } } ✅
-
-const Test = S.coerce(
-  S.object({ nested: TestSchema }),
-  TestSchema,
-  (nested: { name: { value: string } }) => ({ nested }),
-)
-
-console.info(S.mask({ name: 'Jack' }, Test)) // throws
-// I expected `name` to be coerced as `{ value: 'Jack' }`
-// but it did not.
-```
+> 1. The `Function()` constructor creates Function objects. Calling the constructor directly can create functions dynamically, but suffers from security and similar (but far less significant) performance issues as `eval()`.
+> 2. Executing JavaScript from a string is an enormous security risk. It is far too easy for a bad actor to run arbitrary code when you use `eval()`. See Never use direct `eval()`!, below.
