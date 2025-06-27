@@ -13,6 +13,7 @@ jobs:
       - run: npm run gen-tests
       - run: npm run coverage # Run your Vitest tests
       - uses: jpb06/coverage-badges-action@latest
+        if: github.ref_name == 'main'
         with:
           coverage-summary-path: ./coverage/coverage-summary.json # Path to your coverage report
           badges-icon: vitest # Optional: Specify an icon
