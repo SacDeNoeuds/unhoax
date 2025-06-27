@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "gen-tests": "npx gen-jet ./src/fp,./src/builder --header 'import { test } from \"vitest\"' --header 'import pipe from \"just-pipe\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
+    "gen-tests": "npx gen-jet ./src/builder --header 'import { test } from \"vitest\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
     "clean-tests": "rm -rf src/**/*.example.test.*",
     "prebuild": "npm run check-ts && rm -rf ./lib",
     "check-ts": "tsc --noEmit",
