@@ -1,5 +1,6 @@
 import type { JSONSchema7 } from 'json-schema'
 import type { SchemaConfig } from './Schema'
+import type { SetSchema } from './Set'
 import type { ArraySchema } from './array'
 import type { Literal } from './literal'
 import type { StringSchema } from './string'
@@ -14,6 +15,8 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
   const meta = schema.meta ?? {}
   if (schema.name.startsWith('Array<'))
     return toJsonSchemaArray(schema as ArraySchema<any>)
+  if (schema.name.startsWith('Set<'))
+    return toJsonSchemaSet(schema as SetSchema<any>)
 
   if (schema.name === 'string')
     return toJsonSchemaString(schema as StringSchema)
@@ -85,5 +88,12 @@ function toJsonSchemaDate(schema: SchemaConfig<any>): JSONSchema7 {
     formatMinimum: schema.refinements?.min?.value?.toISOString(),
     // @ts-ignore for a lot of reasons…
     formatMaximum: schema.refinements?.max?.value?.toISOString(),
+  }
+}
+
+function toJsonSchemaSet(schema: SetSchema<any>): JSONSchema7 {
+  return {
+    ...toJsonSchemaArray(schema as any),
+    uniqueItems: true,
   }
 }

@@ -248,3 +248,17 @@ describe('toJsonSchemaEnum', () => {
     expect(ajv.validate(schema, null)).toBe(false)
   })
 })
+
+describe('toJsonSchemaSet', () => {
+  it('converts a set', () => {
+    const schema = toJsonSchema(x.setOf(x.number))
+    expect(schema).toEqual({
+      type: 'array',
+      items: { type: 'number' },
+      maxItems: x.setOf.defaultMaxSize,
+      uniqueItems: true,
+    })
+    expect(ajv.validate(schema, [1, 2])).toBe(true)
+    expect(ajv.validate(schema, [1, 1])).toBe(false)
+  })
+})
