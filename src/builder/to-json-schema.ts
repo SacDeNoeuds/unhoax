@@ -12,6 +12,7 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
   if (schema.name === 'string')
     return toJsonSchemaString(schema as StringSchema)
   if (schema.name === 'boolean') return { type: 'boolean' }
+  if (schema.name === 'date') return toJsonSchemaDate(schema)
 
   if ('literal' in meta) return toJsonSchemaLiterals(schema)
   if ('union' in meta) return toJsonSchemaUnion(schema)
@@ -54,5 +55,12 @@ function toJsonSchemaArray(schema: ArraySchema<any>): JSONSchema7 {
     items: toJsonSchema(schema.item),
     minItems: finiteOrUndefined(schema.refinements?.size?.min),
     maxItems: finiteOrUndefined(schema.refinements?.size?.max),
+  }
+}
+
+function toJsonSchemaDate(schema: SchemaConfig<any>): JSONSchema7 {
+  return {
+    type: 'string',
+    format: 'date-time',
   }
 }

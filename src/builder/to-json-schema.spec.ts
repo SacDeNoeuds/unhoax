@@ -1,4 +1,5 @@
 import { Ajv } from 'ajv'
+import addFormats from 'ajv-formats'
 import { describe, expect, it } from 'vitest'
 import { x } from './main'
 import { toJsonSchema } from './to-json-schema'
@@ -7,6 +8,7 @@ x.string.defaultMaxSize = 10
 x.array.defaultMaxSize = 3
 
 const ajv = new Ajv()
+addFormats(ajv)
 
 describe('toJsonSchemaString', () => {
   it('converts a string with max size (default)', () => {
@@ -106,5 +108,18 @@ describe('toJsonSchemaBoolean', () => {
     expect(schema).toEqual({ type: 'boolean' })
     expect(ajv.validate(schema, true)).toBe(true)
     expect(ajv.validate(schema, false)).toBe(true)
+  })
+})
+
+describe('toJsonSchemaDate', () => {
+  it('converts a string with pattern', () => {
+    const schema = toJsonSchema(x.date)
+    expect(schema).toEqual({
+      type: 'string',
+      format: 'date-time',
+    })
+    const date = new Date()
+    expect(ajv.validate(schema, date.toISOString())).toBe(true)
+    expect(ajv.validate(schema, 'def')).toBe(false)
   })
 })
