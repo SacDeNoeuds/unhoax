@@ -10,6 +10,10 @@
   "types": "./dist/builder.d.ts",
   "main": "dist/builder.js",
   "exports": {
+    ".": {
+      "types": "./dist/builder.d.ts",
+      "default": "./dist/builder.js"
+    },
     "./fp": {
       "types": "./dist/fp.d.ts",
       "default": "./dist/fp.js"
