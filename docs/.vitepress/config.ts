@@ -15,6 +15,7 @@ export default defineConfig({
         'src': '//gc.zgo.at/count.js',
       },
     ],
+    ['link', { rel: 'stylesheet', href: '/custom.css' }],
   ].filter(Boolean) as HeadConfig[],
   base: isGithubActions ? '/unhoax/' : undefined,
   outDir: './dist',

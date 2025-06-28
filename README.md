@@ -11,9 +11,9 @@
 
 A [Standard Schema](https://standardschema.dev/)-compliant library intended for **data safety**, leveraging **concise & elegant types** to prevent unreadable 100+ lines TypeScript error messages.
 
-Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#with-predicates-–-isx-value-t-boolean).
+Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#custom-types).
 
-<p>
+</p>
 
 ---
 
@@ -114,6 +114,36 @@ type Email = …
 declare function isEmail(value: string): value is Email
 
 const emailSchema = x.string.guardAs('Email', isEmail) // Schema<Email>
+```
+
+## Safety first
+
+There are default **size guards** everywhere, to diminish the risk of **Denial of Service attacks**, **resource exhaustion** and **oversized payload**.
+
+```ts
+import { x } from 'unhoax'
+
+x.array.defaultMaxSize // 100
+x.setOf.defaultMaxSize // 100
+x.mapOf.defaultMaxSize // 100
+x.string.defaultMaxSize // 100_000
+
+// You can define your own guards:
+x.array.defaultMaxSize = 10_000
+// every array schema with no specific max size
+// will now have a maximum of 10,000 items.
+
+// The rules are retro-active:
+const mySchema = x.array(x.number)
+
+x.array.defaultMaxSize = 3
+mySchema.parse([1, 2, 3, 4]).success === false
+```
+
+You can deactivate those guards by providing the value `Infinity`:
+
+```ts
+x.array.defaultMaxSize = Infinity
 ```
 
 ## Generating random fixtures from your schemas
