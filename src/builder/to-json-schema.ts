@@ -3,6 +3,7 @@ import type { SchemaConfig } from './Schema'
 import type { SetSchema } from './Set'
 import type { ArraySchema } from './array'
 import type { Literal } from './literal'
+import type { ObjectSchema } from './object'
 import type { StringSchema } from './string'
 
 const numberSchemaNames = new Set([
@@ -26,6 +27,7 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
 
   if ('literal' in meta) return toJsonSchemaLiterals(schema)
   if ('union' in meta) return toJsonSchemaUnion(schema)
+  if ('props' in schema) return toJsonSchemaObject(schema as ObjectSchema<any>)
 
   return {}
 }
@@ -47,9 +49,10 @@ function toJsonSchemaUnion(schema: SchemaConfig<any>): JSONSchema7 {
   const schemas = Object.values(
     schema.meta!.union.schemas!,
   ) as SchemaConfig<any>[]
-  return {
-    anyOf: schemas.map(toJsonSchema),
-  }
+  const anyOf = schemas
+    .map(toJsonSchema)
+    .filter((s) => !s.enum || s.enum.length !== 0)
+  return anyOf.length === 1 ? anyOf[0] : { anyOf }
 }
 
 function toJsonSchemaLiterals(schema: SchemaConfig<any>): JSONSchema7 {
@@ -95,5 +98,31 @@ function toJsonSchemaSet(schema: SetSchema<any>): JSONSchema7 {
   return {
     ...toJsonSchemaArray(schema as any),
     uniqueItems: true,
+  }
+}
+
+function toJsonSchemaObject(schema: ObjectSchema<any>): JSONSchema7 {
+  const properties = Object.fromEntries(
+    Object.entries(schema.props).map(([key, value]) => [
+      key,
+      toJsonSchema(value),
+    ]),
+  )
+  const required = Object.keys(schema.props).filter((key) => {
+    const meta = schema.props[key].meta ?? []
+    const hasUndefinedLiteral =
+      'union' in meta &&
+      Object.values(meta.union.schemas!).some((s) => {
+        const meta = s.meta ?? {}
+        return 'literal' in meta && meta.literal.literals.includes(undefined)
+      })
+    return !hasUndefinedLiteral
+  })
+
+  return {
+    type: 'object',
+    properties,
+    required,
+    additionalProperties: false,
   }
 }

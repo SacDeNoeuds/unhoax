@@ -262,3 +262,23 @@ describe('toJsonSchemaSet', () => {
     expect(ajv.validate(schema, [1, 1])).toBe(false)
   })
 })
+
+describe('toJsonSchemaObject', () => {
+  it('converts an object', () => {
+    const s = x.object({ name: x.string, age: x.number.optional() })
+    const schema = toJsonSchema(s)
+    expect(schema).toEqual({
+      type: 'object',
+      properties: {
+        name: toJsonSchema(x.string),
+        age: toJsonSchema(x.number.optional()),
+      },
+      required: ['name'],
+      additionalProperties: false,
+    })
+    expect(ajv.validate(schema, { name: 'John', age: 30 })).toBe(true)
+    expect(ajv.validate(schema, { name: 'John' })).toBe(true)
+    expect(ajv.validate(schema, { name: 'John', age: '30' })).toBe(false)
+    expect(ajv.validate(schema, { name: 'John', extra: 1 })).toBe(false)
+  })
+})
