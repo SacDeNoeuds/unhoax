@@ -4,6 +4,7 @@ import type { SetSchema } from './Set'
 import type { ArraySchema } from './array'
 import type { Literal } from './literal'
 import type { ObjectSchema } from './object'
+import type { RecordSchema } from './record'
 import type { StringSchema } from './string'
 import type { TupleSchema } from './tuple'
 
@@ -19,6 +20,8 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
     return toJsonSchemaArray(schema as ArraySchema<any>)
   if (schema.name.startsWith('Set<'))
     return toJsonSchemaSet(schema as SetSchema<any>)
+  if (schema.name.startsWith('Record<'))
+    return toJsonSchemaRecord(schema as RecordSchema<any, any>)
 
   if (schema.name === 'string')
     return toJsonSchemaString(schema as StringSchema)
@@ -136,5 +139,14 @@ function toJsonSchemaTuple(schema: TupleSchema<any>): JSONSchema7 {
     items: items.map(toJsonSchema),
     minItems: items.length,
     maxItems: items.length,
+  }
+}
+
+function toJsonSchemaRecord(schema: RecordSchema<any, any>): JSONSchema7 {
+  if (schema.key.name !== 'string')
+    throw new Error('records can only handle string keys')
+  return {
+    type: 'object',
+    additionalProperties: toJsonSchema(schema.value),
   }
 }
