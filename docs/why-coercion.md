@@ -10,7 +10,7 @@ From my point of view, the trade-off is acceptable and I am OK delegating serial
 
 See MDN for documentation of `JSON.stringify`'s [replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#using_a_function_as_replacer) and `JSON.parse`'s [reviver](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#using_the_reviver_parameter).
 
-## Examples
+## Example with `JSON.stringify/parse`
 
 ```ts
 import { x } from 'unhoax'

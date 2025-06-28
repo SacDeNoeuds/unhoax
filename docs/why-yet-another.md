@@ -1,42 +1,79 @@
 # Why yet-another schema library?
 
-Because all the libraries out there have a terrible type mindset.
+**TL;DR:** Safety-first and terrible types.
+
+## Safety first
+
+unhoax provides default **size guards** everywhere, to diminish the risk of **Denial of Service attacks**, **resource exhaustion** and **oversized payload**.
+
+```ts
+import { x } from 'unhoax'
+
+x.array.defaultMaxSize // 100
+x.setOf.defaultMaxSize // 100
+x.mapOf.defaultMaxSize // 100
+x.string.defaultMaxSize // 100_000
+
+// You can define your own guards:
+x.array.defaultMaxSize = 10_000
+// every array schema with no specific max size
+// will now have a maximum of 10,000 items.
+
+// The rules are retro-active:
+const mySchema = x.array(x.number)
+
+x.array.defaultMaxSize = 3
+mySchema.parse([1, 2, 3, 4]).success === false
+```
+
+You can deactivate those guards by providing the value `Infinity`:
+
+```ts
+x.array.defaultMaxSize = Infinity
+```
+
+## Terrible types
+
+Most of the libraries out there have terrible typings.
 
 They all force _you_ to adapt your types to _them_. A good library should integrate with you, not force you to do things for them, getting the best of all worlds.
 
-This ends in making TypeScript intellisense and errors completely unreadable. It doesn't have to be that way.
+This ends up making TypeScript intellisense and errors completely unreadable.
 
-## Types with terrible names
-
-A great way of ensuring proper names for types in TypeScript is to use interfaces:
+It doesn't have to be that way.
 
 ```ts
 import { z } from 'zod'
 
-const userSchema1 = z.object({
+const userSchema = z.object({
   id: z.number(),
   name: z.string(),
 })
 
-type User1 = z.infer<typeof userSchema1>
-declare const getUser1: (value: User1) => void
+type User = z.infer<typeof userSchema>
+declare const getUser: (value: User) => void
 // Hovering on `value` gives:
 // (parameter) value: {
 //     id: number;
 //     name: string;
 // }
-// For 2 properties it is still fine, but for more…
+```
 
-interface User2 {
+For 2 properties it is still fine, but for more, it quickly goes out of hand.
+
+A great way of ensuring proper names for types in TypeScript is to use interfaces:
+
+```ts
+interface User {
   id: number
   name: string
 }
 
-const userSchema2 = x.object<User2>({ … }) // x.ObjectSchema<User2>, a simple type!
+const userSchema = x.object<User>({ … }) // x.ObjectSchema<User>, a simple type!
 
-declare const getUser2: (value: User2) => void
+declare const getUser: (value: User) => void
 // Hovering on `value` gives:
-// (parameter) value: User2
+// (parameter) value: User
 ```
 
 ## Another zod example
@@ -72,7 +109,9 @@ const userSchema: z.ZodObject<{
 }>
 ```
 
-If I already have my type and want to use it to get proper names, I can’t:
+Now imagine reading an error containing that type… where do you start?
+
+Plus, I usually already have my type and want to use it to get proper names, which I can’t:
 
 ```ts
 interface User { … }
@@ -109,17 +148,17 @@ const userSchema = v.object<User>({ … })
 
 ## … and so on
 
-This applies for Effect, decoders, @arrirpc/schema, etc…
+This applies for `effect`, `decoders`, `@arrirpc/schema`, etc…
 
 When working on a production application, it means I have no choice but having doomed unreadable types. Needless to say it does not help my daily life.
 
 The only nice library I have seen regarding the type system is [ts.data.json](https://github.com/joanllenas/ts.data.json). `unhoax` brings the same goodies and a lot more utilities and safety-by-default for the same bundle size (~5kB).
 
-## What about ArkType, rescript schema & co?
+## What about ArkType, ReScript Schema & co?
 
 They _compile_ schemas instead of parsing at runtime. Which tends to delegate bundle size on you instead of the library and **requires** a compile step, while JavaScript is an interpreted language.
 
-Node now supports natively TypeScript by _stripping type annotations_, not _compiling the code_. So I'd rather avoid making a compile step necessary.
+NodeJS now supports natively TypeScript by _stripping type annotations_ (transpiling), not _compiling the code_. Transpiling is in general a common practice, so I'd rather avoid making a compile step necessary.
 
 Use those if you _absolutely **need**_ a lightning-fast super-quick library because your environment has some response time specificities. I would redirect you to the [runtime benchmarks](https://moltar.github.io/typescript-runtime-type-benchmarks/) to pick your best option, and get prepared to facade to interchange it as soon as a faster lib comes out.
 
