@@ -1,6 +1,8 @@
 # JSON Schema
 
-unhoax provides JSON Schema support:
+## Basic Usage
+
+unhoax provides JSON Schema (7) support:
 
 ```ts
 import { x, toJsonSchema } from 'unhoax'
@@ -10,6 +12,8 @@ const schema = toJsonSchema(x.number)
 const schema = toJsonSchema(x.object({ … }))
 const schema = toJsonSchema(x.array({ … }))
 ```
+
+## Limitations
 
 The JSON Schema world disables some features enabled by the parsing approach:
 
@@ -27,27 +31,27 @@ Examples of dropped built-in features:
 
 ## Support table
 
-| Type              | Supported                               |
-| ----------------- | --------------------------------------- |
-| `array`           | ✅                                      |
-| `bigint`          | ❌ JSON-incompatible                    |
-| `boolean`         | ✅                                      |
-| `coercedInteger`  | ❌                                      |
-| `coercedNumber`   | ❌                                      |
-| `date`            | ✅                                      |
-| `Enum`            | ✅                                      |
-| `integer`         | ✅                                      |
-| `literal`         | ✅                                      |
-| `mapOf`           | ❌ JSON-incompatible                    |
-| `number`          | ✅                                      |
-| `object`          | ✅                                      |
-| `record`          | ⚠️ only `Record<string, …>`             |
-| `setOf`           | ⚠️ converted as array with unique items |
-| `string`          | ✅ (no trimming, though)                |
-| `tuple`           | ✅                                      |
-| `union`           | ✅                                      |
-| `unknown`         | ❌                                      |
-| `unsafeInteger`   | ✅                                      |
-| `unsafeNumber`    | ✅                                      |
-| `untrimmedString` | ✅                                      |
-| `variant`         | ✅                                      |
+| Type              | Supported                                   |
+| ----------------- | ------------------------------------------- |
+| `array`           | ✅                                          |
+| `bigint`          | ❌ JSON-incompatible                        |
+| `boolean`         | ✅                                          |
+| `coercedInteger`  | ❌                                          |
+| `coercedNumber`   | ❌                                          |
+| `date`            | ✅                                          |
+| `Enum`            | ✅                                          |
+| `integer`         | ✅                                          |
+| `literal`         | ✅                                          |
+| `mapOf`           | ❌ JSON-incompatible                        |
+| `number`          | ✅                                          |
+| `object`          | ✅                                          |
+| `record`          | ✅ with no promise on the record `Key` type |
+| `setOf`           | ⚠️ converted as array with unique items     |
+| `string`          | ✅ (no trimming, though)                    |
+| `tuple`           | ✅                                          |
+| `union`           | ✅                                          |
+| `unknown`         | ❌                                          |
+| `unsafeInteger`   | ✅                                          |
+| `unsafeNumber`    | ✅                                          |
+| `untrimmedString` | ✅                                          |
+| `variant`         | ✅                                          |
