@@ -20,10 +20,15 @@ function applyModifiers(
   return jsonSchema
 }
 
+function finiteOrUndefined(number: unknown) {
+  return Number.isFinite(number) ? (number as number) : undefined
+}
+
 function toJsonSchemaString(schema: StringSchema): JSONSchema7 {
   return applyModifiers(schema, {
     type: 'string',
-    maxLength: schema.refinements?.size?.max as number | undefined,
+    minLength: finiteOrUndefined(schema.refinements?.size?.min),
+    maxLength: finiteOrUndefined(schema.refinements?.size?.max),
   })
 }
 
