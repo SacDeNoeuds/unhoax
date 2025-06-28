@@ -111,6 +111,47 @@ describe('toJsonSchemaBoolean', () => {
   })
 })
 
+describe('toJsonSchemaNumber', () => {
+  describe.each([x.number, x.unsafeNumber])('$name', (number) => {
+    it('converts a number', () => {
+      const schema = toJsonSchema(number)
+      expect(schema).toEqual({ type: 'number' })
+      expect(ajv.validate(schema, 123.12)).toBe(true)
+      expect(ajv.validate(schema, -123)).toBe(true)
+      expect(ajv.validate(schema, Infinity)).toBe(false)
+      expect(ajv.validate(schema, 'abc')).toBe(false)
+    })
+
+    it('converts a min number', () => {
+      const schema = toJsonSchema(number.min(10))
+      expect(schema).toEqual({ type: 'number', minimum: 10 })
+      expect(ajv.validate(schema, 10)).toBe(true)
+      expect(ajv.validate(schema, 9.99)).toBe(false)
+    })
+
+    it('converts a greater-than number', () => {
+      const schema = toJsonSchema(number.gt(10))
+      expect(schema).toEqual({ type: 'number', exclusiveMinimum: 10 })
+      expect(ajv.validate(schema, 10.1)).toBe(true)
+      expect(ajv.validate(schema, 10)).toBe(false)
+    })
+
+    it('converts a max number', () => {
+      const schema = toJsonSchema(number.max(10))
+      expect(schema).toEqual({ type: 'number', maximum: 10 })
+      expect(ajv.validate(schema, 10)).toBe(true)
+      expect(ajv.validate(schema, 10.1)).toBe(false)
+    })
+
+    it('converts a lower-than number', () => {
+      const schema = toJsonSchema(number.lt(10))
+      expect(schema).toEqual({ type: 'number', exclusiveMaximum: 10 })
+      expect(ajv.validate(schema, 9.99)).toBe(true)
+      expect(ajv.validate(schema, 10)).toBe(false)
+    })
+  })
+})
+
 describe('toJsonSchemaDate', () => {
   it('converts a string with pattern', () => {
     const schema = toJsonSchema(x.date)

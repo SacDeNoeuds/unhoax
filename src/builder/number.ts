@@ -52,7 +52,7 @@ export const number = fromGuard<number>(
  * ```
  */
 export const unsafeNumber = fromGuard<number>(
-  'number',
+  'unsafeNumber',
   (input) => typeof input === 'number',
 )
 

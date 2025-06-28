@@ -4,6 +4,12 @@ import type { ArraySchema } from './array'
 import type { Literal } from './literal'
 import type { StringSchema } from './string'
 
+const numberSchemaNames = new Set([
+  'number',
+  'integer',
+  'unsafeNumber',
+  'unsafeInteger',
+])
 export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
   const meta = schema.meta ?? {}
   if (schema.name.startsWith('Array<'))
@@ -13,6 +19,7 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
     return toJsonSchemaString(schema as StringSchema)
   if (schema.name === 'boolean') return { type: 'boolean' }
   if (schema.name === 'date') return toJsonSchemaDate(schema)
+  if (numberSchemaNames.has(schema.name)) return toJsonSchemaNumber(schema)
 
   if ('literal' in meta) return toJsonSchemaLiterals(schema)
   if ('union' in meta) return toJsonSchemaUnion(schema)
@@ -55,6 +62,18 @@ function toJsonSchemaArray(schema: ArraySchema<any>): JSONSchema7 {
     items: toJsonSchema(schema.item),
     minItems: finiteOrUndefined(schema.refinements?.size?.min),
     maxItems: finiteOrUndefined(schema.refinements?.size?.max),
+  }
+}
+
+function toJsonSchemaNumber(schema: SchemaConfig<any>): JSONSchema7 {
+  return {
+    type: schema.name.toLowerCase().replace('unsafe', '') as
+      | 'number'
+      | 'integer',
+    [schema.refinements?.min?.exclusive ? 'exclusiveMinimum' : 'minimum']:
+      finiteOrUndefined(schema.refinements?.min?.value),
+    [schema.refinements?.max?.exclusive ? 'exclusiveMaximum' : 'maximum']:
+      finiteOrUndefined(schema.refinements?.max?.value),
   }
 }
 
