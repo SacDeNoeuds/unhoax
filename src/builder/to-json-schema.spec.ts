@@ -232,3 +232,19 @@ describe('toJsonSchemaDate', () => {
     expect(ajv.validate(schema, tomorrow.toISOString())).toBe(false)
   })
 })
+
+describe('toJsonSchemaEnum', () => {
+  it('converts an enum', () => {
+    enum Test {
+      A = 'a',
+      B = 42,
+    }
+    const schema = toJsonSchema(x.Enum(Test))
+    expect(schema).toEqual({ enum: ['B', 'a', 42] })
+    expect(ajv.validate(schema, 'a')).toBe(true)
+    expect(ajv.validate(schema, 42)).toBe(true)
+    expect(ajv.validate(schema, 'other')).toBe(false)
+    expect(ajv.validate(schema, 12)).toBe(false)
+    expect(ajv.validate(schema, null)).toBe(false)
+  })
+})
