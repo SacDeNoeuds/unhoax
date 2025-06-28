@@ -37,5 +37,11 @@ describe('toJsonSchemaString', () => {
 describe('toJsonSchemaArray', () => {
   it('converts an array with max (default)', () => {
     const schema = x.array(x.string)
+    expect(toJsonSchema(schema)).toEqual({
+      type: 'array',
+      items: toJsonSchema(x.string),
+      minItems: undefined,
+      maxItems: x.array.defaultMaxSize,
+    })
   })
 })
