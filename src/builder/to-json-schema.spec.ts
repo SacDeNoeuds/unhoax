@@ -300,22 +300,19 @@ describe('toJsonSchemaTuple', () => {
 })
 
 describe('toJsonSchemaRecord', () => {
-  it('throws when the key is not a string', () => {
-    const stringToNumber = x.string.convertTo(x.number, Number)
-    expect(() => toJsonSchema(x.record(x.number, x.string))).toThrow()
-    expect(() => toJsonSchema(x.record(stringToNumber, x.string))).toThrow()
-  })
-
-  it('converts a record', () => {
-    // coercion is lost in JSON Schema
-    const schema = toJsonSchema(x.record(x.string, x.number))
-    expect(schema).toEqual({
-      type: 'object',
-      additionalProperties: toJsonSchema(x.number),
-    })
-    expect(ajv.validate(schema, { one: 1, two: 2 })).toBe(true)
-    expect(ajv.validate(schema, { 1: 1, 2: 2 })).toBe(true)
-    expect(ajv.validate(schema, { one: '1', two: 2 })).toBe(false)
-    expect(ajv.validate(schema, { 1: '1', two: 2 })).toBe(false)
-  })
+  it.each([x.number, x.string])(
+    'converts a record with $name keys',
+    (keySchema) => {
+      // coercion is lost in JSON Schema
+      const schema = toJsonSchema(x.record(keySchema as any, x.number))
+      expect(schema).toEqual({
+        type: 'object',
+        additionalProperties: toJsonSchema(x.number),
+      })
+      expect(ajv.validate(schema, { one: 1, two: 2 })).toBe(true)
+      expect(ajv.validate(schema, { 1: 1, 2: 2 })).toBe(true)
+      expect(ajv.validate(schema, { one: '1', two: 2 })).toBe(false)
+      expect(ajv.validate(schema, { 1: '1', two: 2 })).toBe(false)
+    },
+  )
 })

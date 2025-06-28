@@ -143,8 +143,6 @@ function toJsonSchemaTuple(schema: TupleSchema<any>): JSONSchema7 {
 }
 
 function toJsonSchemaRecord(schema: RecordSchema<any, any>): JSONSchema7 {
-  if (schema.key.name !== 'string')
-    throw new Error('records can only handle string keys')
   return {
     type: 'object',
     additionalProperties: toJsonSchema(schema.value),
