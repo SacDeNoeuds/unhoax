@@ -40,7 +40,16 @@ describe('toJsonSchemaArray', () => {
     expect(toJsonSchema(schema)).toEqual({
       type: 'array',
       items: toJsonSchema(x.string),
-      minItems: undefined,
+      maxItems: x.array.defaultMaxSize,
+    })
+  })
+
+  it('converts an array with min length', () => {
+    const schema = x.array(x.string).size({ min: 1 })
+    expect(toJsonSchema(schema)).toEqual({
+      type: 'array',
+      items: toJsonSchema(x.string),
+      minItems: 1,
       maxItems: x.array.defaultMaxSize,
     })
   })
