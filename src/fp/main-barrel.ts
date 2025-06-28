@@ -1,11 +1,11 @@
 /**
- * @module fp
- * @document ../guides/object-intersect-pick-omit.md
- * @document ../guides/getting-started.md
- * @document ../guides/custom-type-email.md
- * @document ../guides/custom-type-first-name.md
- * @document ../guides/migrating-from-zod-yup.md
- * @document ../guides/why-yet-another.md
+ * @module unhoax/fp
+ * @document ../../guides/object-intersect-pick-omit.md
+ * @document ../../guides/getting-started.md
+ * @document ../../guides/custom-type-email.md
+ * @document ../../guides/custom-type-first-name.md
+ * @document ../../guides/migrating-from-zod-yup.md
+ * @document ../../guides/why-yet-another.md
  */
 // * @document ../guides/migrating-from-x.md
 // * @document ../guides/coercing-a-date-from-json.md

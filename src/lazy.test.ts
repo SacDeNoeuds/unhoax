@@ -1,7 +1,13 @@
-// import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 // import { lazy } from './lazy'
 // import { string } from './primitives'
 // import { size } from './refine'
+
+describe('lazy', () => {
+  it('has no tests', () => {
+    expect(true).toBe(true)
+  })
+})
 
 // describe('lazy', () => {
 //   const minSize = size({ min: 5, reason: 'minSize' })

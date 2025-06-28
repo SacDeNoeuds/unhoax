@@ -1,15 +1,3 @@
-/**
- * @module
- * @document ../guides/object-intersect-pick-omit.md
- * @document ../guides/getting-started.md
- * @document ../guides/custom-type-email.md
- * @document ../guides/custom-type-first-name.md
- * @document ../guides/migrating-from-zod-yup.md
- * @document ../guides/why-yet-another.md
- */
-// * @document ../guides/migrating-from-x.md
-// * @document ../guides/coercing-a-date-from-json.md
-// * @document ../guides/coercing-a-bigint-from-json.md
 export type { TypeOf } from '../common/Schema'
 export { array, type ArraySchema } from './array'
 export { bigint, type BigIntSchema } from './bigint'

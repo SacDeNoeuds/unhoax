@@ -1,31 +1,16 @@
-<p align="center">
-  <img alt="Package Size" src="https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}]">
-  <img alt="Total coverage" src="https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/main/badges/coverage-total.svg">
-  <!-- <img alt="Dependency Count" src="https://badgen.net/bundlephobia/dependency-count/unhoax"> -->
-  <a href="https://www.npmjs.com/package/unhoax">
-    <img alt="Downloads" src="https://img.shields.io/npm/dm/unhoax.svg">
-  </a>
-</p>
-
-<p align="center">
+# Getting Started
 
 A [Standard Schema](https://standardschema.dev/)-compliant library intended for **data safety**, leveraging **concise & elegant types** to prevent unreadable 100+ lines TypeScript error messages.
 
-Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#with-predicates-–-isx-value-t-boolean).
+For a detailed explanation with examples, see [why yet-another?](./why-yet-another.md)
 
-<p>
-
----
+Following the unix mindset, `unhoax` proposes **less** features than other libraries, encouraging you to build your own custom schemas when relevant, ie: [email schemas](#custom-types).
 
 ## Installation
 
-```bash
-npm i -S unhoax
+```sh
+npm install --save unhoax
 ```
-
-## Getting Started
-
-Check out the [documentation website](https://sacdenoeuds.github.io/unhoax/), you may want to start with the [getting started guide](https://sacdenoeuds.github.io/unhoax/) 😊
 
 ## Basic Usage
 
@@ -105,7 +90,7 @@ const emailSchema = x.string.refine('Email', isEmail)
 ```
 -->
 
-### Custom Types
+## Custom Types
 
 ```ts
 import { x } from 'unhoax'
@@ -116,10 +101,6 @@ declare function isEmail(value: string): value is Email
 const emailSchema = x.string.guardAs('Email', isEmail) // Schema<Email>
 ```
 
-## Generating random fixtures from your schemas
+## Generating fixtures
 
-Visit [unhoax-chance](https://sacdenoeuds.github.io/unhoax-chance/) to see how to generate random fixtures from your schemas using [ChanceJS](https://chancejs.com/).
-
-## The purpose of this library – Why yet-another?
-
-See [here](https://sacdenoeuds.github.io/unhoax/why-yet-another.html)
+Visit [unhoax-chance](https://sacdenoeuds.github.io/unhoax-chance/) to see how to **generate random fixtures from your schemas** using [ChanceJS](https://chancejs.com/).

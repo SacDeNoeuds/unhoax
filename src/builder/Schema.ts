@@ -67,6 +67,9 @@ export interface SchemaLike<T> {
  */
 export interface BaseSchema<T> extends SchemaConfig<T>, BaseBuilder<T> {}
 
+/**
+ * Utilities common to all schemas.
+ */
 export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
   parse(input: unknown, context?: ParseContext): ParseResult<T>
   /**

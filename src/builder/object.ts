@@ -14,6 +14,9 @@ export function isObject(input: unknown): input is Record<string, unknown> {
 
 type ObjectShape = Record<PropertyKey, any>
 
+/**
+ * Object-specific utilities
+ */
 export interface ObjectBuilder<T extends ObjectShape> {
   /**
    * @category Reference

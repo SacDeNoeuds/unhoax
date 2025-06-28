@@ -2,6 +2,8 @@ import type { Numeric } from '../common/Numeric'
 import type { Schema } from './Schema'
 
 /**
+ * Utilities for every numeric schemas like `x.bigint`, `x.date` and `x.number`.
+ *
  * @see {@link bigint}
  * @see {@link date}
  * @see {@link number}
@@ -31,11 +33,9 @@ export interface NumericBuilder<T extends Numeric> {
    * @example meta
    * ```ts
    * const schema = x.number.min(18, 'threshold in percent')
-   * assert.partialDeepStrictEqual(schema.refinements?.min, {
-   *   value: 18,
-   *   description: 'threshold in percent',
-   *   exclusive: false,
-   * })
+   * assert(schema.refinements?.min.value === 18)
+   * assert(schema.refinements?.min.description === 'threshold in percent')
+   * assert(schema.refinements?.min.exclusive === false)
    * ```
    */
   min(min: T, description?: string): Schema<T>
@@ -68,11 +68,9 @@ export interface NumericBuilder<T extends Numeric> {
    * @example meta
    * ```ts
    * const schema = x.number.greaterThan(22, 'threshold in percent')
-   * assert.partialDeepStrictEqual(schema.refinements?.min, {
-   *   value: 22,
-   *   description: 'threshold in percent',
-   *   exclusive: true,
-   * })
+   * assert(schema.refinements?.min.value === 22)
+   * assert(schema.refinements?.min.description === 'threshold in percent')
+   * assert(schema.refinements?.min.exclusive === true)
    * ```
    */
   greaterThan(number: T, description?: string): Schema<T>
@@ -105,11 +103,9 @@ export interface NumericBuilder<T extends Numeric> {
    * @example meta
    * ```ts
    * const schema = x.number.max(22, 'threshold in percent')
-   * assert.partialDeepStrictEqual(schema.refinements?.max, {
-   *   value: 22,
-   *   description: 'threshold in percent',
-   *   exclusive: false,
-   * })
+   * assert(schema.refinements?.max.value === 22)
+   * assert(schema.refinements?.max.description === 'threshold in percent')
+   * assert(schema.refinements?.max.exclusive === false)
    * ```
    */
   max(max: T, description?: string): Schema<T>
@@ -142,11 +138,9 @@ export interface NumericBuilder<T extends Numeric> {
    * @example meta
    * ```ts
    * const schema = x.number.lowerThan(22, 'threshold in percent')
-   * assert.partialDeepStrictEqual(schema.refinements?.max, {
-   *   value: 22,
-   *   description: 'threshold in percent',
-   *   exclusive: true,
-   * })
+   * assert(schema.refinements?.max.value === 22)
+   * assert(schema.refinements?.max.description === 'threshold in percent')
+   * assert(schema.refinements?.max.exclusive === true)
    * ```
    */
   lowerThan(number: T, description?: string): Schema<T>

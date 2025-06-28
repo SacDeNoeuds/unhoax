@@ -1,6 +1,9 @@
 import type { Sized } from '../common/Sized'
 import type { Schema } from './Schema'
 
+/**
+ * Utilities for every sized schemas like `x.array`, `x.setOf`, `x.mapOf` and `x.string`.
+ */
 export interface SizedBuilder<T extends Sized> {
   /**
    * @category Reference

@@ -2,19 +2,22 @@ name: Generate Coverage Badge
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
   generate-badge:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
       - run: npm ci
       - run: npm run check-ts
       - run: npm run gen-tests
       - run: npm run coverage # Run your Vitest tests
       - uses: jpb06/coverage-badges-action@latest
+        if: github.ref_name == 'main'
         with:
           coverage-summary-path: ./coverage/coverage-summary.json # Path to your coverage report
           badges-icon: vitest # Optional: Specify an icon

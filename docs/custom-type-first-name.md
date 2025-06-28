@@ -1,7 +1,4 @@
----
-title: 3b. Custom Type – First Name
-category: Guide
----
+# Custom Type – First Name
 
 ## Introduction
 
@@ -17,25 +14,19 @@ It is a stupid spec, but it will do for this example.
 
 ## Code, I want code!
 
-Well, that’s typically where the `pipe` approach helps improving readability of the various constraints we may have:
-
 ```ts
 import { x } from 'unhoax'
-import pipe from 'just-pipe'
 
 type FirstName = Branded<string, 'FirstName'>
 
-const firstNameSchema = pipe(
-  x.string, // base type
-
-  // apply some constraints
-  x.size({ min: 3, max: 80, reason: 'firstNameSize' }),
-  x.pattern(/^[A-z-]+$/i, { reason: 'onlyLettersDashesAndSpaces' }),
-
+const firstNameSchema = x.string
+  .size({ min: 3, max: 80, reason: 'firstNameSize' }) // apply some constraints
+  .pattern(/^[A-z-]+$/i, { reason: 'onlyLettersDashesAndSpaces' })
   // now that we are sure it complies to our spec, let's cast it
-  x.map((name) => name as FirstName),
-)
-// Tada: Schema<FirstName>
+  .map((name) => name as FirstName)
+
+// Tada:
+// const firstNameSchema: x.BaseSchema<FirstName>
 
 firstNameSchema.parse('Jack') // { result: true, value: FirstName }
 firstNameSchema.parse('a') // { result: false, error: … } // not enough chars
