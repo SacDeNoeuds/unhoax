@@ -23,6 +23,15 @@ describe('toJsonSchemaString', () => {
       type: 'string',
     })
   })
+
+  it('converts nullable string', () => {
+    expect(toJsonSchema(x.string.nullable())).toEqual({
+      anyOf: [
+        { enum: [null] },
+        { type: 'string', maxLength: x.string.defaultMaxSize },
+      ],
+    })
+  })
 })
 
 describe('toJsonSchemaArray', () => {
