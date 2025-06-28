@@ -1,7 +1,7 @@
 import { defineIterableSchema } from './iterable'
 import type { BaseSchema, Schema } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
-import { tuple } from './tuple'
+import { tuple, type TupleSchema } from './tuple'
 
 /**
  * @category Reference
@@ -10,7 +10,7 @@ import { tuple } from './tuple'
 export interface MapSchema<Key, Value>
   extends BaseSchema<Map<Key, Value>>,
     SizedBuilder<Map<Key, Value>> {
-  readonly item: [key: Schema<Key>, value: Schema<Value>]
+  readonly item: TupleSchema<[key: Schema<Key>, value: Schema<Value>]>
 }
 
 /**
