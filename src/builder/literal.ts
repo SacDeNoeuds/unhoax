@@ -1,6 +1,6 @@
 import { fromGuard } from './from-guard'
 
-type Literal = string | number | boolean | null | undefined
+export type Literal = string | number | boolean | null | undefined
 const isLiteral =
   <L extends [Literal, ...Literal[]]>(...literals: L) =>
   (value: unknown): value is L[number] =>

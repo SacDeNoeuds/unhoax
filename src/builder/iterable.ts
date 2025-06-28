@@ -37,5 +37,7 @@ export const defineIterableSchema = <T, Acc extends Sized>(
       return success(context, acc)
     },
   }) as unknown as Schema<Acc> & SizedBuilder<Acc>
+  // @ts-ignore
+  schema.defaultMaxSize = maxLength
   return schema.size({ max: maxLength })
 }

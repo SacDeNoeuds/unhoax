@@ -63,8 +63,11 @@
   },
   "homepage": "https://sacdenoeuds.github.io/unhoax/",
   "devDependencies": {
+    "@types/json-schema": "^7.0.15",
     "@types/node": "^22.14.0",
     "@vitest/coverage-istanbul": "^3.1.1",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "generate-jsdoc-example-tests": "^0.2.4",
     "heedoc": "^0.1.0",
     "just-pipe": "^1.0.0",
