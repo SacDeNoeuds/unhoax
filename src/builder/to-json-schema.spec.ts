@@ -62,3 +62,9 @@ describe('toJsonSchemaArray', () => {
     })
   })
 })
+
+describe('toJsonSchemaBoolean', () => {
+  it('converts a boolean', () => {
+    expect(toJsonSchema(x.boolean)).toEqual({ type: 'boolean' })
+  })
+})

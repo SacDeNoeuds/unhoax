@@ -11,9 +11,9 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
 
   if (schema.name === 'string')
     return toJsonSchemaString(schema as StringSchema)
+  if (schema.name === 'boolean') return { type: 'boolean' }
 
   if ('literal' in meta) return toJsonSchemaLiterals(schema)
-
   if ('union' in meta) return toJsonSchemaUnion(schema)
 
   return {}
