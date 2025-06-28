@@ -282,3 +282,19 @@ describe('toJsonSchemaObject', () => {
     expect(ajv.validate(schema, { name: 'John', extra: 1 })).toBe(false)
   })
 })
+
+describe('toJsonSchemaTuple', () => {
+  it('converts a tuple', () => {
+    const s = x.tuple(x.string, x.number)
+    const schema = toJsonSchema(s)
+    expect(schema).toEqual({
+      type: 'array',
+      items: [toJsonSchema(x.string), toJsonSchema(x.number)],
+      minItems: 2,
+      maxItems: 2,
+    })
+    expect(ajv.validate(schema, ['John', 30])).toBe(true)
+    expect(ajv.validate(schema, ['John'])).toBe(false)
+    expect(ajv.validate(schema, ['John', '30'])).toBe(false)
+  })
+})

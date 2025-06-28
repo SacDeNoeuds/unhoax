@@ -5,6 +5,7 @@ import type { ArraySchema } from './array'
 import type { Literal } from './literal'
 import type { ObjectSchema } from './object'
 import type { StringSchema } from './string'
+import type { TupleSchema } from './tuple'
 
 const numberSchemaNames = new Set([
   'number',
@@ -28,6 +29,7 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
   if ('literal' in meta) return toJsonSchemaLiterals(schema)
   if ('union' in meta) return toJsonSchemaUnion(schema)
   if ('props' in schema) return toJsonSchemaObject(schema as ObjectSchema<any>)
+  if ('items' in schema) return toJsonSchemaTuple(schema as TupleSchema<any>)
 
   return {}
 }
@@ -124,5 +126,15 @@ function toJsonSchemaObject(schema: ObjectSchema<any>): JSONSchema7 {
     properties,
     required,
     additionalProperties: false,
+  }
+}
+
+function toJsonSchemaTuple(schema: TupleSchema<any>): JSONSchema7 {
+  const items = schema.items as unknown as SchemaConfig<any>[]
+  return {
+    type: 'array',
+    items: items.map(toJsonSchema),
+    minItems: items.length,
+    maxItems: items.length,
   }
 }
