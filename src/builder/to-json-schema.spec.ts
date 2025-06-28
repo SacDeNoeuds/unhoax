@@ -48,6 +48,17 @@ describe('toJsonSchemaString', () => {
     expect(ajv.validate(schema, 'toto')).toBe(true)
     expect(ajv.validate(schema, null)).toBe(true)
   })
+
+  it('converts a string with pattern', () => {
+    const schema = toJsonSchema(x.string.pattern(/(abc)/))
+    expect(schema).toEqual({
+      type: 'string',
+      pattern: '(abc)',
+      maxLength: x.string.defaultMaxSize,
+    })
+    expect(ajv.validate(schema, 'abc')).toBe(true)
+    expect(ajv.validate(schema, 'def')).toBe(false)
+  })
 })
 
 describe('toJsonSchemaArray', () => {

@@ -28,6 +28,7 @@ function toJsonSchemaString(schema: StringSchema): JSONSchema7 {
     type: 'string',
     minLength: finiteOrUndefined(schema.refinements?.size?.min),
     maxLength: finiteOrUndefined(schema.refinements?.size?.max),
+    pattern: schema.refinements?.pattern?.pattern?.toString().slice(1, -1),
   }
 }
 
