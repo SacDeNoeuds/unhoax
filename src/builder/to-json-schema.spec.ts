@@ -192,14 +192,43 @@ describe('toJsonSchemaNumber', () => {
 })
 
 describe('toJsonSchemaDate', () => {
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
   it('converts a date', () => {
     const schema = toJsonSchema(x.date)
     expect(schema).toEqual({
       type: 'string',
       format: 'date-time',
     })
-    const date = new Date()
-    expect(ajv.validate(schema, date.toISOString())).toBe(true)
+    expect(ajv.validate(schema, today.toISOString())).toBe(true)
     expect(ajv.validate(schema, 'def')).toBe(false)
+  })
+
+  it('converts a date with min', () => {
+    const schema = toJsonSchema(x.date.min(today))
+    expect(schema).toEqual({
+      type: 'string',
+      format: 'date-time',
+      formatMinimum: today.toISOString(),
+    })
+    expect(ajv.validate(schema, today.toISOString())).toBe(true)
+    expect(ajv.validate(schema, tomorrow.toISOString())).toBe(true)
+    expect(ajv.validate(schema, yesterday.toISOString())).toBe(false)
+  })
+
+  it('converts a date with max', () => {
+    const schema = toJsonSchema(x.date.max(today))
+    expect(schema).toEqual({
+      type: 'string',
+      format: 'date-time',
+      formatMaximum: today.toISOString(),
+    })
+    expect(ajv.validate(schema, today.toISOString())).toBe(true)
+    expect(ajv.validate(schema, yesterday.toISOString())).toBe(true)
+    expect(ajv.validate(schema, tomorrow.toISOString())).toBe(false)
   })
 })

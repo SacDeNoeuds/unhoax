@@ -81,5 +81,9 @@ function toJsonSchemaDate(schema: SchemaConfig<any>): JSONSchema7 {
   return {
     type: 'string',
     format: 'date-time',
+    // @ts-ignore for a lot of reasons…
+    formatMinimum: schema.refinements?.min?.value?.toISOString(),
+    // @ts-ignore for a lot of reasons…
+    formatMaximum: schema.refinements?.max?.value?.toISOString(),
   }
 }
