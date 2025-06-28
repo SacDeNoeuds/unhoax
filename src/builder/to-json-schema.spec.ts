@@ -53,4 +53,12 @@ describe('toJsonSchemaArray', () => {
       maxItems: x.array.defaultMaxSize,
     })
   })
+
+  it('converts an array with no length constraints', () => {
+    const schema = x.array(x.string).size({ max: Infinity })
+    expect(toJsonSchema(schema)).toEqual({
+      type: 'array',
+      items: toJsonSchema(x.string),
+    })
+  })
 })

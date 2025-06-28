@@ -51,7 +51,7 @@ function toJsonSchemaArray(schema: ArraySchema<any>): JSONSchema7 {
   return {
     type: 'array',
     items: toJsonSchema(schema.item),
-    minItems: schema.refinements?.size?.min as number | undefined,
-    maxItems: schema.refinements?.size?.max as number | undefined,
+    minItems: finiteOrUndefined(schema.refinements?.size?.min),
+    maxItems: finiteOrUndefined(schema.refinements?.size?.max),
   }
 }
