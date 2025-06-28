@@ -34,7 +34,7 @@ export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
   if ('props' in schema) return toJsonSchemaObject(schema as ObjectSchema<any>)
   if ('items' in schema) return toJsonSchemaTuple(schema as TupleSchema<any>)
 
-  return {}
+  throw new Error('unsupported schema')
 }
 
 function finiteOrUndefined(number: unknown) {
@@ -114,7 +114,7 @@ function toJsonSchemaObject(schema: ObjectSchema<any>): JSONSchema7 {
     ]),
   )
   const required = Object.keys(schema.props).filter((key) => {
-    const meta = schema.props[key].meta ?? []
+    const meta = schema.props[key].meta ?? {}
     const hasUndefinedLiteral =
       'union' in meta &&
       Object.values(meta.union.schemas!).some((s) => {

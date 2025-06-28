@@ -10,6 +10,12 @@ x.array.defaultMaxSize = 3
 const ajv = new Ajv()
 addFormats(ajv)
 
+describe('unsupported schema', () => {
+  it('throws upon unsupported schema', () => {
+    expect(() => toJsonSchema(x.unknown)).toThrow('unsupported schema')
+  })
+})
+
 describe('toJsonSchemaString', () => {
   it('converts a string with max size (default)', () => {
     const schema = toJsonSchema(x.string)
