@@ -192,7 +192,7 @@ describe('toJsonSchemaNumber', () => {
 })
 
 describe('toJsonSchemaDate', () => {
-  it('converts a string with pattern', () => {
+  it('converts a date', () => {
     const schema = toJsonSchema(x.date)
     expect(schema).toEqual({
       type: 'string',
