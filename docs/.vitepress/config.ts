@@ -18,6 +18,9 @@ export default defineConfig({
     ['link', { rel: 'stylesheet', href: '/custom.css' }],
   ].filter(Boolean) as HeadConfig[],
   base: isGithubActions ? '/unhoax/' : undefined,
+  sitemap: isGithubActions
+    ? { hostname: 'https://sacdenoeuds.github.io/unhoax/' }
+    : undefined,
   outDir: './dist',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
