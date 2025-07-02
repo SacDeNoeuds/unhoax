@@ -7,24 +7,28 @@
     "./dist",
     "./README.md"
   ],
-  "types": "./dist/builder.d.ts",
-  "main": "dist/builder.js",
+  "types": "./dist/types/builder/main.d.ts",
+  "main": "./dist/builder/main.mjs",
   "exports": {
     ".": {
-      "types": "./dist/builder.d.ts",
-      "default": "./dist/builder.js"
+      "types": "./dist/types/builder/main.d.ts",
+      "import": "./dist/builder/main.mjs",
+      "require": "./dist/builder/main.cjs"
     },
     "./fp": {
-      "types": "./dist/fp.d.ts",
-      "default": "./dist/fp.js"
+      "types": "./dist/types/fp/main.d.ts",
+      "import": "./dist/fp/main.mjs",
+      "require": "./dist/fp/main.cjs"
     }
   },
   "scripts": {
     "gen-tests": "npx gen-jet ./src/builder --header 'import { test } from \"vitest\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
     "clean-tests": "rm -rf src/**/*.example.test.*",
-    "prebuild": "npm run check-ts && rm -rf ./lib",
     "check-ts": "tsc --noEmit",
-    "build": "npx tsup --entry.builder ./src/builder/main.ts --entry.fp ./src/fp/main.ts -d dist/ --dts --sourcemap --format esm --minify",
+    "build:clean": "rm -rf ./dist",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "build:code": "rollup -c",
+    "build": "npm run build:clean && npm run build:types && npm run build:code",
     "doc:gen": "npx tsx ./src/generate-documentation.ts",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
@@ -67,6 +71,9 @@
   },
   "homepage": "https://sacdenoeuds.github.io/unhoax/",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.4",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^24.0.7",
     "@vitest/coverage-istanbul": "^3.1.1",
@@ -76,8 +83,8 @@
     "heedoc": "^0.1.0",
     "just-pipe": "^1.0.0",
     "prettier": "^3.5.3",
+    "rollup": "^4.44.1",
     "tslib": "^2.8.1",
-    "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitepress": "^1.6.3",
     "vitest": "^3.1.1"
