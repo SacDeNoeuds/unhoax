@@ -56,6 +56,7 @@ Promise.all([
     renames: {
       BaseBuilder: 'Schema',
       SizedBuilder: 'SizedSchema',
+      StringBuilder: 'StringSchema',
       NumericBuilder: 'NumericSchema',
       ObjectBuilder: 'x.object',
     },
@@ -63,6 +64,10 @@ Promise.all([
       './src/builder/Schema.ts': {
         type: 'pick',
         exports: ['BaseBuilder'],
+      },
+      './src/builder/string.ts': {
+        type: 'pick',
+        exports: ['StringBuilder'],
       },
       './src/builder/main-barrel.ts': {
         type: 'pick',

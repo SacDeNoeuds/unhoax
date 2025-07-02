@@ -121,11 +121,9 @@ assert(schema.parse(42n).success === false)
 
 ```ts
 const schema = x.number.greaterThan(22, 'threshold in percent')
-assert.partialDeepStrictEqual(schema.refinements?.min, {
-  value: 22,
-  description: 'threshold in percent',
-  exclusive: true,
-})
+assert(schema.refinements?.min.value === 22)
+assert(schema.refinements?.min.description === 'threshold in percent')
+assert(schema.refinements?.min.exclusive === true)
 ```
 
 ### `NumericSchema.lowerThan`
@@ -158,11 +156,9 @@ assert(schema.parse(42n).success === false)
 
 ```ts
 const schema = x.number.lowerThan(22, 'threshold in percent')
-assert.partialDeepStrictEqual(schema.refinements?.max, {
-  value: 22,
-  description: 'threshold in percent',
-  exclusive: true,
-})
+assert(schema.refinements?.max.value === 22)
+assert(schema.refinements?.max.description === 'threshold in percent')
+assert(schema.refinements?.max.exclusive === true)
 ```
 
 ### `NumericSchema.max`
@@ -195,11 +191,9 @@ assert(schema.parse(43n).success === false)
 
 ```ts
 const schema = x.number.max(22, 'threshold in percent')
-assert.partialDeepStrictEqual(schema.refinements?.max, {
-  value: 22,
-  description: 'threshold in percent',
-  exclusive: false,
-})
+assert(schema.refinements?.max.value === 22)
+assert(schema.refinements?.max.description === 'threshold in percent')
+assert(schema.refinements?.max.exclusive === false)
 ```
 
 ### `NumericSchema.min`
@@ -232,11 +226,9 @@ assert(schema.parse(9n).success === false)
 
 ```ts
 const schema = x.number.min(18, 'threshold in percent')
-assert.partialDeepStrictEqual(schema.refinements?.min, {
-  value: 18,
-  description: 'threshold in percent',
-  exclusive: false,
-})
+assert(schema.refinements?.min.value === 18)
+assert(schema.refinements?.min.description === 'threshold in percent')
+assert(schema.refinements?.min.exclusive === false)
 ```
 
 ## `SizedSchema`
