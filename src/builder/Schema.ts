@@ -14,35 +14,37 @@ import type { StringSchema } from './string'
 import type { TupleSchema } from './tuple'
 import type { IsTuple, IsUnion } from './types'
 
-export type Schema<T> = [unknown] extends [T]
+export type Schema<T, Input = T> = [unknown] extends [T]
   ? BaseSchema<unknown>
   : IsUnion<T> extends true // literal or union, no way of knowing reliably.
-    ? BaseSchema<T>
+    ? BaseSchema<T, Input>
     : T extends any[]
       ? IsTuple<T> extends true
-        ? TupleSchema<T>
-        : ArraySchema<T[number]>
+        ? TupleSchema<T, Input>
+        : ArraySchema<T[number], Input>
       : T extends Set<infer U>
-        ? SetSchema<U>
+        ? SetSchema<U, Input>
         : T extends Map<infer Key, infer Value>
-          ? MapSchema<Key, Value>
+          ? MapSchema<Key, Value, Input>
           : T extends new (...args: any[]) => infer U
-            ? BaseSchema<U>
+            ? BaseSchema<U, Input>
             : string extends T
-              ? StringSchema
+              ? StringSchema<Input>
               : number extends T
-                ? NumberSchema
+                ? NumberSchema<Input>
                 : Date extends T
-                  ? DateSchema
+                  ? DateSchema<Input>
                   : bigint extends T
-                    ? BigIntSchema
+                    ? BigIntSchema<Input>
                     : [T] extends [Record<string, any>]
                       ? T extends string | number | Date | bigint | boolean
-                        ? BaseSchema<T> // avoid to type branded type as ObjectSchema
+                        ? BaseSchema<T, Input> // avoid to type branded type as ObjectSchema
                         : IsUnion<keyof T> extends true
-                          ? ObjectSchema<T>
+                          ? ObjectSchema<T, Input>
                           : RecordSchema<keyof T, T[keyof T]>
-                      : BaseSchema<T>
+                      : BaseSchema<T, Input>
+
+export type InputOf<T extends StandardSchemaV1> = StandardSchemaV1.InferInput<T>
 
 export interface SchemaConfig<T> {
   readonly name: string
@@ -65,12 +67,14 @@ export interface SchemaLike<T> {
  *
  * @category Reference
  */
-export interface BaseSchema<T> extends SchemaConfig<T>, BaseBuilder<T> {}
+export interface BaseSchema<T, Input = T>
+  extends SchemaConfig<T>,
+    BaseBuilder<T, Input> {}
 
 /**
  * Utilities common to all schemas.
  */
-export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
+export interface BaseBuilder<T, Input = T> extends StandardSchemaV1<Input, T> {
   parse(input: unknown, context?: ParseContext): ParseResult<T>
   /**
    * @category Reference
@@ -87,7 +91,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
     name: string,
     refine: (value: T) => boolean,
     config?: Omit<Refinement<T>, 'refine'>,
-  ): Schema<T>
+  ): Schema<T, Input>
   /**
    * @category Reference
    * @example
@@ -104,7 +108,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
     name: string,
     refine: (value: T) => value is U,
     config?: Omit<Refinement<T>, 'refine'>,
-  ): Schema<U>
+  ): Schema<U, T>
   /**
    * @category Reference
    * @example
@@ -115,7 +119,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    * assert(capitalized.parse('hey').value === 'Hey')
    * ```
    */
-  map<U>(mapper: (value: T) => U): Schema<U>
+  map<U>(mapper: (value: T) => U): Schema<U, T>
   /**
    * @category Reference
    * @example
@@ -127,7 +131,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    * assert(capitalized.name === 'Capitalized')
    * ```
    */
-  map<U>(name: string, mapper: (value: T) => U): Schema<U>
+  map<U>(name: string, mapper: (value: T) => U): Schema<U, T>
   /**
    * @example
    * ```ts
@@ -139,7 +143,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    * assert(numberFromString.name === 'number')
    * ```
    */
-  convertTo<U>(schema: BaseSchema<U>, coerce: (input: T) => U): Schema<U>
+  convertTo<U>(schema: BaseSchema<U>, coerce: (input: T) => U): Schema<U, T>
   /**
    * @category Reference
    * @example provide a name to the generated schema:
@@ -158,7 +162,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
     name: string,
     schema: BaseSchema<U>,
     coerce: (input: T) => U,
-  ): Schema<U>
+  ): Schema<U, T>
   /**
    * @category Reference
    * @example
@@ -168,7 +172,7 @@ export interface BaseBuilder<T> extends StandardSchemaV1<unknown, T> {
    * assert(schema.parse(true).value === 42)
    * ```
    */
-  recover<U>(getFallback: () => U): Schema<T | U>
+  recover<U>(getFallback: () => U): Schema<T | U, T>
   /**
    * @category Reference
    * @example

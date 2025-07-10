@@ -66,8 +66,8 @@ export interface ObjectBuilder<T extends ObjectShape> {
  * @category Reference
  * @see {@link object}
  */
-export interface ObjectSchema<T extends ObjectShape>
-  extends BaseSchema<T>,
+export interface ObjectSchema<T extends ObjectShape, Input = T>
+  extends BaseSchema<T, Input>,
     ObjectBuilder<T> {
   readonly props: PropsOf<T>
 }

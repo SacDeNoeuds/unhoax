@@ -3,8 +3,9 @@ import type { NumericBuilder } from './NumericSchema'
 import type { BaseSchema, Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
-export interface BigIntSchema
-  extends BaseSchema<bigint>,
+type BigIntInput = Parameters<typeof BigInt>[0]
+export interface BigIntSchema<Input = BigIntInput>
+  extends BaseSchema<bigint, Input>,
     NumericBuilder<bigint> {}
 
 const name = 'bigint'
@@ -30,7 +31,7 @@ export const bigint = new Factory({
   name,
   parser: (input, context) => {
     try {
-      return ok(BigInt(input as any))
+      return ok(BigInt(input as BigIntInput))
     } catch (err) {
       return failure(context, 'bigint', input)
     }

@@ -7,8 +7,8 @@ import { tuple, type TupleSchema } from './tuple'
  * @category Reference
  * @see {@link mapOf}
  */
-export interface MapSchema<Key, Value>
-  extends BaseSchema<Map<Key, Value>>,
+export interface MapSchema<Key, Value, Input = Iterable<[Key, Value]>>
+  extends BaseSchema<Map<Key, Value>, Input>,
     SizedBuilder<Map<Key, Value>> {
   readonly item: TupleSchema<[key: Schema<Key>, value: Schema<Value>]>
 }

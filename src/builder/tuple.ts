@@ -7,7 +7,7 @@ import { Factory } from './SchemaFactory'
  * @category Reference
  * @see {@link tuple}
  */
-export interface TupleSchema<T> extends BaseSchema<T> {
+export interface TupleSchema<T, Input = T> extends BaseSchema<T, Input> {
   readonly items: { [Key in keyof T]: Schema<T[Key]> }
 }
 

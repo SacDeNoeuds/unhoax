@@ -7,7 +7,9 @@ import type { SizedBuilder } from './SizedSchema'
  * @category Reference
  * @see {@link setOf}
  */
-export interface SetSchema<T> extends BaseSchema<Set<T>>, SizedBuilder<Set<T>> {
+export interface SetSchema<T, Input = Iterable<T>>
+  extends BaseSchema<Set<T>, Input>,
+    SizedBuilder<Set<T>> {
   readonly item: Schema<T>
 }
 

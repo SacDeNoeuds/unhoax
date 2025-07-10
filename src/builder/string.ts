@@ -17,8 +17,8 @@ export interface StringBuilder {
   pattern(pattern: RegExp): StringSchema
 }
 
-export interface StringSchema
-  extends BaseSchema<string>,
+export interface StringSchema<Input = string>
+  extends BaseSchema<string, Input>,
     StringBuilder,
     SizedBuilder<string> {
   /**

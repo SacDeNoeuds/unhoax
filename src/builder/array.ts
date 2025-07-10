@@ -7,7 +7,9 @@ import type { SizedBuilder } from './SizedSchema'
  * @category Reference
  * @see {@link array}
  */
-export interface ArraySchema<T> extends BaseSchema<T[]>, SizedBuilder<T[]> {
+export interface ArraySchema<T, Input = Iterable<T>>
+  extends BaseSchema<T[], Input>,
+    SizedBuilder<T[]> {
   readonly item: Schema<T>
 }
 

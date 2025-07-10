@@ -8,8 +8,11 @@ import { isObject } from './object'
  * @category Reference
  * @see {@link record}
  */
-export interface RecordSchema<Key extends PropertyKey, Value>
-  extends BaseSchema<Record<Key, Value>> {
+export interface RecordSchema<
+  Key extends PropertyKey,
+  Value,
+  Input = Record<Key, Value>,
+> extends BaseSchema<Record<Key, Value>, Input> {
   readonly key: Schema<Key>
   readonly value: Schema<Value>
 }

@@ -19,7 +19,7 @@ export {
 export type { NumericBuilder } from './NumericSchema'
 export { object, type ObjectBuilder, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
-export type { BaseSchema, Schema } from './Schema'
+export type { BaseSchema, InputOf, Schema } from './Schema'
 export { unknown } from './SchemaFactory'
 export { setOf, type SetSchema } from './Set'
 export type { SizedBuilder } from './SizedSchema'

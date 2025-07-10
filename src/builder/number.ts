@@ -2,8 +2,8 @@ import { fromGuard } from './from-guard'
 import type { NumericBuilder } from './NumericSchema'
 import type { BaseSchema } from './Schema'
 
-export interface NumberSchema
-  extends BaseSchema<number>,
+export interface NumberSchema<Input = number>
+  extends BaseSchema<number, Input>,
     NumericBuilder<number> {}
 
 /**

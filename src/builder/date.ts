@@ -4,11 +4,15 @@ import type { NumericBuilder } from './NumericSchema'
 import type { BaseSchema, Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
+type DateInput = ConstructorParameters<typeof Date>[0]
+
 /**
  * @category Reference
  * @see {@link date}
  */
-export interface DateSchema extends BaseSchema<Date>, NumericBuilder<Date> {}
+export interface DateSchema<Input = DateInput>
+  extends BaseSchema<Date, Input>,
+    NumericBuilder<Date> {}
 
 const name = 'date'
 
@@ -56,9 +60,9 @@ const name = 'date'
 export const date = new Factory({
   name,
   parser: (input, context) => {
-    const value = new Date(input as any)
+    const value = new Date(input as DateInput)
     return Number.isNaN(value.valueOf())
       ? failure(context, name, input)
       : ok(value)
   },
-}) as unknown as Schema<Date>
+}) as unknown as Schema<Date, DateInput>
