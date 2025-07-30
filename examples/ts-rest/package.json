@@ -1,0 +1,21 @@
+{
+  "name": "ts-rest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@ts-rest/core": "^3.53.0-rc.1",
+    "@ts-rest/serverless": "^3.53.0-rc.1",
+    "typescript": "^5.8.3",
+    "unhoax": "file:../../unhoax-0.10.3.tgz"
+  },
+  "devDependencies": {
+    "vite": "^7.0.6"
+  }
+}
