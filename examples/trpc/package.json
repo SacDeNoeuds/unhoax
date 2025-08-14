@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -11,10 +11,12 @@
   "description": "",
   "dependencies": {
     "@trpc/client": "^11.4.3",
-    "@trpc/server": "^11.4.3"
+    "@trpc/server": "^11.4.3",
+    "unhoax": "^0.10.4"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
-    "vite": "^7.0.6"
+    "vite": "^7.0.6",
+    "vitest": "^3.2.4"
   }
 }
