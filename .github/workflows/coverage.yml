@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npm run check-ts
+      - run: npm run build # make sure the lib can be built before merging
       - run: npm run gen-tests
       - run: npm run coverage # Run your Vitest tests
       - uses: jpb06/coverage-badges-action@latest
