@@ -1,0 +1,22 @@
+{
+  "name": "ts-rest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@ts-rest/core": "^3.53.0-rc.1",
+    "@ts-rest/serverless": "^3.53.0-rc.1",
+    "typescript": "^5.8.3",
+    "unhoax": "^0.10.4"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4",
+    "zod": "^4.0.17"
+  }
+}
