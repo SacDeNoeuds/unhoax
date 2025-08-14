@@ -1,11 +1,11 @@
-<p align="center">
+<div align="center">
   <img alt="Package Size" src="https://deno.bundlejs.com/badge?q=unhoax&treeshake=[{+x+}]">
   <img alt="Total coverage" src="https://raw.githubusercontent.com/SacDeNoeuds/unhoax/refs/heads/main/badges/coverage-total.svg">
   <!-- <img alt="Dependency Count" src="https://badgen.net/bundlephobia/dependency-count/unhoax"> -->
   <a href="https://www.npmjs.com/package/unhoax">
     <img alt="Downloads" src="https://img.shields.io/npm/dm/unhoax.svg">
   </a>
-</p>
+</div>
 
 <p align="center">
 
@@ -144,6 +144,21 @@ You can deactivate those guards by providing the value `Infinity`:
 
 ```ts
 x.array.defaultMaxSize = Infinity
+```
+
+## Use `unhoax` with other tools
+
+Leveraging the Standard Schema compliance:
+
+- [ts-rest example](https://github.com/SacDeNoeuds/unhoax/tree/main/examples/ts-rest)
+
+Or any JSON Schema compatibility:
+
+```ts
+import { x, toJSONSchema } from 'unhoax'
+
+const mySchema = x.object({ … }) // or x.array(…), or x.number, …
+const schema = toJsonSchema(mySchema)
 ```
 
 ## Generating random fixtures from your schemas
