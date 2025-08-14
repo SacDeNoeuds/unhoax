@@ -1,7 +1,7 @@
 import { initClient, tsRestFetchApi } from '@ts-rest/core'
 import { pokemonContract } from './contract'
 
-const client = initClient(pokemonContract, {
+export const client = initClient(pokemonContract, {
   baseUrl: 'http://localhost:3000',
   baseHeaders: {},
   api: (args) => {

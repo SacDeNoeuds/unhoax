@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,11 @@
     "@ts-rest/core": "^3.53.0-rc.1",
     "@ts-rest/serverless": "^3.53.0-rc.1",
     "typescript": "^5.8.3",
-    "unhoax": "file:../../unhoax-0.10.3.tgz"
+    "unhoax": "^0.10.4"
   },
   "devDependencies": {
-    "vite": "^7.0.6"
+    "vitest": "^3.2.4",
+    "vitest-fetch-mock": "^0.4.5",
+    "zod": "^4.0.17"
   }
 }
