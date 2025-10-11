@@ -1,6 +1,6 @@
 {
   "name": "unhoax",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "type/data-centric schema library. A schema library empower you, not constrain you with their types messy types.",
   "type": "module",
   "files": [
