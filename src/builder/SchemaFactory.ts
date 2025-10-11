@@ -112,8 +112,8 @@ export class Factory implements Interface {
 
   convertTo<U>(
     ...args:
-      | [name: string, schema: BaseSchema<U>, (value: any) => any]
-      | [schema: BaseSchema<U>, (value: any) => any]
+      | [name: string, schema: BaseSchema<U, any>, (value: any) => any]
+      | [schema: BaseSchema<U, any>, (value: any) => any]
   ): any {
     const [name, schema, coerce] =
       args.length === 3 ? args : [args[0].name, args[0], args[1]]
@@ -131,21 +131,21 @@ export class Factory implements Interface {
   }
   recover(getFallback: () => any): any {
     return union(
-      this as BaseSchema<any>,
+      this as BaseSchema<any, any>,
       unknown.map('recovered', getFallback as any),
     )
   }
   optional(defaultValue = undefined): any {
     return union(
       literal(undefined).map(() => defaultValue),
-      this as BaseSchema<any>,
+      this as BaseSchema<any, any>,
     )
   }
   // @ts-ignore
   nullable(defaultValue = null): any {
     return union(
       literal(null).map(() => defaultValue),
-      this as BaseSchema<any>,
+      this as BaseSchema<any, any>,
     )
   }
 
@@ -218,7 +218,7 @@ export class Factory implements Interface {
   }
 
   // ObjectBuilder
-  intersect(otherSchema: ObjectSchema<any>): any {
+  intersect(otherSchema: ObjectSchema<any, any>): any {
     return this.#evolve({
       // @ts-ignore the prop exists, no worries. This is backed by tests
       props: { ...(this as any).props, ...otherSchema.props },

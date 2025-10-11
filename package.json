@@ -96,5 +96,8 @@
     "@standard-schema/spec": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "type-fest": "^5.0.1"
   }
 }

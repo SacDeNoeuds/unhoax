@@ -8,11 +8,8 @@ import { isObject } from './object'
  * @category Reference
  * @see {@link record}
  */
-export interface RecordSchema<
-  Key extends PropertyKey,
-  Value,
-  Input = Record<Key, Value>,
-> extends BaseSchema<Record<Key, Value>, Input> {
+export interface RecordSchema<Key extends PropertyKey, Value, Input>
+  extends BaseSchema<Record<Key, Value>, Input> {
   readonly key: Schema<Key>
   readonly value: Schema<Value>
 }
@@ -44,10 +41,15 @@ export interface RecordSchema<
  * assert(schema.parse({ 1: '12' }).success === false)
  * ```
  */
-export function record<Key extends PropertyKey, Value>(
-  key: BaseSchema<Key>,
-  value: BaseSchema<Value>,
-): RecordSchema<Key, Value> {
+export function record<
+  Key extends PropertyKey,
+  Value,
+  KeyInput extends PropertyKey,
+  ValueInput,
+>(
+  key: BaseSchema<Key, Key>,
+  value: BaseSchema<Value, Key>,
+): RecordSchema<Key, Value, Record<KeyInput, ValueInput>> {
   const name = `Record<${key.name}, ${value.name}>`
   const schema = new Factory({
     name,
@@ -69,6 +71,7 @@ export function record<Key extends PropertyKey, Value>(
   })
   return Object.assign(schema, { key, value }) as unknown as RecordSchema<
     Key,
-    Value
+    Value,
+    Record<KeyInput, ValueInput>
   >
 }

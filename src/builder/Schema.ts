@@ -2,49 +2,10 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { ParseContext } from '../common/ParseContext'
 import type { ParseResult } from '../common/ParseResult'
 import type { Refinement, SchemaMeta } from '../common/Schema'
-import type { ArraySchema } from './array'
-import type { BigIntSchema } from './bigint'
-import type { DateSchema } from './date'
-import type { MapSchema } from './Map'
-import type { NumberSchema } from './number'
-import type { ObjectSchema } from './object'
-import type { RecordSchema } from './record'
-import type { SetSchema } from './Set'
-import type { StringSchema } from './string'
-import type { TupleSchema } from './tuple'
-import type { IsTuple, IsUnion } from './types'
-
-export type Schema<T, Input = T> = [unknown] extends [T]
-  ? BaseSchema<unknown>
-  : IsUnion<T> extends true // literal or union, no way of knowing reliably.
-    ? BaseSchema<T, Input>
-    : T extends any[]
-      ? IsTuple<T> extends true
-        ? TupleSchema<T, Input>
-        : ArraySchema<T[number], Input>
-      : T extends Set<infer U>
-        ? SetSchema<U, Input>
-        : T extends Map<infer Key, infer Value>
-          ? MapSchema<Key, Value, Input>
-          : T extends new (...args: any[]) => infer U
-            ? BaseSchema<U, Input>
-            : string extends T
-              ? StringSchema<Input>
-              : number extends T
-                ? NumberSchema<Input>
-                : Date extends T
-                  ? DateSchema<Input>
-                  : bigint extends T
-                    ? BigIntSchema<Input>
-                    : [T] extends [Record<string, any>]
-                      ? T extends string | number | Date | bigint | boolean
-                        ? BaseSchema<T, Input> // avoid to type branded type as ObjectSchema
-                        : IsUnion<keyof T> extends true
-                          ? ObjectSchema<T, Input>
-                          : RecordSchema<keyof T, T[keyof T]>
-                      : BaseSchema<T, Input>
+import type { Schema } from './Schema.all'
 
 export type InputOf<T extends StandardSchemaV1> = StandardSchemaV1.InferInput<T>
+export type { Schema }
 
 export interface SchemaConfig<T> {
   readonly name: string
@@ -67,7 +28,7 @@ export interface SchemaLike<T> {
  *
  * @category Reference
  */
-export interface BaseSchema<T, Input = T>
+export interface BaseSchema<T, Input>
   extends SchemaConfig<T>,
     BaseBuilder<T, Input> {}
 
@@ -143,7 +104,10 @@ export interface BaseBuilder<T, Input = T> extends StandardSchemaV1<Input, T> {
    * assert(numberFromString.name === 'number')
    * ```
    */
-  convertTo<U>(schema: BaseSchema<U>, coerce: (input: T) => U): Schema<U, T>
+  convertTo<U>(
+    schema: BaseSchema<U, any>,
+    coerce: (input: T) => U,
+  ): Schema<U, T>
   /**
    * @category Reference
    * @example provide a name to the generated schema:
@@ -160,7 +124,7 @@ export interface BaseBuilder<T, Input = T> extends StandardSchemaV1<Input, T> {
    */
   convertTo<U>(
     name: string,
-    schema: BaseSchema<U>,
+    schema: BaseSchema<U, any>,
     coerce: (input: T) => U,
   ): Schema<U, T>
   /**

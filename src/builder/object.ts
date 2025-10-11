@@ -4,7 +4,7 @@ import type { BaseSchema, Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
 export type PropsOf<T extends Record<string, any>> = {
-  readonly [Key in keyof T]: Schema<T[Key]>
+  readonly [Key in keyof T]: Schema<T[Key], any>
 }
 
 export function isObject(input: unknown): input is Record<string, unknown> {
@@ -31,8 +31,8 @@ export interface ObjectBuilder<T extends ObjectShape> {
    * ```
    */
   intersect<U extends ObjectShape>(
-    otherSchema: ObjectSchema<U>,
-  ): ObjectSchema<Omit<T, keyof U> & U>
+    otherSchema: ObjectSchema<U, U>,
+  ): ObjectSchema<Omit<T, keyof U> & U, Omit<T, keyof U> & U>
   /**
    * @category Reference
    * @see {@link object}
@@ -46,7 +46,9 @@ export interface ObjectBuilder<T extends ObjectShape> {
    * )
    * ```
    */
-  pick<Prop extends keyof T>(...props: Prop[]): ObjectSchema<Pick<T, Prop>>
+  pick<Prop extends keyof T>(
+    ...props: Prop[]
+  ): ObjectSchema<Pick<T, Prop>, Pick<T, Prop>> // TODO: improve the input, `Pick<T, Prop>` is incorrect
   /**
    * @category Reference
    * @see {@link object}
@@ -60,13 +62,15 @@ export interface ObjectBuilder<T extends ObjectShape> {
    * )
    * ```
    */
-  omit<Prop extends keyof T>(...props: Prop[]): ObjectSchema<Omit<T, Prop>>
+  omit<Prop extends keyof T>(
+    ...props: Prop[]
+  ): ObjectSchema<Omit<T, Prop>, Omit<T, Prop>>
 }
 /**
  * @category Reference
  * @see {@link object}
  */
-export interface ObjectSchema<T extends ObjectShape, Input = T>
+export interface ObjectSchema<T extends ObjectShape, Input>
   extends BaseSchema<T, Input>,
     ObjectBuilder<T> {
   readonly props: PropsOf<T>
@@ -98,7 +102,7 @@ export interface ObjectSchema<T extends ObjectShape, Input = T>
  */
 export function object<T extends ObjectShape>(
   props: PropsOf<T>,
-): ObjectSchema<T>
+): ObjectSchema<T, T>
 /**
  * @category Reference
  * @example
@@ -112,7 +116,7 @@ export function object<T extends ObjectShape>(
 export function object<T extends ObjectShape>(
   name: string,
   props: PropsOf<T>,
-): ObjectSchema<T>
+): ObjectSchema<T, T>
 export function object<T extends ObjectShape>(
   ...args: [name: string, props: T] | [props: T]
 ) {
@@ -134,5 +138,5 @@ export function object<T extends ObjectShape>(
       return success(context, parsed)
     },
   })
-  return Object.assign(schema, { props }) as unknown as ObjectSchema<T>
+  return Object.assign(schema, { props }) as unknown as ObjectSchema<T, T>
 }

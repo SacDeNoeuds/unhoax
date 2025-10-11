@@ -5,10 +5,9 @@ import type { ObjectSchema } from './object'
 import type { BaseSchema, InputOf, Schema, SchemaLike } from './Schema'
 import { Factory } from './SchemaFactory'
 
-function namedUnion<T extends [BaseSchema<any>, ...BaseSchema<any>[]]>(
-  name: string,
-  schemas: T,
-): Schema<TypeOf<T[number]>, InputOf<T[number]>> {
+function namedUnion<
+  T extends [BaseSchema<any, any>, ...BaseSchema<any, any>[]],
+>(name: string, schemas: T): Schema<TypeOf<T[number]>, InputOf<T[number]>> {
   return new Factory({
     name,
     meta: { union: { schemas } },
@@ -43,7 +42,8 @@ export function union<T extends [SchemaLike<any>, ...SchemaLike<any>[]]>(
 > {
   const name = schemas.map((schema) => schema.name).join(' | ')
   return namedUnion(name, schemas as any) as unknown as BaseSchema<
-    TypeOf<T[number]>
+    TypeOf<T[number]>,
+    InputOf<Extract<T[number], StandardSchemaV1<any>>>
   >
 }
 
@@ -70,7 +70,9 @@ export function union<T extends [SchemaLike<any>, ...SchemaLike<any>[]]>(
  * assert(schema.name === 'a | b')
  * ```
  */
-export function variant<T extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
+export function variant<
+  T extends [ObjectSchema<any, any>, ...ObjectSchema<any, any>[]],
+>(
   discriminant: keyof T[number]['props'],
   schemas: T,
 ): BaseSchema<TypeOf<T[number]>, InputOf<T[number]>> {
@@ -81,6 +83,7 @@ export function variant<T extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
     .filter((value, index, self) => self.indexOf(value) === index)
     .join(' | ')
   return namedUnion(name, schemas as any) as unknown as BaseSchema<
-    TypeOf<T[number]>
+    TypeOf<T[number]>,
+    InputOf<T[number]>
   >
 }

@@ -12,9 +12,9 @@ function isIterableObject<T>(input: unknown): input is Iterable<T> {
   )
 }
 
-export const defineIterableSchema = <T, Acc extends Sized>(
+export const defineIterableSchema = <T, Input, Acc extends Sized>(
   name: string,
-  itemSchema: BaseSchema<T>,
+  itemSchema: BaseSchema<T, Input>,
   createAcc: () => Acc,
   addToAcc: (acc: Acc, item: T) => void,
   maxLength: number,

@@ -7,7 +7,7 @@ import type { SizedBuilder } from './SizedSchema'
  * @category Reference
  * @see {@link setOf}
  */
-export interface SetSchema<T, Input = Iterable<T>>
+export interface SetSchema<T, Input>
   extends BaseSchema<Set<T>, Input>,
     SizedBuilder<Set<T>> {
   readonly item: Schema<T>
@@ -40,14 +40,16 @@ export interface SetSchema<T, Input = Iterable<T>>
  * assert(schema.item === x.string)
  * ```
  */
-export function setOf<T>(itemSchema: BaseSchema<T>): SetSchema<T> {
+export function setOf<T, Input>(
+  itemSchema: BaseSchema<T, Input>,
+): SetSchema<T, Iterable<Input>> {
   return defineIterableSchema(
     `Set<${itemSchema.name}>`,
     itemSchema,
     () => new Set<T>(),
     (acc, item) => acc.add(item),
     setOf.defaultMaxSize,
-  ) as unknown as SetSchema<T>
+  ) as unknown as SetSchema<T, Iterable<Input>>
 }
 
 /**

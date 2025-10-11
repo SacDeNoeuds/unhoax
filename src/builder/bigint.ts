@@ -36,4 +36,4 @@ export const bigint = new Factory({
       return failure(context, 'bigint', input)
     }
   },
-}) as unknown as Schema<bigint>
+}) as unknown as Schema<bigint, BigIntInput>

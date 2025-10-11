@@ -1,5 +1,5 @@
 import { defineIterableSchema } from './iterable'
-import type { BaseSchema, Schema } from './Schema'
+import type { BaseSchema } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
 import { tuple, type TupleSchema } from './tuple'
 
@@ -7,10 +7,11 @@ import { tuple, type TupleSchema } from './tuple'
  * @category Reference
  * @see {@link mapOf}
  */
-export interface MapSchema<Key, Value, Input = Iterable<[Key, Value]>>
+export interface MapSchema<Key, Value, Input>
   extends BaseSchema<Map<Key, Value>, Input>,
     SizedBuilder<Map<Key, Value>> {
-  readonly item: TupleSchema<[key: Schema<Key>, value: Schema<Value>]>
+  // readonly item: TupleSchema<[key: Schema<Key, any>, value: Schema<Value, any>]>
+  readonly item: TupleSchema<[key: Key, value: Value], Input>
 }
 
 /**
@@ -40,10 +41,10 @@ export interface MapSchema<Key, Value, Input = Iterable<[Key, Value]>>
  * assert(schema.parse([['Jack', 1]]).success === false)
  * ```
  */
-export function mapOf<Key, Value>(
-  key: BaseSchema<Key>,
-  value: BaseSchema<Value>,
-): MapSchema<Key, Value> {
+export function mapOf<Key, Value, KeyInput, ValueInput>(
+  key: BaseSchema<Key, KeyInput>,
+  value: BaseSchema<Value, ValueInput>,
+): MapSchema<Key, Value, Iterable<[KeyInput, ValueInput]>> {
   const item = tuple(key, value)
   return defineIterableSchema(
     `Map<${key.name}, ${value.name}>`,
@@ -51,7 +52,7 @@ export function mapOf<Key, Value>(
     () => new Map(),
     (acc, item) => acc.set(item[0], item[1]),
     mapOf.defaultMaxSize,
-  ) as unknown as MapSchema<Key, Value>
+  ) as unknown as MapSchema<Key, Value, Iterable<[KeyInput, ValueInput]>>
 }
 
 /**

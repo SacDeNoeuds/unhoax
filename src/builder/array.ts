@@ -7,7 +7,7 @@ import type { SizedBuilder } from './SizedSchema'
  * @category Reference
  * @see {@link array}
  */
-export interface ArraySchema<T, Input = Iterable<T>>
+export interface ArraySchema<T, Input>
   extends BaseSchema<T[], Input>,
     SizedBuilder<T[]> {
   readonly item: Schema<T>
@@ -40,14 +40,16 @@ export interface ArraySchema<T, Input = Iterable<T>>
  * assert(schema.item === x.string)
  * ```
  */
-export function array<T>(itemSchema: BaseSchema<T>): ArraySchema<T> {
+export function array<T, Input>(
+  itemSchema: BaseSchema<T, Input>,
+): ArraySchema<T, Iterable<Input>> {
   return defineIterableSchema(
     `Array<${itemSchema.name}>`,
     itemSchema,
     () => [] as T[],
     (acc, item) => acc.push(item),
     array.defaultMaxSize,
-  ) as ArraySchema<T>
+  ) as ArraySchema<T, Iterable<Input>>
 }
 
 /**
