@@ -48,7 +48,7 @@ export function record<
   ValueInput,
 >(
   key: BaseSchema<Key, KeyInput>,
-  value: BaseSchema<Value, KeyInput>,
+  value: BaseSchema<Value, ValueInput>,
 ): RecordSchema<Key, Value, Record<KeyInput, ValueInput>> {
   const name = `Record<${key.name}, ${value.name}>`
   const schema = new Factory({
