@@ -1,4 +1,4 @@
-import type { IsLiteral, IsTuple, IsUnion } from 'type-fest'
+import type { IsLiteral } from 'type-fest'
 import type { ArraySchema } from './array'
 import type { BigIntSchema } from './bigint'
 import type { DateSchema } from './date'
@@ -10,7 +10,7 @@ import type { BaseSchema } from './Schema'
 import type { SetSchema } from './Set'
 import type { StringSchema } from './string'
 import type { TupleSchema } from './tuple'
-import type { FirstOf, IsPrimitive } from './types'
+import type { FirstOf, IsPrimitive, IsTuple, IsUnion } from './types'
 
 export type Schema<T, Input = T> = FirstOf<
   [
