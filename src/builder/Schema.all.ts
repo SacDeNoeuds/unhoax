@@ -25,6 +25,7 @@ export type Schema<T, Input = T> = FirstOf<
     NumberSchemaOrNever<T, Input>,
     BigIntSchemaOrNever<T, Input>,
     DateSchemaOrNever<T, Input>,
+    BrandedSchemaOrNever<T, Input>,
     ObjectOrRecordSchemaOrNever<T, Input>,
     BaseSchema<T, Input>,
   ]
@@ -68,9 +69,43 @@ type BigIntSchemaOrNever<T, Input> =
 type DateSchemaOrNever<T, Input> =
   IsPrimitive<Date, T> extends true ? DateSchema<Input> : never
 
+type Primitive = string | number | Date | boolean | symbol
+type BrandedSchemaOrNever<T, Input> = T extends Primitive & Record<string, any>
+  ? BaseSchema<T, Input>
+  : never
+
 type ObjectOrRecordSchemaOrNever<T, Input> =
   T extends Record<string, any>
     ? [IsLiteral<keyof T>] extends [true]
       ? ObjectSchema<T, Input>
       : RecordSchema<keyof T, T[keyof T], Input>
     : never
+
+// Tests
+// type TestUnknown = Schema<unknown, unknown>
+// type TestUnionOfLiterals = Schema<'a' | 'b', unknown>
+// type TestUnionOfObjects = Schema<
+//   { type: 'a'; a: string } | { type: 'b'; b: number },
+//   unknown
+// >
+// type TestTuple = Schema<[string, number], unknown>
+// type TestArray = Schema<number[], unknown>
+// type TestSet = Schema<Set<number>, unknown>
+// type TestMap = Schema<Map<string, number>, unknown>
+// class Toto {}
+// type TestClass = Schema<typeof Toto, unknown>
+// type TestString = Schema<string, string>
+// type TestNumber = Schema<number, number>
+// type TestBigInt = Schema<bigint, bigint>
+// type TestDate = Schema<Date, Date>
+// type TestRecord = Schema<Record<string, number>, never>
+// type TestObject1 = Schema<{ a: number }, never>
+// type TestObject2 = Schema<{ a: number; b: string }, never>
+
+// type Year = number & { type: 'Year' }
+// type Email = string & { type: 'Email' }
+
+// type TestRecordWithBrandedNumberKey = Schema<Record<Year, number>, never>
+// type TestRecordWithBrandedStringKey = Schema<Record<Email, number>, never>
+// type TestBrandedNumber = Schema<Year, string>
+// type TestBrandedString = Schema<Email, string>

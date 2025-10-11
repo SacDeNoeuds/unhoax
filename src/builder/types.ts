@@ -32,11 +32,9 @@ export type FirstOf<Values extends any[], Acc = never> = [Acc] extends [never]
 // ]>
 
 export type IsPrimitive<Primitive, T> = [T] extends [NonNullable<T>]
-  ? [T & Primitive] extends [Primitive & NonNullable<T>]
-    ? [Extract<T, Primitive>] extends [never]
-      ? false
-      : true
-    : false
+  ? [Extract<Primitive, T>] extends [never]
+    ? false
+    : true
   : false
 
 // type Email = string & { tag: 'Email' }
