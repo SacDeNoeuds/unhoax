@@ -1,5 +1,5 @@
 import type { JSONSchema7 } from 'json-schema'
-import type { SchemaConfig } from './Schema'
+import type { SchemaLike } from './SchemaFactory'
 import type { SetSchema } from './Set'
 import type { ArraySchema } from './array'
 import type { Literal } from './literal'
@@ -14,7 +14,7 @@ const numberSchemaNames = new Set([
   'unsafeNumber',
   'unsafeInteger',
 ])
-export function toJsonSchema(schema: SchemaConfig<any>): JSONSchema7 {
+export function toJsonSchema(schema: SchemaLike<any, any>): JSONSchema7 {
   const meta = schema.meta ?? {}
   if (schema.name.startsWith('Array<'))
     return toJsonSchemaArray(schema as ArraySchema<any, any>)
@@ -52,17 +52,18 @@ function toJsonSchemaString(schema: StringSchema): JSONSchema7 {
   }
 }
 
-function toJsonSchemaUnion(schema: SchemaConfig<any>): JSONSchema7 {
-  const schemas = Object.values(
-    schema.meta!.union.schemas!,
-  ) as SchemaConfig<any>[]
+function toJsonSchemaUnion(schema: SchemaLike<any, any>): JSONSchema7 {
+  const schemas = Object.values(schema.meta!.union.schemas!) as SchemaLike<
+    any,
+    any
+  >[]
   const anyOf = schemas
     .map(toJsonSchema)
     .filter((s) => !s.enum || s.enum.length !== 0)
   return anyOf.length === 1 ? anyOf[0] : { anyOf }
 }
 
-function toJsonSchemaLiterals(schema: SchemaConfig<any>): JSONSchema7 {
+function toJsonSchemaLiterals(schema: SchemaLike<any, any>): JSONSchema7 {
   const literals = schema.meta!.literal.literals as Literal[]
   return {
     enum: literals.filter((literal) => literal !== undefined), // `undefined` is not supported
@@ -78,7 +79,7 @@ function toJsonSchemaArray(schema: ArraySchema<any, any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaNumber(schema: SchemaConfig<any>): JSONSchema7 {
+function toJsonSchemaNumber(schema: SchemaLike<any, any>): JSONSchema7 {
   return {
     type: schema.name.toLowerCase().replace('unsafe', '') as
       | 'number'
@@ -90,7 +91,7 @@ function toJsonSchemaNumber(schema: SchemaConfig<any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaDate(schema: SchemaConfig<any>): JSONSchema7 {
+function toJsonSchemaDate(schema: SchemaLike<any, any>): JSONSchema7 {
   return {
     type: 'string',
     format: 'date-time',
@@ -135,7 +136,7 @@ function toJsonSchemaObject(schema: ObjectSchema<any, any>): JSONSchema7 {
 }
 
 function toJsonSchemaTuple(schema: TupleSchema<any, any>): JSONSchema7 {
-  const items = schema.items as unknown as SchemaConfig<any>[]
+  const items = schema.items as unknown as SchemaLike<any, any>[]
   return {
     type: 'array',
     items: items.map(toJsonSchema),

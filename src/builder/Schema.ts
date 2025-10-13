@@ -1,27 +1,12 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { ParseContext } from '../common/ParseContext'
 import type { ParseResult } from '../common/ParseResult'
-import type { Refinement, SchemaMeta } from '../common/Schema'
+import type { Refinement } from '../common/Schema'
 import type { Schema } from './Schema.all'
+import type { SchemaLike } from './SchemaFactory'
 
 export type InputOf<T extends StandardSchemaV1> = StandardSchemaV1.InferInput<T>
 export type { Schema }
-
-export interface SchemaConfig<T> {
-  readonly name: string
-  readonly parser: (
-    input: unknown,
-    context: ParseContext,
-    self: any,
-  ) => ParseResult<T>
-  readonly meta?: SchemaMeta
-  readonly refinements?: Record<string, Refinement<T>>
-}
-
-export interface SchemaLike<T> {
-  readonly name: string
-  parse(input: unknown, context?: ParseContext): ParseResult<T>
-}
 
 /**
  * This interface contains all the global utilities of any schema.
@@ -29,7 +14,7 @@ export interface SchemaLike<T> {
  * @category Reference
  */
 export interface BaseSchema<T, Input>
-  extends SchemaConfig<T>,
+  extends SchemaLike<T, Input>,
     BaseBuilder<T, Input> {}
 
 /**

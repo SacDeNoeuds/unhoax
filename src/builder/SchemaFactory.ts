@@ -1,13 +1,33 @@
-import { createParseContext } from '../common/ParseContext'
-import { failure, ok, success } from '../common/ParseResult'
-import type { Refinement } from '../common/Schema'
+import type { StandardSchemaV1 } from '@standard-schema/spec'
+import { createParseContext, type ParseContext } from '../common/ParseContext'
+import { failure, ok, success, type ParseResult } from '../common/ParseResult'
+import type { Refinement, SchemaMeta } from '../common/Schema'
 import { literal } from './literal'
 import type { NumericBuilder } from './NumericSchema'
 import type { ObjectBuilder, ObjectSchema } from './object'
-import type { BaseBuilder, BaseSchema, Schema, SchemaConfig } from './Schema'
+import type { BaseBuilder, BaseSchema, Schema } from './Schema'
 import type { SizedBuilder } from './SizedSchema'
 import type { StringBuilder } from './string'
 import { union } from './union'
+
+export interface SchemaLike<T, Input> extends StandardSchemaV1<Input, T> {
+  readonly name: string
+  readonly meta: SchemaMeta
+  readonly refinements: Record<string, Refinement<T>>
+
+  parse(input: unknown, context?: ParseContext): ParseResult<T>
+}
+
+interface SchemaConfig<T> {
+  readonly name: string
+  readonly parser: (
+    input: unknown,
+    context: ParseContext,
+    self: any,
+  ) => ParseResult<T>
+  readonly meta?: SchemaMeta
+  readonly refinements?: Record<string, Refinement<T>>
+}
 
 interface Interface
   extends BaseBuilder<any>,
@@ -30,7 +50,7 @@ const propsIfDefined = (
 }
 export class Factory implements Interface {
   readonly name!: SchemaConfig<any>['name']
-  readonly parser!: SchemaConfig<any>['parser']
+  private readonly parser!: SchemaConfig<any>['parser']
   readonly meta: NonNullable<SchemaConfig<any>['meta']> = {}
   readonly refinements: NonNullable<SchemaConfig<any>['refinements']> = {}
   readonly defaultMaxSize?: number

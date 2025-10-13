@@ -2,11 +2,11 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { failure } from '../common/ParseResult'
 import type { TypeOf } from '../common/Schema'
 import type { ObjectSchema } from './object'
-import type { BaseSchema, InputOf, Schema, SchemaLike } from './Schema'
-import { Factory } from './SchemaFactory'
+import type { BaseSchema, InputOf, Schema } from './Schema'
+import { Factory, type SchemaLike } from './SchemaFactory'
 
 function namedUnion<
-  T extends [BaseSchema<any, any>, ...BaseSchema<any, any>[]],
+  T extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
 >(name: string, schemas: T): Schema<TypeOf<T[number]>, InputOf<T[number]>> {
   return new Factory({
     name,
@@ -34,7 +34,9 @@ function namedUnion<
  * assert(schema.parse({}).success === false)
  * ```
  */
-export function union<T extends [SchemaLike<any>, ...SchemaLike<any>[]]>(
+export function union<
+  T extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
+>(
   ...schemas: T
 ): BaseSchema<
   TypeOf<T[number]>,
