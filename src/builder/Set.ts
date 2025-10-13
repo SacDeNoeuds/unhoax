@@ -1,17 +1,22 @@
 /** @module */
 import { defineIterableSchema } from './iterable'
-import type { BaseSchema, Schema } from './Schema'
-import type { SizedBuilder } from './SizedSchema'
+import type { InputOf, Schema, TypeOf } from './Schema'
+import type { SchemaLike } from './SchemaFactory'
+import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 
 /**
  * @category Reference
  * @see {@link setOf}
  */
-export interface SetSchema<T, Input>
-  extends BaseSchema<Set<T>, Input>,
-    SizedBuilder<Set<T>> {
-  readonly item: Schema<T>
-}
+export interface SetSchema<S extends SchemaLike<any, any>>
+  extends Schema<{
+      output: Set<TypeOf<S>>
+      input: Iterable<InputOf<S>>
+      props: {
+        item: S
+      }
+    }>,
+    SizedSchemaRefiners {}
 
 /**
  * Parses any iterable to an array.
@@ -40,16 +45,16 @@ export interface SetSchema<T, Input>
  * assert(schema.item === x.string)
  * ```
  */
-export function setOf<T, Input>(
-  itemSchema: BaseSchema<T, Input>,
-): SetSchema<T, Iterable<Input>> {
+export function setOf<S extends SchemaLike<any, any>>(
+  itemSchema: S,
+): SetSchema<S> {
   return defineIterableSchema(
     `Set<${itemSchema.name}>`,
     itemSchema,
-    () => new Set<T>(),
+    () => new Set<TypeOf<S>>(),
     (acc, item) => acc.add(item),
     setOf.defaultMaxSize,
-  ) as unknown as SetSchema<T, Iterable<Input>>
+  ) as SetSchema<S>
 }
 
 /**

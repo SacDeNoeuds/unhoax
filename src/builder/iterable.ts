@@ -1,9 +1,8 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
 import type { Sized } from '../common/Sized'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
-import type { SizedBuilder } from './SizedSchema'
+import { Factory, type SchemaLike } from './SchemaFactory'
+import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 
 function isIterableObject<T>(input: unknown): input is Iterable<T> {
   return (
@@ -14,15 +13,15 @@ function isIterableObject<T>(input: unknown): input is Iterable<T> {
 
 export const defineIterableSchema = <T, Input, Acc extends Sized>(
   name: string,
-  itemSchema: BaseSchema<T, Input>,
+  itemSchema: SchemaLike<T, Input>,
   createAcc: () => Acc,
   addToAcc: (acc: Acc, item: T) => void,
   maxLength: number,
 ) => {
   const schema = new Factory({
     name,
-    // @ts-expect-error it is effectively taken into account.
     item: itemSchema,
+    defaultMaxSize: maxLength,
     parser: (input, context) => {
       if (!isIterableObject(input)) return failure(context, name, input)
       const acc = createAcc()
@@ -36,8 +35,6 @@ export const defineIterableSchema = <T, Input, Acc extends Sized>(
       }
       return success(context, acc)
     },
-  }) as unknown as Schema<Acc> & SizedBuilder<Acc>
-  // @ts-ignore
-  schema.defaultMaxSize = maxLength
+  }) as SchemaLike<Acc, Iterable<Input>> & SizedSchemaRefiners
   return schema.size({ max: maxLength })
 }

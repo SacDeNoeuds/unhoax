@@ -3,13 +3,18 @@ import { createParseContext, type ParseContext } from '../common/ParseContext'
 import { failure, ok, success, type ParseResult } from '../common/ParseResult'
 import type { Refinement, SchemaMeta } from '../common/Schema'
 import { literal } from './literal'
-import type { NumericBuilder } from './NumericSchema'
-import type { ObjectBuilder, ObjectSchema } from './object'
-import type { BaseBuilder, BaseSchema, Schema } from './Schema'
-import type { SizedBuilder } from './SizedSchema'
-import type { StringBuilder } from './string'
+import type { NumericSchemaRefiners } from './NumericSchemaRefiners'
+import type { Schema, SchemaAdditionalProps } from './Schema'
+import type { SchemaRefiners } from './SchemaRefiners'
+import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
+import type { StringSchemaRefiners } from './string'
 import { union } from './union'
 
+/**
+ * The most svelte shape of a Schema
+ *
+ * @category Reference
+ */
 export interface SchemaLike<T, Input> extends StandardSchemaV1<Input, T> {
   readonly name: string
   readonly meta: SchemaMeta
@@ -18,7 +23,7 @@ export interface SchemaLike<T, Input> extends StandardSchemaV1<Input, T> {
   parse(input: unknown, context?: ParseContext): ParseResult<T>
 }
 
-interface SchemaConfig<T> {
+interface SchemaConfig<T> extends SchemaAdditionalProps {
   readonly name: string
   readonly parser: (
     input: unknown,
@@ -30,11 +35,11 @@ interface SchemaConfig<T> {
 }
 
 interface Interface
-  extends BaseBuilder<any>,
-    NumericBuilder<any>,
-    SizedBuilder<any>,
-    StringBuilder,
-    ObjectBuilder<any> {}
+  extends SchemaLike<any, any>,
+    SchemaRefiners<any, any>,
+    NumericSchemaRefiners<any>,
+    SizedSchemaRefiners,
+    StringSchemaRefiners {}
 
 const propsIfDefined = (
   a: Record<string, any>,
@@ -53,12 +58,21 @@ export class Factory implements Interface {
   private readonly parser!: SchemaConfig<any>['parser']
   readonly meta: NonNullable<SchemaConfig<any>['meta']> = {}
   readonly refinements: NonNullable<SchemaConfig<any>['refinements']> = {}
-  readonly defaultMaxSize?: number
-  readonly guardAs!: Schema<any>['guardAs']
+  readonly guardAs!: SchemaRefiners<any, any>['guardAs']
+
+  // additional props captured from inputs.
+  readonly item?: any // for iterable schemas
+  readonly items?: any // for tuple schemas
+  readonly props?: any // for object schemas
+  readonly key?: any // for record schemas
+  readonly value?: any // for record schemas
+  readonly schemas?: any // for unions
+  readonly literals?: any // for literals
+  readonly defaultMaxSize?: number // for sized schemas
 
   constructor(config: SchemaConfig<any>) {
     Object.assign(this, config)
-    this.guardAs = this.refine.bind(this)
+    this.guardAs = this.refine.bind(this) as any
   }
 
   get ['~standard']() {
@@ -132,8 +146,8 @@ export class Factory implements Interface {
 
   convertTo<U>(
     ...args:
-      | [name: string, schema: BaseSchema<U, any>, (value: any) => any]
-      | [schema: BaseSchema<U, any>, (value: any) => any]
+      | [name: string, schema: SchemaLike<U, any>, (value: any) => any]
+      | [schema: SchemaLike<U, any>, (value: any) => any]
   ): any {
     const [name, schema, coerce] =
       args.length === 3 ? args : [args[0].name, args[0], args[1]]
@@ -151,21 +165,21 @@ export class Factory implements Interface {
   }
   recover(getFallback: () => any): any {
     return union(
-      this as BaseSchema<any, any>,
+      this as SchemaLike<any, any>,
       unknown.map('recovered', getFallback as any),
     )
   }
   optional(defaultValue = undefined): any {
     return union(
       literal(undefined).map(() => defaultValue),
-      this as BaseSchema<any, any>,
+      this as SchemaLike<any, any>,
     )
   }
   // @ts-ignore
   nullable(defaultValue = null): any {
     return union(
       literal(null).map(() => defaultValue),
-      this as BaseSchema<any, any>,
+      this as SchemaLike<any, any>,
     )
   }
 
@@ -238,35 +252,39 @@ export class Factory implements Interface {
   }
 
   // ObjectBuilder
-  intersect(otherSchema: ObjectSchema<any, any>): any {
-    return this.#evolve({
-      // @ts-ignore the prop exists, no worries. This is backed by tests
-      props: { ...(this as any).props, ...otherSchema.props },
-    })
-  }
+  // intersect(otherSchema: ObjectSchema<any, any>): any {
+  //   return this.#evolve({
+  //     // @ts-ignore the prop exists, no worries. This is backed by tests
+  //     props: { ...(this as any).props, ...otherSchema.props },
+  //   })
+  // }
 
-  omit(...props: any[]): any {
-    const object = (this as any).props
-    return this.#evolve({
-      // @ts-ignore the prop exists, no worries. This is backed by tests
-      props: Object.fromEntries(
-        Object.entries(object).filter(([key]) => !props.includes(key)),
-      ),
-    })
-  }
+  // omit(...props: any[]): any {
+  //   const object = (this as any).props
+  //   return this.#evolve({
+  //     // @ts-ignore the prop exists, no worries. This is backed by tests
+  //     props: Object.fromEntries(
+  //       Object.entries(object).filter(([key]) => !props.includes(key)),
+  //     ),
+  //   })
+  // }
 
-  pick(...props: any[]): any {
-    const object = (this as any).props
-    return this.#evolve({
-      // @ts-ignore the prop exists, no worries. This is backed by tests
-      props: Object.fromEntries(
-        Object.entries(object).filter(([key]) => props.includes(key)),
-      ),
-    })
-  }
+  // pick(...props: any[]): any {
+  //   const object = (this as any).props
+  //   return this.#evolve({
+  //     // @ts-ignore the prop exists, no worries. This is backed by tests
+  //     props: Object.fromEntries(
+  //       Object.entries(object).filter(([key]) => props.includes(key)),
+  //     ),
+  //   })
+  // }
 }
 
+export interface UnknownSchema
+  extends Schema<{ input: unknown; output: unknown }> {}
+
+// NOTE: `unknown` schema is defined here to avoid circular references
 export const unknown = new Factory({
   name: 'unknown',
   parser: ok,
-}) as Schema<unknown>
+}) as UnknownSchema

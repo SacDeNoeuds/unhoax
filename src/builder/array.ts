@@ -1,17 +1,20 @@
 /** @module */
 import { defineIterableSchema } from './iterable'
-import type { BaseSchema, Schema } from './Schema'
-import type { SizedBuilder } from './SizedSchema'
+import type { InputOf, Schema, TypeOf } from './Schema'
+import type { SchemaLike } from './SchemaFactory'
+import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 
 /**
  * @category Reference
  * @see {@link array}
  */
-export interface ArraySchema<T, Input>
-  extends BaseSchema<T[], Input>,
-    SizedBuilder<T[]> {
-  readonly item: Schema<T>
-}
+export interface ArraySchema<S extends SchemaLike<any, any>>
+  extends Schema<{
+      output: TypeOf<S>[]
+      input: Iterable<InputOf<S>>
+      props: { item: S }
+    }>,
+    SizedSchemaRefiners {}
 
 /**
  * Parses any iterable to an array.
@@ -40,16 +43,17 @@ export interface ArraySchema<T, Input>
  * assert(schema.item === x.string)
  * ```
  */
-export function array<T, Input>(
-  itemSchema: BaseSchema<T, Input>,
-): ArraySchema<T, Iterable<Input>> {
-  return defineIterableSchema(
+export function array<S extends SchemaLike<any, any>>(
+  itemSchema: S,
+): ArraySchema<S> {
+  const s = defineIterableSchema(
     `Array<${itemSchema.name}>`,
     itemSchema,
-    () => [] as T[],
+    () => [] as TypeOf<S>[],
     (acc, item) => acc.push(item),
     array.defaultMaxSize,
-  ) as ArraySchema<T, Iterable<Input>>
+  )
+  return s as ArraySchema<S>
 }
 
 /**

@@ -1,4 +1,3 @@
-export type { TypeOf } from '../common/Schema'
 export { array, type ArraySchema } from './array'
 export { bigint, type BigIntSchema } from './bigint'
 export { boolean } from './boolean'
@@ -16,13 +15,13 @@ export {
   unsafeNumber,
   type NumberSchema,
 } from './number'
-export type { NumericBuilder } from './NumericSchema'
-export { object, type ObjectBuilder, type ObjectSchema } from './object'
+export type { NumericSchemaRefiners as NumericBuilder } from './NumericSchemaRefiners'
+export { object, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
-export type { BaseSchema, InputOf, Schema } from './Schema'
+export type { InputOf, Schema, TypeOf } from './Schema'
 export { unknown } from './SchemaFactory'
 export { setOf, type SetSchema } from './Set'
-export type { SizedBuilder } from './SizedSchema'
+export type { SizedSchemaRefiners as SizedBuilder } from './SizedSchemaRefiners'
 export { string, untrimmedString, type StringSchema } from './string'
 export { tuple, type TupleSchema } from './tuple'
 export { union, variant } from './union'

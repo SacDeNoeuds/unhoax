@@ -1,10 +1,10 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import type { Schema } from './Schema'
+import { Factory, type SchemaLike } from './SchemaFactory'
 
 export type PropsOf<T extends Record<string, any>> = {
-  readonly [Key in keyof T]: Schema<T[Key], any>
+  readonly [Key in keyof T]: SchemaLike<T[Key], any>
 }
 
 export function isObject(input: unknown): input is Record<string, unknown> {
@@ -17,64 +17,61 @@ type ObjectShape = Record<PropertyKey, any>
 /**
  * Object-specific utilities
  */
-export interface ObjectBuilder<T extends ObjectShape> {
-  /**
-   * @category Reference
-   * @see {@link object}
-   * @example
-   * ```ts
-   * const a = x.object({ name: x.string })
-   * const b = x.object({ name: x.number, age: x.number })
-   * const c = a.intersect(b)
-   *
-   * assert(c.parse({ name: 12, age: 18 }).success === true)
-   * ```
-   */
-  intersect<U extends ObjectShape>(
-    otherSchema: ObjectSchema<U, U>,
-  ): ObjectSchema<Omit<T, keyof U> & U, Omit<T, keyof U> & U>
-  /**
-   * @category Reference
-   * @see {@link object}
-   * @example
-   * ```ts
-   * const schema = x.object({ name: x.string, age: x.number }).pick('name')
-   *
-   * assert.deepEqual(
-   *   schema.parse({ name: 'Jack', age: 18 }),
-   *   { success: true, value: { name: 'Jack' } },
-   * )
-   * ```
-   */
-  pick<Prop extends keyof T>(
-    ...props: Prop[]
-  ): ObjectSchema<Pick<T, Prop>, Pick<T, Prop>> // TODO: improve the input, `Pick<T, Prop>` is incorrect
-  /**
-   * @category Reference
-   * @see {@link object}
-   * @example
-   * ```ts
-   * const schema = x.object({ name: x.string, age: x.number }).omit('age')
-   *
-   * assert.deepEqual(
-   *   schema.parse({ name: 'Jack', age: 18 }),
-   *   { success: true, value: { name: 'Jack' } },
-   * )
-   * ```
-   */
-  omit<Prop extends keyof T>(
-    ...props: Prop[]
-  ): ObjectSchema<Omit<T, Prop>, Omit<T, Prop>>
-}
+// export interface ObjectBuilder<T extends ObjectShape> {
+//   /**
+//    * @category Reference
+//    * @see {@link object}
+//    * @example
+//    * ```ts
+//    * const a = x.object({ name: x.string })
+//    * const b = x.object({ name: x.number, age: x.number })
+//    * const c = a.intersect(b)
+//    *
+//    * assert(c.parse({ name: 12, age: 18 }).success === true)
+//    * ```
+//    */
+//   intersect<U extends ObjectShape>(
+//     otherSchema: ObjectSchema<U, U>,
+//   ): ObjectSchema<Omit<T, keyof U> & U, Omit<T, keyof U> & U>
+//   /**
+//    * @category Reference
+//    * @see {@link object}
+//    * @example
+//    * ```ts
+//    * const schema = x.object({ name: x.string, age: x.number }).pick('name')
+//    *
+//    * assert.deepEqual(
+//    *   schema.parse({ name: 'Jack', age: 18 }),
+//    *   { success: true, value: { name: 'Jack' } },
+//    * )
+//    * ```
+//    */
+//   pick<Prop extends keyof T>(
+//     ...props: Prop[]
+//   ): ObjectSchema<Pick<T, Prop>, Pick<T, Prop>> // TODO: improve the input, `Pick<T, Prop>` is incorrect
+//   /**
+//    * @category Reference
+//    * @see {@link object}
+//    * @example
+//    * ```ts
+//    * const schema = x.object({ name: x.string, age: x.number }).omit('age')
+//    *
+//    * assert.deepEqual(
+//    *   schema.parse({ name: 'Jack', age: 18 }),
+//    *   { success: true, value: { name: 'Jack' } },
+//    * )
+//    * ```
+//    */
+//   omit<Prop extends keyof T>(
+//     ...props: Prop[]
+//   ): ObjectSchema<Omit<T, Prop>, Omit<T, Prop>>
+// }
 /**
  * @category Reference
  * @see {@link object}
  */
-export interface ObjectSchema<T extends ObjectShape, Input>
-  extends BaseSchema<T, Input>,
-    ObjectBuilder<T> {
-  readonly props: PropsOf<T>
-}
+export interface ObjectSchema<T extends ObjectShape>
+  extends Schema<{ input: T; output: T; props: { props: PropsOf<T> } }> {}
 
 /**
  * @category Reference
@@ -102,7 +99,7 @@ export interface ObjectSchema<T extends ObjectShape, Input>
  */
 export function object<T extends ObjectShape>(
   props: PropsOf<T>,
-): ObjectSchema<T, T>
+): ObjectSchema<T>
 /**
  * @category Reference
  * @example
@@ -116,13 +113,14 @@ export function object<T extends ObjectShape>(
 export function object<T extends ObjectShape>(
   name: string,
   props: PropsOf<T>,
-): ObjectSchema<T, T>
+): ObjectSchema<T>
 export function object<T extends ObjectShape>(
   ...args: [name: string, props: T] | [props: T]
 ) {
   const [name, props] = args.length === 1 ? ['object', args[0]] : args
-  const schema = new Factory({
+  return new Factory({
     name,
+    props,
     parser: (input, context, self: any) => {
       if (!isObject(input)) return failure(context, name, input)
 
@@ -137,6 +135,5 @@ export function object<T extends ObjectShape>(
       }
       return success(context, parsed)
     },
-  })
-  return Object.assign(schema, { props }) as unknown as ObjectSchema<T, T>
+  }) as unknown as ObjectSchema<T>
 }

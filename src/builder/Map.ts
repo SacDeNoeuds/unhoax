@@ -1,18 +1,24 @@
 import { defineIterableSchema } from './iterable'
-import type { BaseSchema } from './Schema'
-import type { SizedBuilder } from './SizedSchema'
+import type { InputOf, Schema, TypeOf } from './Schema'
+import type { SchemaLike } from './SchemaFactory'
+import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 import { tuple, type TupleSchema } from './tuple'
 
 /**
  * @category Reference
  * @see {@link mapOf}
  */
-export interface MapSchema<Key, Value, Input>
-  extends BaseSchema<Map<Key, Value>, Input>,
-    SizedBuilder<Map<Key, Value>> {
-  // readonly item: TupleSchema<[key: Schema<Key, any>, value: Schema<Value, any>]>
-  readonly item: TupleSchema<[key: Key, value: Value], Input>
-}
+export interface MapSchema<
+  KeySchema extends SchemaLike<any, any>,
+  ValueSchema extends SchemaLike<any, any>,
+> extends Schema<{
+      input: Iterable<[key: InputOf<KeySchema>, value: InputOf<ValueSchema>]>
+      output: Map<TypeOf<KeySchema>, TypeOf<ValueSchema>>
+      props: {
+        item: TupleSchema<[KeySchema, ValueSchema]>
+      }
+    }>,
+    SizedSchemaRefiners {}
 
 /**
  * @category Reference
@@ -41,10 +47,10 @@ export interface MapSchema<Key, Value, Input>
  * assert(schema.parse([['Jack', 1]]).success === false)
  * ```
  */
-export function mapOf<Key, Value, KeyInput, ValueInput>(
-  key: BaseSchema<Key, KeyInput>,
-  value: BaseSchema<Value, ValueInput>,
-): MapSchema<Key, Value, Iterable<[KeyInput, ValueInput]>> {
+export function mapOf<
+  KeySchema extends SchemaLike<any, any>,
+  ValueSchema extends SchemaLike<any, any>,
+>(key: KeySchema, value: ValueSchema): MapSchema<KeySchema, ValueSchema> {
   const item = tuple(key, value)
   return defineIterableSchema(
     `Map<${key.name}, ${value.name}>`,
@@ -52,7 +58,7 @@ export function mapOf<Key, Value, KeyInput, ValueInput>(
     () => new Map(),
     (acc, item) => acc.set(item[0], item[1]),
     mapOf.defaultMaxSize,
-  ) as unknown as MapSchema<Key, Value, Iterable<[KeyInput, ValueInput]>>
+  ) as MapSchema<KeySchema, ValueSchema>
 }
 
 /**

@@ -1,18 +1,24 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
-import type { BaseSchema, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import type { InputOf, Schema, TypeOf } from './Schema'
+import { Factory, type SchemaLike } from './SchemaFactory'
 import { isObject } from './object'
 
 /**
  * @category Reference
  * @see {@link record}
  */
-export interface RecordSchema<Key extends PropertyKey, Value, Input>
-  extends BaseSchema<Record<Key, Value>, Input> {
-  readonly key: Schema<Key>
-  readonly value: Schema<Value>
-}
+export interface RecordSchema<
+  KeySchema extends SchemaLike<any, PropertyKey>,
+  ValueSchema extends SchemaLike<any, any>,
+> extends Schema<{
+    input: Record<InputOf<KeySchema>, InputOf<ValueSchema>>
+    output: Record<TypeOf<KeySchema>, TypeOf<ValueSchema>>
+    props: {
+      key: KeySchema
+      value: ValueSchema
+    }
+  }> {}
 
 /**
  * @category Reference
@@ -42,20 +48,17 @@ export interface RecordSchema<Key extends PropertyKey, Value, Input>
  * ```
  */
 export function record<
-  Key extends PropertyKey,
-  Value,
-  KeyInput extends PropertyKey,
-  ValueInput,
->(
-  key: BaseSchema<Key, KeyInput>,
-  value: BaseSchema<Value, ValueInput>,
-): RecordSchema<Key, Value, Record<KeyInput, ValueInput>> {
+  KeySchema extends SchemaLike<any, PropertyKey>,
+  ValueSchema extends SchemaLike<any, any>,
+>(key: KeySchema, value: ValueSchema): RecordSchema<KeySchema, ValueSchema> {
   const name = `Record<${key.name}, ${value.name}>`
-  const schema = new Factory({
+  return new Factory({
     name,
+    key,
+    value,
     parser: (input, context) => {
       if (!isObject(input)) return failure(context, name, input)
-      const acc = {} as Record<Key, Value>
+      const acc = {} as Record<TypeOf<KeySchema>, TypeOf<ValueSchema>>
       Object.entries(input).forEach(([k, v]) => {
         const ctx = withPathSegment(context, k as PropertyKey)
         const keyResult = key.parse(k, ctx)
@@ -68,10 +71,5 @@ export function record<
       })
       return success(context, acc)
     },
-  })
-  return Object.assign(schema, { key, value }) as unknown as RecordSchema<
-    Key,
-    Value,
-    Record<KeyInput, ValueInput>
-  >
+  }) as RecordSchema<KeySchema, ValueSchema>
 }

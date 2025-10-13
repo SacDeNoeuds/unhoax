@@ -1,18 +1,22 @@
-import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
 import type { TypeOf } from './main-barrel'
-import type { BaseSchema, InputOf, Schema } from './Schema'
-import { Factory } from './SchemaFactory'
+import type { InputOf, Schema } from './Schema'
+import { Factory, type SchemaLike } from './SchemaFactory'
 
 /**
  * @category Reference
  * @see {@link tuple}
  */
-export interface TupleSchema<T, Input> extends BaseSchema<T, Input> {
-  // TODO: Schema is missing an `Input`, but it requires changing the TupleSchema signature.
-  readonly items: { [Key in keyof T]: Schema<T[Key]> }
-}
+export interface TupleSchema<
+  S extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
+> extends Schema<{
+    input: { [K in keyof S]: InputOf<S[K]> }
+    output: { [K in keyof S]: TypeOf<S[K]> }
+    props: {
+      items: S
+    }
+  }> {}
 
 /**
  * @category Reference
@@ -49,24 +53,17 @@ export interface TupleSchema<T, Input> extends BaseSchema<T, Input> {
  * ```
  */
 export function tuple<
-  T extends [StandardSchemaV1<any, any>, ...StandardSchemaV1<any, any>[]],
->(
-  ...items: T
-): TupleSchema<
-  { [K in keyof T]: TypeOf<T[K]> },
-  { [K in keyof T]: InputOf<T[K]> }
-> {
-  const tupleOfSchema = items as {
-    [K in keyof T]: T[K] & BaseSchema<T[K], InputOf<T[K]>>
-  }
-  const name = `[${tupleOfSchema.map((schema) => schema.name).join(', ')}]`
-  const schema = new Factory({
+  S extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
+>(...items: S): TupleSchema<S> {
+  const name = `[${items.map((schema) => schema.name).join(', ')}]`
+  return new Factory({
     name,
+    items,
     parser: (input, context) => {
       if (!Array.isArray(input)) return failure(context, name, input)
       if (input.length < items.length) return failure(context, name, input)
 
-      const tuple = tupleOfSchema.flatMap((itemSchema, index) => {
+      const tuple = items.flatMap((itemSchema, index) => {
         const value = input[index]!
         const ctx = withPathSegment(context, index)
         const result = itemSchema.parse(value, ctx)
@@ -74,11 +71,7 @@ export function tuple<
         // and the error will be taken from context at `success()` step.
         return result.success ? [result.value] : []
       })
-      return success(context, tuple as T)
+      return success(context, tuple as S)
     },
-  })
-  return Object.assign(schema, { items }) as unknown as TupleSchema<
-    { [K in keyof T]: TypeOf<T[K]> },
-    { [K in keyof T]: InputOf<T[K]> }
-  >
+  }) as TupleSchema<S>
 }

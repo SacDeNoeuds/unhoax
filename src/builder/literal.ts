@@ -1,10 +1,18 @@
 import { fromGuard } from './from-guard'
+import type { Schema } from './Schema'
 
 export type Literal = string | number | boolean | null | undefined
 const isLiteral =
   <L extends [Literal, ...Literal[]]>(...literals: L) =>
   (value: unknown): value is L[number] =>
     literals.some((literal) => value === literal)
+
+export interface LiteralSchema<L extends Literal[]>
+  extends Schema<{
+    input: L[number]
+    output: L[number]
+    props: { literals: L }
+  }> {}
 
 /**
  * @category Reference
@@ -25,6 +33,6 @@ const isLiteral =
  */
 export function literal<L extends [Literal, ...Literal[]]>(...literals: L) {
   return Object.assign(fromGuard('literal', isLiteral(...literals)), {
-    meta: { literal: { literals } },
-  })
+    literals,
+  }) as LiteralSchema<L>
 }

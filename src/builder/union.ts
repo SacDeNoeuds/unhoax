@@ -1,16 +1,23 @@
-import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { failure } from '../common/ParseResult'
 import type { TypeOf } from '../common/Schema'
 import type { ObjectSchema } from './object'
-import type { BaseSchema, InputOf, Schema } from './Schema'
+import type { InputOf, Schema } from './Schema'
 import { Factory, type SchemaLike } from './SchemaFactory'
 
+export interface UnionSchema<
+  S extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
+> extends Schema<{
+    input: InputOf<S[number]>
+    output: TypeOf<S[number]>
+    props: { schemas: S }
+  }> {}
+
 function namedUnion<
-  T extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
->(name: string, schemas: T): Schema<TypeOf<T[number]>, InputOf<T[number]>> {
+  S extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
+>(name: string, schemas: S): UnionSchema<S> {
   return new Factory({
     name,
-    meta: { union: { schemas } },
+    schemas,
     parser: (input, context) => {
       for (const schema of schemas) {
         const result = schema.parse(input)
@@ -18,7 +25,7 @@ function namedUnion<
       }
       return failure(context, name, input)
     },
-  }) as unknown as Schema<TypeOf<T[number]>>
+  }) as unknown as UnionSchema<S>
 }
 
 /**
@@ -35,18 +42,10 @@ function namedUnion<
  * ```
  */
 export function union<
-  T extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
->(
-  ...schemas: T
-): BaseSchema<
-  TypeOf<T[number]>,
-  InputOf<Extract<T[number], StandardSchemaV1<any>>>
-> {
+  S extends [SchemaLike<any, any>, ...SchemaLike<any, any>[]],
+>(...schemas: S): UnionSchema<S> {
   const name = schemas.map((schema) => schema.name).join(' | ')
-  return namedUnion(name, schemas as any) as unknown as BaseSchema<
-    TypeOf<T[number]>,
-    InputOf<Extract<T[number], StandardSchemaV1<any>>>
-  >
+  return namedUnion(name, schemas) as UnionSchema<S>
 }
 
 /**
@@ -72,20 +71,13 @@ export function union<
  * assert(schema.name === 'a | b')
  * ```
  */
-export function variant<
-  T extends [ObjectSchema<any, any>, ...ObjectSchema<any, any>[]],
->(
-  discriminant: keyof T[number]['props'],
-  schemas: T,
-): BaseSchema<TypeOf<T[number]>, InputOf<T[number]>> {
+export function variant<S extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
+  discriminant: keyof S[number]['props'],
+  schemas: S,
+): UnionSchema<S> {
   const name = schemas
-    .map(
-      (schema) => (schema.props[discriminant] as any).meta.literal.literals[0],
-    )
+    .map((schema) => (schema.props?.[discriminant] as any).literals[0])
     .filter((value, index, self) => self.indexOf(value) === index)
     .join(' | ')
-  return namedUnion(name, schemas as any) as unknown as BaseSchema<
-    TypeOf<T[number]>,
-    InputOf<T[number]>
-  >
+  return namedUnion(name, schemas) as UnionSchema<S>
 }

@@ -1,12 +1,12 @@
 import { failure, ok } from '../common/ParseResult'
-import type { NumericBuilder } from './NumericSchema'
-import type { BaseSchema, Schema } from './Schema'
+import type { NumericSchemaRefiners } from './NumericSchemaRefiners'
+import type { Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
 type BigIntInput = Parameters<typeof BigInt>[0]
-export interface BigIntSchema<Input = BigIntInput>
-  extends BaseSchema<bigint, Input>,
-    NumericBuilder<bigint> {}
+export interface BigIntSchema
+  extends Schema<{ output: bigint; input: BigIntInput }>,
+    NumericSchemaRefiners<bigint> {}
 
 const name = 'bigint'
 
@@ -36,4 +36,4 @@ export const bigint = new Factory({
       return failure(context, 'bigint', input)
     }
   },
-}) as unknown as Schema<bigint, BigIntInput>
+}) as BigIntSchema

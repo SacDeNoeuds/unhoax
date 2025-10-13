@@ -38,5 +38,5 @@ export const fromGuard = <T>(name: string, guard: Guard<T>) => {
     parser: (input, context) => {
       return guard(input) ? ok(input) : failure(context, name, input)
     },
-  }) as unknown as Schema<T>
+  }) as Schema<{ input: T; output: T }>
 }

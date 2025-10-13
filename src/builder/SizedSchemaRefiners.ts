@@ -1,10 +1,7 @@
-import type { Sized } from '../common/Sized'
-import type { Schema } from './Schema'
-
 /**
  * Utilities for every sized schemas like `x.array`, `x.setOf`, `x.mapOf` and `x.string`.
  */
-export interface SizedBuilder<T extends Sized> {
+export interface SizedSchemaRefiners {
   /**
    * @category Reference
    * @example min size, no description
@@ -59,7 +56,7 @@ export interface SizedBuilder<T extends Sized> {
    * }])
    * ```
    */
-  size(options: { min: number; max?: number; description?: string }): Schema<T>
+  size(options: { min: number; max?: number; description?: string }): this
   /**
    * @category Reference
    * @example Max size, no description
@@ -82,5 +79,5 @@ export interface SizedBuilder<T extends Sized> {
    * }])
    * ```
    */
-  size(options: { min?: number; max: number; description?: string }): Schema<T>
+  size(options: { min?: number; max: number; description?: string }): this
 }

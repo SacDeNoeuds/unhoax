@@ -1,5 +1,4 @@
-import { literal } from './literal'
-import type { Schema } from './Schema'
+import { literal, type LiteralSchema } from './literal'
 
 interface Enum {
   [key: string]: string | number
@@ -38,7 +37,7 @@ interface Enum {
  * assert(schema.parse(-1).success === false)
  * ```
  */
-export function Enum<T extends Enum>(Enum: T): Schema<T[keyof T]> {
+export function Enum<T extends Enum>(Enum: T): LiteralSchema<T[keyof T][]> {
   // @ts-ignore
   return literal(...Object.values(Enum))
 }

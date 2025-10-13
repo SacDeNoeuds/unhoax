@@ -1,7 +1,7 @@
 import { failure, ok } from '../common/ParseResult'
 import { instanceOf } from './instance-of'
-import type { NumericBuilder } from './NumericSchema'
-import type { BaseSchema, Schema } from './Schema'
+import type { NumericSchemaRefiners } from './NumericSchemaRefiners'
+import type { Schema } from './Schema'
 import { Factory } from './SchemaFactory'
 
 type DateInput = ConstructorParameters<typeof Date>[0]
@@ -10,9 +10,9 @@ type DateInput = ConstructorParameters<typeof Date>[0]
  * @category Reference
  * @see {@link date}
  */
-export interface DateSchema<Input = DateInput>
-  extends BaseSchema<Date, Input>,
-    NumericBuilder<Date> {}
+export interface DateSchema
+  extends Schema<{ output: Date; input: DateInput }>,
+    NumericSchemaRefiners<Date> {}
 
 const name = 'date'
 
@@ -65,4 +65,4 @@ export const date = new Factory({
       ? failure(context, name, input)
       : ok(value)
   },
-}) as unknown as Schema<Date, DateInput>
+}) as DateSchema

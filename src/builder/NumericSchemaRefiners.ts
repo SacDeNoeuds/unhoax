@@ -1,5 +1,4 @@
 import type { Numeric } from '../common/Numeric'
-import type { Schema } from './Schema'
 
 /**
  * Utilities for every numeric schemas like `x.bigint`, `x.date` and `x.number`.
@@ -8,7 +7,7 @@ import type { Schema } from './Schema'
  * @see {@link date}
  * @see {@link number}
  */
-export interface NumericBuilder<T extends Numeric> {
+export interface NumericSchemaRefiners<T extends Numeric> {
   /**
    * @category Reference
    * @alias of {@link gte}
@@ -38,13 +37,13 @@ export interface NumericBuilder<T extends Numeric> {
    * assert(schema.refinements?.min.exclusive === false)
    * ```
    */
-  min(min: T, description?: string): Schema<T>
+  min(min: T, description?: string): this
 
   /**
    * @category Reference
    * @alias of {@link min}
    */
-  gte(number: T, description?: string): Schema<T>
+  gte(number: T, description?: string): this
   /**
    * @alias of {@link gt}
    * @example number
@@ -73,12 +72,12 @@ export interface NumericBuilder<T extends Numeric> {
    * assert(schema.refinements?.min.exclusive === true)
    * ```
    */
-  greaterThan(number: T, description?: string): Schema<T>
+  greaterThan(number: T, description?: string): this
   /**
    * @category Reference
    * @alias of {@link greaterThan}
    */
-  gt(number: T, description?: string): Schema<T>
+  gt(number: T, description?: string): this
   /**
    * @category Reference
    * @alias of {@link lte}
@@ -108,12 +107,12 @@ export interface NumericBuilder<T extends Numeric> {
    * assert(schema.refinements?.max.exclusive === false)
    * ```
    */
-  max(max: T, description?: string): Schema<T>
+  max(max: T, description?: string): this
   /**
    * @category Reference
    * @alias of {@link max}
    */
-  lte(number: T, description?: string): Schema<T>
+  lte(number: T, description?: string): this
   /**
    * @category Reference
    * @alias of {@link lt}
@@ -143,10 +142,10 @@ export interface NumericBuilder<T extends Numeric> {
    * assert(schema.refinements?.max.exclusive === true)
    * ```
    */
-  lowerThan(number: T, description?: string): Schema<T>
+  lowerThan(number: T, description?: string): this
   /**
    * @category Reference
    * @alias of {@link lowerThan}
    */
-  lt(number: T, description?: string): Schema<T>
+  lt(number: T, description?: string): this
 }

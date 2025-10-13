@@ -37,6 +37,8 @@ export type IsPrimitive<Primitive, T> = [T] extends [NonNullable<T>]
     : true
   : false
 
+export type If<Condition, Then, Else> = Condition extends true ? Then : Else
+
 // type Email = string & { tag: 'Email' }
 // type aaa = IsPrimitive<Email, string>
 // type bbb = Extract<string, Date>

@@ -1,8 +1,8 @@
 import { fromGuard } from './from-guard'
-import type { BaseSchema } from './Schema'
-import type { SizedBuilder } from './SizedSchema'
+import type { Schema } from './Schema'
+import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 
-export interface StringBuilder {
+export interface StringSchemaRefiners {
   /**
    * @category Reference
    * @see {@link string}
@@ -14,55 +14,59 @@ export interface StringBuilder {
    * assert(schema.parse('ab3').success === false)
    * ```
    */
-  pattern(pattern: RegExp): StringSchema
+  pattern(pattern: RegExp): this
 }
 
-export interface StringSchema<Input = string>
-  extends BaseSchema<string, Input>,
-    StringBuilder,
-    SizedBuilder<string> {
-  /**
-   * Allows to configure the default max length of strings.
-   *
-   * The default value is intentionally low because safety-first.
-   *
-   * If you need to increase it, I recommend increasing it _locally_ at schema level:
-   * `x.string.size({ max: 10_000 })`
-   *
-   * If you need to loosen it globally, use `x.string = x.untrimmedString.size({ max: 10_000 })`
-   *
-   * @category Config – Safety Guards
-   * @default 1_000
-   * @see {@link string}
-   * @see {@link untrimmedString}
-   *
-   * @example
-   * ```ts
-   * x.string.defaultMaxSize = 20
-   *
-   * assert(x.string.parse('x'.repeat(20)).success === true)
-   * assert(x.string.parse('x'.repeat(21)).success === false)
-   * ```
-   * @example override string default max length locally
-   * ```ts
-   * x.string.defaultMaxSize = 20
-   * const schema = x.string.size({ min: 4, max: 25 })
-   * assert(schema.parse('x'.repeat(24)).success === true)
-   * ```
-   *
-   * @example it keeps max when applying min:
-   * ```ts
-   * x.string.defaultMaxSize = 20
-   * const schema = x.string.size({ min: 3 })
-   *
-   * assert(schema.parse('x'.repeat(12)).success === true)
-   *
-   * assert(schema.parse('xx').success === false)
-   * assert(schema.parse('x'.repeat(21)).success === false)
-   * ```
-   */
-  defaultMaxSize: number
-}
+export interface StringSchema
+  extends Schema<{
+      input: string
+      output: string
+      props: {
+        /**
+         * Allows to configure the default max length of strings.
+         *
+         * The default value is intentionally low because safety-first.
+         *
+         * If you need to increase it, I recommend increasing it _locally_ at schema level:
+         * `x.string.size({ max: 10_000 })`
+         *
+         * If you need to loosen it globally, use `x.string = x.untrimmedString.size({ max: 10_000 })`
+         *
+         * @category Config – Safety Guards
+         * @default 1_000
+         * @see {@link string}
+         * @see {@link untrimmedString}
+         *
+         * @example
+         * ```ts
+         * x.string.defaultMaxSize = 20
+         *
+         * assert(x.string.parse('x'.repeat(20)).success === true)
+         * assert(x.string.parse('x'.repeat(21)).success === false)
+         * ```
+         * @example override string default max length locally
+         * ```ts
+         * x.string.defaultMaxSize = 20
+         * const schema = x.string.size({ min: 4, max: 25 })
+         * assert(schema.parse('x'.repeat(24)).success === true)
+         * ```
+         *
+         * @example it keeps max when applying min:
+         * ```ts
+         * x.string.defaultMaxSize = 20
+         * const schema = x.string.size({ min: 3 })
+         *
+         * assert(schema.parse('x'.repeat(12)).success === true)
+         *
+         * assert(schema.parse('xx').success === false)
+         * assert(schema.parse('x'.repeat(21)).success === false)
+         * ```
+         */
+        defaultMaxSize: number
+      }
+    }>,
+    StringSchemaRefiners,
+    SizedSchemaRefiners {}
 
 /**
  * @category Reference
@@ -76,7 +80,7 @@ export interface StringSchema<Input = string>
 export const untrimmedString = fromGuard(
   'string',
   (value) => typeof value === 'string',
-)
+) as unknown as StringSchema
 
 let defaultMaxSize = 1_000
 /**

@@ -1,10 +1,10 @@
 import { fromGuard } from './from-guard'
-import type { NumericBuilder } from './NumericSchema'
-import type { BaseSchema } from './Schema'
+import type { NumericSchemaRefiners } from './NumericSchemaRefiners'
+import type { Schema } from './Schema'
 
-export interface NumberSchema<Input = number>
-  extends BaseSchema<number, Input>,
-    NumericBuilder<number> {}
+export interface NumberSchema
+  extends Schema<{ input: number; output: number }>,
+    NumericSchemaRefiners<number> {}
 
 /**
  * This schema only accepts **finite** numbers for safety.<br>
@@ -31,7 +31,7 @@ export interface NumberSchema<Input = number>
 export const number = fromGuard<number>(
   'number',
   Number.isFinite as (input: unknown) => input is number,
-)
+) as NumberSchema
 
 /**
  * ⚠️ valid inputs are `Infinity`, `NaN` and unsafe integers.<br>
@@ -54,7 +54,7 @@ export const number = fromGuard<number>(
 export const unsafeNumber = fromGuard<number>(
   'unsafeNumber',
   (input) => typeof input === 'number',
-)
+) as NumberSchema
 
 /**
  * it accepts anything passing the check `Number.isSafeInteger`.
@@ -80,7 +80,7 @@ export const unsafeNumber = fromGuard<number>(
 export const integer = fromGuard<number>(
   'integer',
   Number.isSafeInteger as (input: unknown) => input is number,
-)
+) as NumberSchema
 /**
  * it accepts anything passing the check `Number.isInteger` (not `Number.isSafeInteger`).
  *
@@ -105,4 +105,4 @@ export const integer = fromGuard<number>(
 export const unsafeInteger = fromGuard<number>(
   'unsafeInteger',
   Number.isInteger as (input: unknown) => input is number,
-)
+) as NumberSchema

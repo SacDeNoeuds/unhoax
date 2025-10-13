@@ -21,6 +21,6 @@ const isInstanceOf = <T>(constructor: new (...args: any[]) => T) => {
  */
 export function instanceOf<T extends new (...args: any[]) => any>(
   constructor: T,
-): Schema<T> {
+): Schema<{ input: T; output: T }> {
   return fromGuard<T>(constructor.name, isInstanceOf(constructor))
 }

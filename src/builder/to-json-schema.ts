@@ -17,11 +17,11 @@ const numberSchemaNames = new Set([
 export function toJsonSchema(schema: SchemaLike<any, any>): JSONSchema7 {
   const meta = schema.meta ?? {}
   if (schema.name.startsWith('Array<'))
-    return toJsonSchemaArray(schema as ArraySchema<any, any>)
+    return toJsonSchemaArray(schema as ArraySchema<any>)
   if (schema.name.startsWith('Set<'))
-    return toJsonSchemaSet(schema as SetSchema<any, any>)
+    return toJsonSchemaSet(schema as SetSchema<any>)
   if (schema.name.startsWith('Record<'))
-    return toJsonSchemaRecord(schema as RecordSchema<any, any, any>)
+    return toJsonSchemaRecord(schema as RecordSchema<any, any>)
 
   if (schema.name === 'string')
     return toJsonSchemaString(schema as StringSchema)
@@ -31,10 +31,8 @@ export function toJsonSchema(schema: SchemaLike<any, any>): JSONSchema7 {
 
   if ('literal' in meta) return toJsonSchemaLiterals(schema)
   if ('union' in meta) return toJsonSchemaUnion(schema)
-  if ('props' in schema)
-    return toJsonSchemaObject(schema as ObjectSchema<any, any>)
-  if ('items' in schema)
-    return toJsonSchemaTuple(schema as TupleSchema<any, any>)
+  if ('props' in schema) return toJsonSchemaObject(schema as ObjectSchema<any>)
+  if ('items' in schema) return toJsonSchemaTuple(schema as TupleSchema<any>)
 
   throw new Error('unsupported schema')
 }
@@ -70,10 +68,10 @@ function toJsonSchemaLiterals(schema: SchemaLike<any, any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaArray(schema: ArraySchema<any, any>): JSONSchema7 {
+function toJsonSchemaArray(schema: ArraySchema<any>): JSONSchema7 {
   return {
     type: 'array',
-    items: toJsonSchema(schema.item),
+    items: toJsonSchema(schema.item as any),
     minItems: finiteOrUndefined(schema.refinements?.size?.min),
     maxItems: finiteOrUndefined(schema.refinements?.size?.max),
   }
@@ -102,14 +100,14 @@ function toJsonSchemaDate(schema: SchemaLike<any, any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaSet(schema: SetSchema<any, any>): JSONSchema7 {
+function toJsonSchemaSet(schema: SetSchema<any>): JSONSchema7 {
   return {
     ...toJsonSchemaArray(schema as any),
     uniqueItems: true,
   }
 }
 
-function toJsonSchemaObject(schema: ObjectSchema<any, any>): JSONSchema7 {
+function toJsonSchemaObject(schema: ObjectSchema<any>): JSONSchema7 {
   const properties = Object.fromEntries(
     Object.entries(schema.props).map(([key, value]) => [
       key,
@@ -135,7 +133,7 @@ function toJsonSchemaObject(schema: ObjectSchema<any, any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaTuple(schema: TupleSchema<any, any>): JSONSchema7 {
+function toJsonSchemaTuple(schema: TupleSchema<any>): JSONSchema7 {
   const items = schema.items as unknown as SchemaLike<any, any>[]
   return {
     type: 'array',
@@ -145,9 +143,9 @@ function toJsonSchemaTuple(schema: TupleSchema<any, any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaRecord(schema: RecordSchema<any, any, any>): JSONSchema7 {
+function toJsonSchemaRecord(schema: RecordSchema<any, any>): JSONSchema7 {
   return {
     type: 'object',
-    additionalProperties: toJsonSchema(schema.value),
+    additionalProperties: toJsonSchema(schema.value as any),
   }
 }
