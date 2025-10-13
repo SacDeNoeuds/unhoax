@@ -100,6 +100,6 @@ Object.defineProperty(string, 'defaultMaxSize', {
   get: () => defaultMaxSize,
   set: (max) => {
     defaultMaxSize = max
-    string.refinements!.size.max = max
+    string.refinements.size.max = max
   },
 })

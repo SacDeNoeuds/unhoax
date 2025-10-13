@@ -91,10 +91,13 @@ export class Factory implements Interface {
       refinements: config.refinements ?? this.refinements,
       ...propsIfDefined(config, this, [
         'item', // for iterable schemas
+        'items', // for tuple schemas
         'props', // for object schemas
         'key', // for record schemas
         'value', // for record schemas
         'defaultMaxSize', // for sized schemas
+        'schemas', // for … unions
+        'literals', // for … literals
       ]),
     })
   }

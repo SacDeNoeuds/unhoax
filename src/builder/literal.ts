@@ -32,7 +32,7 @@ export interface LiteralSchema<L extends Literal[]>
  * ```
  */
 export function literal<L extends [Literal, ...Literal[]]>(...literals: L) {
-  return Object.assign(fromGuard('literal', isLiteral(...literals)), {
+  return fromGuard('literal', isLiteral(...literals), {
     literals,
   }) as LiteralSchema<L>
 }
