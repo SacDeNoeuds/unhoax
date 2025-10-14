@@ -34,14 +34,13 @@ This section only describes trivial how tos, see the [reference](/schemas) for a
 ```ts
 import { x } from 'unhoax'
 
-// type-driven:
 interface User {
   id: number
   name: string
   email: string
 }
 
-const userSchema = x.object<User>({
+const userSchema = x.typed<User>().object({
   id: x.number,
   name: x.string,
   email: x.string,
@@ -50,9 +49,17 @@ userSchema.parse({ … })
 // { result: true, value: User } <- `User` is properly named via intellisense
 
 // hovering on `userSchema` prompts this ; simple type, right?
-const userSchema: x.ObjectSchema<User>
+const userSchema: x.ObjectSchema<
+  User,
+  SomeLongInternalsAfterYourEntityType
+>
+```
 
-// infer-driven:
+## Inference
+
+```ts
+import { x } from 'unhoax'
+
 const userSchema = x.object({
   id: x.number,
   name: x.string,
@@ -63,22 +70,11 @@ type User = x.TypeOf<typeof userSchema>
 userSchema.parse({ … })
 // { result: true, value: { id: number, … } } <- `User` is not properly named
 
-// hovering on `userSchema` prompts this ; simple type, right?
 const userSchema: x.ObjectSchema<{
     id: number;
     name: string;
     email: string;
-}>
-```
-
-## Inference
-
-```ts
-import { x } from 'unhoax'
-
-const schema = x.object({ name: x.string })
-type Test = x.TypeOf<typeof schema>
-declare const test: Test // { name: string }
+}, SomeLongInternalsAfterYourEntityType>
 ```
 
 <!-- ## Transforming Data
@@ -123,20 +119,22 @@ There are default **size guards** everywhere, to diminish the risk of **Denial o
 ```ts
 import { x } from 'unhoax'
 
-x.array.defaultMaxSize // 100
-x.setOf.defaultMaxSize // 100
-x.mapOf.defaultMaxSize // 100
-x.string.defaultMaxSize // 100_000
+x.array.defaultMaxSize // 500
+x.setOf.defaultMaxSize // 500
+x.mapOf.defaultMaxSize // 500
+x.string.defaultMaxSize // 500
+```
 
-// You can define your own guards:
-x.array.defaultMaxSize = 10_000
+Those safety nts are **not** retro-active, you should define them at the entry-point of your program.
+
+```ts
+// You can define your own global guards:
+x.array.defaultMaxSize = 3
 // every array schema with no specific max size
-// will now have a maximum of 10,000 items.
+// will now have a maximum of 3 items.
 
-// The rules are retro-active:
 const mySchema = x.array(x.number)
 
-x.array.defaultMaxSize = 3
 mySchema.parse([1, 2, 3, 4]).success === false
 ```
 

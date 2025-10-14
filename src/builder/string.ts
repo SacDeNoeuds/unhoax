@@ -2,6 +2,9 @@ import { fromGuard } from './from-guard'
 import type { Schema } from './Schema'
 import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 
+/**
+ * string-specific schema methods
+ */
 export interface StringSchemaRefiners {
   /**
    * @category Reference

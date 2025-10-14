@@ -2,6 +2,7 @@ import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
 import type { InputOf, Schema, TypeOf } from './Schema'
 import { Factory, type SchemaLike } from './SchemaFactory'
+import type { Typed } from './typed'
 
 export function isObject(input: unknown): input is Record<string, unknown> {
   // input.constructor is `undefined` for null-proto objects.
@@ -13,6 +14,7 @@ export type ObjectShape = Record<PropertyKey, any>
 /**
  * @category Reference
  * @see {@link object}
+ * @see {@link Typed} for a Type-Driven approach
  */
 export interface ObjectSchema<T extends ObjectShape, S extends SchemasShape>
   extends Schema<{
@@ -53,10 +55,9 @@ type InputFromSchemas<S extends SchemasShape> = Simplify<
 >
 
 /**
+ * See [`x.typed<MyType>().object(…)`](#x-typed) to use a Type-Driven approach
  * @category Reference
- *
- * To use a Type-Driven approach, see {@link typed}
- *
+ * @see {@link Typed} to use a Type-Driven approach
  * @example
  * ```ts
  * const person = x.object({ name: x.string })
@@ -84,9 +85,7 @@ export function object<Schemas extends SchemasShape>(
 ): ObjectSchema<OutputFromSchemas<Schemas>, Schemas>
 /**
  * @category Reference
- *
- * * To use a Type-Driven approach, see {@link typed}
- *
+ * @see {@link Typed} to use a Type-Driven approach
  * @example
  * ```ts
  * const person = x.object('Person', { name: x.string })
@@ -99,6 +98,9 @@ export function object<S extends SchemasShape>(
   name: string,
   props: S,
 ): ObjectSchema<OutputFromSchemas<S>, S>
+/**
+ * Goddamn test of a description
+ */
 export function object<S extends SchemasShape>(
   ...args: [name: string, props: S] | [props: S]
 ) {

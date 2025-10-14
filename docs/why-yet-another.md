@@ -9,20 +9,20 @@ unhoax provides default **size guards** everywhere, to diminish the risk of **De
 ```ts
 import { x } from 'unhoax'
 
-x.array.defaultMaxSize // 100
-x.setOf.defaultMaxSize // 100
-x.mapOf.defaultMaxSize // 100
-x.string.defaultMaxSize // 100_000
+x.array.defaultMaxSize // 500
+x.setOf.defaultMaxSize // 500
+x.mapOf.defaultMaxSize // 500
+x.string.defaultMaxSize // 500
 
 // You can define your own guards:
-x.array.defaultMaxSize = 10_000
+x.array.defaultMaxSize = 3
 // every array schema with no specific max size
-// will now have a maximum of 10,000 items.
+// will now have a maximum of 3 items.
+// Beware, the safety nets are **not** retro-active, you should override them
+// the entry point of your program.
 
-// The rules are retro-active:
 const mySchema = x.array(x.number)
 
-x.array.defaultMaxSize = 3
 mySchema.parse([1, 2, 3, 4]).success === false
 ```
 
@@ -34,13 +34,11 @@ x.array.defaultMaxSize = Infinity
 
 ## Terrible types
 
-Most of the libraries out there have terrible typings.
+Most of the libraries out there have terrible typings, which is difficult for _Type-Driven Development_ lovers.
 
-They all force _you_ to adapt your types to _them_. A good library should integrate with you, not force you to do things for them, getting the best of all worlds.
+All the libraries force _you_ to adapt your types to _them_. A good library should integrate with you (or your types), not force you to do things for them, getting the best of all worlds.
 
-This ends up making TypeScript intellisense and errors completely unreadable.
-
-It doesn't have to be that way.
+This ends up making TypeScript intellisense and errors completely unreadable, it doesn't have to be that way.
 
 ```ts
 import { z } from 'zod'
@@ -69,7 +67,8 @@ interface User {
   name: string
 }
 
-const userSchema = x.object<User>({ … }) // x.ObjectSchema<User>, a simple type!
+const userSchema = x.typed<User>().object({ … })
+// x.ObjectSchema<User, TheInternalsGoHereAfterYourType>
 
 declare const getUser: (value: User) => void
 // Hovering on `value` gives:
@@ -109,7 +108,7 @@ const userSchema: z.ZodObject<{
 }>
 ```
 
-Now imagine reading an error containing that type… where do you start?
+Now imagine reading an error containing that type… where do you start? Some plugins like [pretty TS errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors) help out, but still.
 
 Plus, I usually already have my type and want to use it to get proper names, which I can’t:
 

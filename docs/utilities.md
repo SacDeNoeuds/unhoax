@@ -1,90 +1,18 @@
 # Utilities
 
-## `Schema`
+## `StringSchema`
 
-Utilities common to all schemas.
+string-specific schema methods
 
-### `Schema.convertTo`
+### `StringSchema.pattern`
 
-```ts
-const numberFromString = x.string.convertTo(x.number, Number)
-assert(numberFromString.parse('42').value === 42)
-assert(numberFromString.parse('toto').success === false)
-assert(numberFromString.parse(42).success === false) // input needs to be a string first, then coerced as a number
-
-assert(numberFromString.name === 'number')
-```
-
-### `Schema.guardAs`
+**accepting only alpha letters**
 
 ```ts
-type Email = string & { _tag: 'Email' }
-const isEmail = (s: string): s is Email => s.includes('@')
+const schema = x.string.pattern(/^[a-zA-Z]+$/)
 
-const schema = x.string.guardAs('Email', isEmail)
-assert(schema.parse('hey').success === false)
-assert(schema.parse('hey@yo').success === true)
-```
-
-### `Schema.map`
-
-```ts
-import { capitalize } from './test-utils'
-
-const capitalized = x.string.map(capitalize)
-assert(capitalized.parse('hey').value === 'Hey')
-```
-
-### `Schema.nullable`
-
-```ts
-const schema = x.string.nullable()
-assert(schema.parse(null).success === true)
-assert(schema.parse(null).value === null)
-assert(schema.parse(null).value === null)
-assert(schema.parse('abc').value === 'abc')
-```
-
-**with default value**
-
-```ts
-const schema = x.string.nullable(42)
-assert.deepEqual(schema.parse(null), { success: true, value: 42 })
-```
-
-### `Schema.optional`
-
-```ts
-const schema = x.string.optional()
-assert(schema.parse(undefined).success === true)
-assert(schema.parse(undefined).value === undefined)
-assert(schema.parse('abc').value === 'abc')
-```
-
-**with default value**
-
-```ts
-const schema = x.string.optional(42)
-assert(schema.parse(undefined).success === true)
-assert(schema.parse(undefined).value === 42)
-```
-
-### `Schema.recover`
-
-```ts
-const schema = x.string.recover(() => 42)
-assert(schema.parse('hey').value === 'hey')
-assert(schema.parse(true).value === 42)
-```
-
-### `Schema.refine`
-
-```ts
-import { isCapitalized } from './test-utils'
-
-const capitalized = x.string.refine('capitalized', isCapitalized)
-assert(capitalized.parse('hey').success === false)
-assert(capitalized.parse('Hey').success === true)
+assert(schema.parse('abc').success === true)
+assert(schema.parse('ab3').success === false)
 ```
 
 ## `NumericSchema`
@@ -309,40 +237,4 @@ assert.deepEqual(sized.parse('he').issues, [
     input: 'he',
   },
 ])
-```
-
-## `x.object`
-
-Object-specific utilities
-
-### `x.object.intersect`
-
-```ts
-const a = x.object({ name: x.string })
-const b = x.object({ name: x.number, age: x.number })
-const c = a.intersect(b)
-
-assert(c.parse({ name: 12, age: 18 }).success === true)
-```
-
-### `x.object.omit`
-
-```ts
-const schema = x.object({ name: x.string, age: x.number }).omit('age')
-
-assert.deepEqual(schema.parse({ name: 'Jack', age: 18 }), {
-  success: true,
-  value: { name: 'Jack' },
-})
-```
-
-### `x.object.pick`
-
-```ts
-const schema = x.object({ name: x.string, age: x.number }).pick('name')
-
-assert.deepEqual(schema.parse({ name: 'Jack', age: 18 }), {
-  success: true,
-  value: { name: 'Jack' },
-})
 ```

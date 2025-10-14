@@ -5,10 +5,13 @@ type PropsOf<T extends Record<string, any>> = {
   readonly [Key in keyof T]: SchemaLike<T[Key], any>
 }
 
+/**
+ * This is unhoax’s Type-Driven API
+ */
 export interface Typed<T> {
   /**
    * @category Reference
-   * @example
+   * @example with a `Person` interface
    * ```ts
    * interface Person {
    *   name: string

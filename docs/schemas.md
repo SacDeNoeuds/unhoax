@@ -1,6 +1,6 @@
 # Schemas
 
-## `array`
+## `x.array`
 
 Parses any iterable to an array.
 
@@ -22,7 +22,7 @@ const schema = x.array(x.string)
 assert(schema.item === x.string)
 ```
 
-## `bigint`
+## `x.bigint`
 
 It accepts any input that can construct a BigInt. You can use it to decode JSON coming from a `JSON.parse`
 
@@ -37,7 +37,7 @@ assert(x.bigint.parse(1.23).success === false)
 assert(x.bigint.parse({}).success === false)
 ```
 
-## `boolean`
+## `x.boolean`
 
 ```ts
 const schema = x.boolean
@@ -48,7 +48,7 @@ assert(x.boolean.parse(1).success === false)
 assert(x.boolean.parse('toto').success === false)
 ```
 
-## `date`
+## `x.date`
 
 It can parse anything the `Date` constructor can take as single parameter.
 
@@ -87,7 +87,7 @@ assert(x.date.parse(NaN).success === false)
 assert(x.date.parse(() => {}).success === false)
 ```
 
-## `Enum`
+## `x.Enum`
 
 **Parses as-const enum**
 
@@ -131,7 +131,7 @@ assert(schema.parse(0).value === Direction.Left)
 assert(schema.parse(-1).success === false)
 ```
 
-## `instanceOf`
+## `x.instanceOf`
 
 **parsing a Date**
 
@@ -148,7 +148,7 @@ const schema = x.instanceOf(User)
 assert(schema.parse(new User()).success === true)
 ```
 
-## `integer`
+## `x.integer`
 
 it accepts anything passing the check `Number.isSafeInteger`.
 
@@ -165,7 +165,7 @@ assert(x.integer.parse(true).success === false)
 assert(x.integer.parse('abc').success === false)
 ```
 
-## `literal`
+## `x.literal`
 
 ```ts
 const schema = x.literal('a', 42, true, null, undefined)
@@ -181,7 +181,7 @@ assert(schema.parse(43).success === false)
 assert(schema.parse(false).success === false)
 ```
 
-## `mapOf`
+## `x.mapOf`
 
 ```ts
 const schema = x.mapOf(x.number, x.string)
@@ -205,7 +205,7 @@ assert(schema.parse([['1', 'Jack']]).success === false)
 assert(schema.parse([['Jack', 1]]).success === false)
 ```
 
-## `number`
+## `x.number`
 
 This schema only accepts **finite** numbers for safety.<br>
 If you need full control over your number, use `unsafeNumber` instead.
@@ -223,7 +223,9 @@ assert(x.number.parse(true).success === false)
 assert(x.number.parse('abc').success === false)
 ```
 
-## `object`
+## `x.object`
+
+See [`x.typed<MyType>().object(…)`](#x-typed) to use a Type-Driven approach
 
 ```ts
 const person = x.object({ name: x.string })
@@ -248,7 +250,7 @@ assert(schema.parse(new Set()).success === false)
 assert(schema.parse(new Map()).success === false)
 ```
 
-## `record`
+## `x.record`
 
 ```ts
 const schema = x.record(x.string.convertTo(x.number, Number), x.string)
@@ -271,7 +273,7 @@ assert(schema.parse(new Map()).success === false)
 assert(schema.parse({ 1: '12' }).success === false)
 ```
 
-## `setOf`
+## `x.setOf`
 
 Parses any iterable to an array.
 
@@ -293,7 +295,7 @@ const schema = x.setOf(x.string)
 assert(schema.item === x.string)
 ```
 
-## `string`
+## `x.string`
 
 This also trims the string. If you do not want this behavior,
 explicitly use {@link untrimmedString}
@@ -302,7 +304,7 @@ explicitly use {@link untrimmedString}
 assert(x.string.parse('  hello  ').value === 'hello')
 ```
 
-## `tuple`
+## `x.tuple`
 
 ```ts
 const schema = x.tuple(x.string, x.number)
@@ -330,7 +332,25 @@ assert(schema.parse({ 0: '1', 1: 2 }).success === false)
 assert(schema.parse({ 0: '1', 1: 2, length: 2 }).success === false)
 ```
 
-## `union`
+## `x.typed`
+
+This is unhoax’s Type-Driven API
+
+### `x.typed.x.object`
+
+**with a `Person` interface**
+
+```ts
+interface Person {
+  name: string
+}
+const person = x.typed<Person>().object({ name: x.string })
+assert(person.parse({ name: 'Jack' }).success === true)
+assert(person.parse({ name: 42 }).success === false)
+assert(person.name === 'object')
+```
+
+## `x.union`
 
 If you want to use a discriminated union, checkout {@link variant}
 
@@ -342,7 +362,7 @@ assert(schema.parse(42).value === 42)
 assert(schema.parse({}).success === false)
 ```
 
-## `variant`
+## `x.variant`
 
 If you need to use a simple union, checkout {@link union}
 

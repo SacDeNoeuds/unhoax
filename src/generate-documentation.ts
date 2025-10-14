@@ -13,6 +13,7 @@ const basicSchemas = [
   'integer',
   'number',
   'object',
+  'Typed',
   'record',
   'unknown',
   'setOf',
@@ -41,6 +42,15 @@ Promise.all([
     output: './docs/schemas.md',
     mainHeading: 'Schemas',
     propertiesToOmit,
+    renames: {
+      ...Object.assign(
+        {},
+        ...basicSchemas.map((schemaName) => ({
+          [schemaName]: `x.${schemaName}`,
+        })),
+      ),
+      Typed: 'x.typed',
+    },
     entryPoints: {
       './src/builder/main-barrel.ts': {
         type: 'pick',
@@ -54,24 +64,23 @@ Promise.all([
     mainHeading: 'Utilities',
     propertiesToOmit: new Set(['~standard']),
     renames: {
-      BaseBuilder: 'Schema',
-      SizedBuilder: 'SizedSchema',
-      StringBuilder: 'StringSchema',
-      NumericBuilder: 'NumericSchema',
-      ObjectBuilder: 'x.object',
+      SchemaRefiners: 'Schema',
+      SizedSchemaRefiners: 'SizedSchema',
+      StringSchemaRefiners: 'StringSchema',
+      NumericSchemaRefiners: 'NumericSchema',
     },
     entryPoints: {
-      './src/builder/Schema.ts': {
+      './src/builder/SchemaRefiners.ts': {
         type: 'pick',
-        exports: ['BaseBuilder'],
+        exports: ['SchemaRefiners'],
       },
       './src/builder/string.ts': {
         type: 'pick',
-        exports: ['StringBuilder'],
+        exports: ['StringSchemaRefiners'],
       },
       './src/builder/main-barrel.ts': {
         type: 'pick',
-        exports: ['NumericBuilder', 'ObjectBuilder', 'SizedBuilder'],
+        exports: ['NumericSchemaRefiners', 'SizedSchemaRefiners'],
       },
     },
   }),

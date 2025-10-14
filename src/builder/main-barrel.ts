@@ -15,14 +15,19 @@ export {
   unsafeNumber,
   type NumberSchema,
 } from './number'
-export type { NumericSchemaRefiners as NumericBuilder } from './NumericSchemaRefiners'
+export type { NumericSchemaRefiners } from './NumericSchemaRefiners'
 export { object, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
 export type { InputOf, Schema, TypeOf } from './Schema'
 export { unknown } from './SchemaFactory'
 export { setOf, type SetSchema } from './Set'
-export type { SizedSchemaRefiners as SizedBuilder } from './SizedSchemaRefiners'
-export { string, untrimmedString, type StringSchema } from './string'
+export type { SizedSchemaRefiners } from './SizedSchemaRefiners'
+export {
+  string,
+  untrimmedString,
+  type StringSchema,
+  type StringSchemaRefiners,
+} from './string'
 export { tuple, type TupleSchema } from './tuple'
-export { typed } from './typed'
+export { typed, type Typed } from './typed'
 export { union, variant } from './union'
