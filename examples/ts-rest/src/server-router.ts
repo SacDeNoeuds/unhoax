@@ -13,9 +13,9 @@ const pikachu: Pokemon = {
   health: 100,
   experiencePoints: 12324n,
   caughtAt: new Date('2000-04-02T09:23:24.164Z'),
-  types: new Set([PokemonType.Electric]),
+  types: new Set([PokemonType.Electric]), // ⚠️ this would need a proper JSON.stringify replacer
   pokeballLocation: 'inventory',
-  battleHistory: new Map([[3, 1]]),
+  battleHistory: new Map([[3, 1]]), // ⚠️ this would need a proper JSON.stringify replacer
   friendIds: [14, 54, 23],
   attacks: [
     PokemonAttack.Earthquake,
