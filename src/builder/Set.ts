@@ -99,4 +99,4 @@ export function setOf<S extends SchemaLike<any, any>>(
  * assert(x.setOf(x.string).parse(new Array(21).fill('x')).success === false)
  * ```
  */
-setOf.defaultMaxSize = 100
+setOf.defaultMaxSize = 500

@@ -105,4 +105,4 @@ export function mapOf<
  * assert(schema.parse(mapOfSize(21)).success === false)
  * ```
  */
-mapOf.defaultMaxSize = 100
+mapOf.defaultMaxSize = 500

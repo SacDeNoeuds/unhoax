@@ -82,7 +82,7 @@ export const untrimmedString = fromGuard(
   (value) => typeof value === 'string',
 ) as unknown as StringSchema
 
-let defaultMaxSize = 1_000
+let defaultMaxSize = 500
 /**
  * This also trims the string. If you do not want this behavior,
  * explicitly use {@link untrimmedString}

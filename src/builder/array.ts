@@ -96,4 +96,4 @@ export function array<S extends SchemaLike<any, any>>(
  * assert(schema.parse(new Array(21).fill('x')).success === false)
  * ```
  */
-array.defaultMaxSize = 100
+array.defaultMaxSize = 500
