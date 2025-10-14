@@ -35,7 +35,6 @@ export default defineConfig({
         items: [
           { text: 'Schemas', link: '/schemas' },
           { text: 'Utilities', link: '/utilities' },
-          { text: 'Advanced schemas', link: '/advanced-schemas' },
           { text: 'JSON Schema', link: '/json-schema' },
         ],
       },

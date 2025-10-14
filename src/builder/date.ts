@@ -22,7 +22,6 @@ const name = 'date'
  * If you need to accept `Date` only, use `x.instanceOf(Date)` @see {@link instanceOf}
  *
  * @category Reference
- * @example const schema = x.date
  * @example parses a Date
  * ```ts
  * const now = new Date()

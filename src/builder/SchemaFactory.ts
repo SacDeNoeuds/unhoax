@@ -287,6 +287,11 @@ export interface UnknownSchema
   extends Schema<{ input: unknown; output: unknown }> {}
 
 // NOTE: `unknown` schema is defined here to avoid circular references
+/**
+ * `x.unknown` will never fail and always cast the input as `unknown`.
+ *
+ * @category Reference
+ */
 export const unknown = new Factory({
   name: 'unknown',
   parser: ok,

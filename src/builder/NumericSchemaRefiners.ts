@@ -52,7 +52,7 @@ export interface NumericSchemaRefiners<T extends Numeric> {
    * assert(schema.parse(43).success === true)
    * assert(schema.parse(42).success === false)
    * ```
-   * * @example Date
+   * @example Date
    * ```ts
    * const schema = x.date.greaterThan(new Date(2025))
    * assert(schema.parse(new Date(2025, 1)).success === true)

@@ -21,21 +21,21 @@ export interface SizedSchemaRefiners {
    * assert(schema.parse('hey yo').success === false)
    * assert(schema.refinements.size.description === description)
    * ```
-   * @example basic array min/max
+   * @example array min/max
    * ```ts
    * const schema = x.array(x.number).size({ min: 1, max: 3 })
    * assert(schema.parse([1]).success === true)
    * assert(schema.parse([]).success === false)
    * assert(schema.parse([1, 2, 3, 4]).success === false)
    * ```
-   * @example basic Set min/max
+   * @example Set min/max
    * ```ts
    * const schema = x.Set(x.number).size({ min: 1, max: 3 })
    * assert(schema.parse(new Set([1])).success === true)
    * assert(schema.parse(new Set()).success === false)
    * assert(schema.parse(new Set([1, 2, 3, 4])).success === false)
    * ```
-   * @example basic Map min/max
+   * @example Map min/max
    * ```ts
    * const schema = x.Map(x.number, x.number).size({ min: 1, max: 3 })
    * assert(schema.parse(new Map([[1, 1]])).success === true)

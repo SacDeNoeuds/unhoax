@@ -62,7 +62,7 @@ export function gte<T extends Numeric>(number: T, description?: string) {
  * assert(schema.parse(43).success === true)
  * assert(schema.parse(42).success === false)
  * ```
- * * @example Date
+ * @example Date
  * ```ts
  * const schema = pipe(
  *   x.date,

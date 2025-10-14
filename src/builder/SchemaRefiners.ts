@@ -2,6 +2,9 @@ import type { Refinement } from '../common/Schema'
 import type { Schema, SchemaMetaOf } from './Schema'
 import type { SchemaLike } from './SchemaFactory'
 
+/**
+ * All the utilities to transform, bend or map unhoax schemas.
+ */
 export interface SchemaRefiners<Output> {
   /**
    * @category Reference

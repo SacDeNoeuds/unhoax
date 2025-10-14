@@ -20,6 +20,7 @@ export { object, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
 export type { InputOf, Schema, TypeOf } from './Schema'
 export { unknown } from './SchemaFactory'
+export type { SchemaRefiners } from './SchemaRefiners'
 export { setOf as Set, type SetSchema } from './Set'
 export type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 export {

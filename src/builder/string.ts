@@ -84,7 +84,6 @@ export interface StringSchema
 /**
  * @category Reference
  * @see {@link string} for a trimmed string.
- * @example const schema = x.untrimmedString
  * @example
  * ```ts
  * assert(x.untrimmedString.parse(' hello ').value === ' hello ')
@@ -98,8 +97,9 @@ export const untrimmedString = fromGuard(
 let defaultMaxSize = 500
 /**
  * This also trims the string. If you do not want this behavior,
- * explicitly use {@link untrimmedString}
+ * explicitly use [`x.untrimmedString`](./advanced-schemas.html#untrimmedstring)
  * @category Reference
+ * @see {@link untrimmedString}
  * @example
  * ```ts
  * assert(x.string.parse('  hello  ').value === 'hello')
