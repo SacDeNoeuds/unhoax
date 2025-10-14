@@ -18,6 +18,17 @@ const isInstanceOf = <T>(constructor: new (...args: any[]) => T) => {
  * const schema = x.instanceOf(User)
  * assert(schema.parse(new User()).success === true)
  * ```
+ * @example usage with `convertTo`
+ * ```ts
+ * class User {
+ *   constructor(public name: string) {}
+ * }
+ * const schema = x.string.convertTo(x.instanceOf(User), (name) => new User(name))
+ * const result = schema.parse('Jack')
+ * assert(result.success === true)
+ * assert(result.value instanceof User)
+ * assert(result.value.name === 'Jack')
+ * ```
  */
 export function instanceOf<T extends new (...args: any[]) => any>(
   constructor: T,
