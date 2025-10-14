@@ -18,11 +18,11 @@ type UnionToIntersection<Union> =
 
 export type IsUnion<T> = [UnionToIntersection<T>] extends [never] ? true : false
 
-export type FirstOf<Values extends any[], Acc = never> = [Acc] extends [never]
-  ? Values extends [infer First, ...infer Rest]
-    ? FirstOf<Rest, First>
-    : Acc
-  : Acc
+// export type FirstOf<Values extends any[], Acc = never> = [Acc] extends [never]
+//   ? Values extends [infer First, ...infer Rest]
+//     ? FirstOf<Rest, First>
+//     : Acc
+//   : Acc
 // type TestFirstOf = FirstOf<[
 //   never,
 //   string,
