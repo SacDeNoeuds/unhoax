@@ -1,5 +1,5 @@
 /**
- * Utilities for every sized schemas like `x.array`, `x.setOf`, `x.mapOf` and `x.string`.
+ * Utilities for every sized schemas like `x.array`, `x.Set`, `x.Map` and `x.string`.
  */
 export interface SizedSchemaRefiners {
   /**
@@ -7,14 +7,14 @@ export interface SizedSchemaRefiners {
    * @example min size, no description
    * ```ts
    * const sized = x.string.size({ min: 3 })
-   * // or x.array(…), x.setOf(…), x.mapOf(…)
+   * // or x.array(…), x.Set(…), x.Map(…)
    * assert(sized.parse('hey').success === true)
    * ```
    * @example string min, max and description
    * ```ts
    * const description = 'short first name'
    * const schema = x.string.size({ min: 3, max: 5, description })
-   * // or x.array(…), x.setOf(…), x.mapOf(…)
+   * // or x.array(…), x.Set(…), x.Map(…)
    *
    * assert(schema.parse('hey').success === true)
    * assert(schema.parse('he').success === false)
@@ -30,14 +30,14 @@ export interface SizedSchemaRefiners {
    * ```
    * @example basic Set min/max
    * ```ts
-   * const schema = x.setOf(x.number).size({ min: 1, max: 3 })
+   * const schema = x.Set(x.number).size({ min: 1, max: 3 })
    * assert(schema.parse(new Set([1])).success === true)
    * assert(schema.parse(new Set()).success === false)
    * assert(schema.parse(new Set([1, 2, 3, 4])).success === false)
    * ```
    * @example basic Map min/max
    * ```ts
-   * const schema = x.mapOf(x.number, x.number).size({ min: 1, max: 3 })
+   * const schema = x.Map(x.number, x.number).size({ min: 1, max: 3 })
    * assert(schema.parse(new Map([[1, 1]])).success === true)
    * assert(schema.parse(new Map()).success === false)
    * assert(schema.parse(new Map([[1, 1], [2, 2], [3, 3], [4, 4]])).success === false)

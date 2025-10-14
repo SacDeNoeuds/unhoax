@@ -17,6 +17,7 @@ const isInstanceOf = <T>(constructor: new (...args: any[]) => T) => {
  * class User {}
  * const schema = x.instanceOf(User)
  * assert(schema.parse(new User()).success === true)
+ * assert(schema.parse({}).success === false)
  * ```
  * @example usage with `convertTo`
  * ```ts

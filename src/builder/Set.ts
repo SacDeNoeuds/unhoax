@@ -17,7 +17,9 @@ export interface SetSchema<S extends SchemaLike<any, any>>
     SizedSchemaRefiners {}
 
 /**
- * Parses any iterable to an array.
+ * Parses any iterable to a Set.
+ *
+ * NB: this schema is PascalCase to avoid confusion with setter functions, like `new Map(…).set(…)`
  *
  * @category Reference
  * @see {@link SetSchema}
@@ -28,7 +30,7 @@ export interface SetSchema<S extends SchemaLike<any, any>>
  * @see {@link record}
  * @example
  * ```ts
- * const schema = x.setOf(x.string)
+ * const schema = x.Set(x.string)
  *
  * assert.deepEqual(schema.parse(['a']).value, new Set(['a']))
  * assert.deepEqual(schema.parse(new Set(['a'])).value, new Set(['a']))
@@ -39,7 +41,7 @@ export interface SetSchema<S extends SchemaLike<any, any>>
  * ```
  * @example Access the Set content schema with `.item`
  * ```ts
- * const schema = x.setOf(x.string)
+ * const schema = x.Set(x.string)
  * assert(schema.item === x.string)
  * ```
  */
@@ -61,9 +63,9 @@ export function setOf<S extends SchemaLike<any, any>>(
  * The default value is intentionally low because safety-first.
  *
  * If you need to increase it, I recommend increasing it _locally_ at schema level:
- * `x.setOf(x.string).size({ max: 10_000 })`
+ * `x.Set(x.string).size({ max: 10_000 })`
  *
- * If you need to loosen it globally, use `x.setOf.defaultMaxSize = 10_000`
+ * If you need to loosen it globally, use `x.Set.defaultMaxSize = 10_000`
  *
  * @category Config – Safety Guards
  * @see {@link setOf}
@@ -73,8 +75,8 @@ export function setOf<S extends SchemaLike<any, any>>(
  * ```ts
  * import { setOfSize } from './test-utils'
  *
- * x.setOf.defaultMaxSize = 20
- * const schema = x.setOf(x.string)
+ * x.Set.defaultMaxSize = 20
+ * const schema = x.Set(x.string)
  *
  * assert(schema.parse(setOfSize(20)).success === true)
  * assert(schema.parse(setOfSize(21)).success === false)
@@ -83,8 +85,8 @@ export function setOf<S extends SchemaLike<any, any>>(
  * ```ts
  * import { setOfSize } from './test-utils'
  *
- * x.setOf.defaultMaxSize = 20
- * const schema = x.setOf(x.string).size({ min: 4, max: 25 })
+ * x.Set.defaultMaxSize = 20
+ * const schema = x.Set(x.string).size({ min: 4, max: 25 })
  * assert(schema.parse(setOfSize(24)).success === true)
  * ```
  *
@@ -92,8 +94,8 @@ export function setOf<S extends SchemaLike<any, any>>(
  * ```ts
  * import { setOfSize } from './test-utils'
  *
- * x.setOf.defaultMaxSize = 20
- * const schema = x.setOf(x.string).size({ min: 3 })
+ * x.Set.defaultMaxSize = 20
+ * const schema = x.Set(x.string).size({ min: 3 })
  *
  * assert(schema.parse(setOfSize(12)).success === true)
  *
@@ -105,12 +107,12 @@ export function setOf<S extends SchemaLike<any, any>>(
  * ```ts
  * import { setOfSize } from './test-utils'
  *
- * x.setOf.defaultMaxSize = 100
- * const schema = x.setOf(x.string).size({ min: 3 })
+ * x.Set.defaultMaxSize = 100
+ * const schema = x.Set(x.string).size({ min: 3 })
  *
  * assert(schema.parse(setOfSize(21)).success === true)
  *
- * x.setOf.defaultMaxSize = 20
+ * x.Set.defaultMaxSize = 20
  * assert(schema.parse(setOfSize(21)).success === true)
  * ```
  */

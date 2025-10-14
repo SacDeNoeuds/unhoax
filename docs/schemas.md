@@ -148,6 +148,19 @@ const schema = x.instanceOf(User)
 assert(schema.parse(new User()).success === true)
 ```
 
+**usage with `convertTo`**
+
+```ts
+class User {
+  constructor(public name: string) {}
+}
+const schema = x.string.convertTo(x.instanceOf(User), (name) => new User(name))
+const result = schema.parse('Jack')
+assert(result.success === true)
+assert(result.value instanceof User)
+assert(result.value.name === 'Jack')
+```
+
 ## `x.integer`
 
 it accepts anything passing the check `Number.isSafeInteger`.
@@ -181,10 +194,14 @@ assert(schema.parse(43).success === false)
 assert(schema.parse(false).success === false)
 ```
 
-## `x.mapOf`
+## `x.Map`
+
+Parses any iterable of entries to a Map
+
+NB: this schema is PascalCase to avoid confusion with mapper functions, like `[…].map(…)`
 
 ```ts
-const schema = x.mapOf(x.number, x.string)
+const schema = x.Map(x.number, x.string)
 
 const entries = [
   [1, 'Jack'],
@@ -273,12 +290,14 @@ assert(schema.parse(new Map()).success === false)
 assert(schema.parse({ 1: '12' }).success === false)
 ```
 
-## `x.setOf`
+## `x.Set`
 
-Parses any iterable to an array.
+Parses any iterable to a Set.
+
+NB: this schema is PascalCase to avoid confusion with setter functions, like `new Map(…).set(…)`
 
 ```ts
-const schema = x.setOf(x.string)
+const schema = x.Set(x.string)
 
 assert.deepEqual(schema.parse(['a']).value, new Set(['a']))
 assert.deepEqual(schema.parse(new Set(['a'])).value, new Set(['a']))
@@ -291,7 +310,7 @@ assert(schema.parse({}).success === false)
 **Access the Set content schema with `.item`**
 
 ```ts
-const schema = x.setOf(x.string)
+const schema = x.Set(x.string)
 assert(schema.item === x.string)
 ```
 

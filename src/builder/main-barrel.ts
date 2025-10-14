@@ -7,7 +7,7 @@ export { Enum } from './Enum'
 export { fromGuard, type Guard } from './from-guard'
 export { instanceOf } from './instance-of'
 export { literal } from './literal'
-export { mapOf, type MapSchema } from './Map'
+export { mapOf as Map, type MapSchema } from './Map'
 export {
   integer,
   number,
@@ -20,7 +20,7 @@ export { object, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
 export type { InputOf, Schema, TypeOf } from './Schema'
 export { unknown } from './SchemaFactory'
-export { setOf, type SetSchema } from './Set'
+export { setOf as Set, type SetSchema } from './Set'
 export type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 export {
   string,

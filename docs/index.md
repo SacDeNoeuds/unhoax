@@ -120,8 +120,8 @@ There are default **size guards** everywhere, to diminish the risk of **Denial o
 import { x } from 'unhoax'
 
 x.array.defaultMaxSize // 500
-x.setOf.defaultMaxSize // 500
-x.mapOf.defaultMaxSize // 500
+x.Set.defaultMaxSize // 500
+x.Map.defaultMaxSize // 500
 x.string.defaultMaxSize // 500
 ```
 

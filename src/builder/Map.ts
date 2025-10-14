@@ -19,6 +19,10 @@ export interface MapSchema<
     SizedSchemaRefiners {}
 
 /**
+ * Parses any iterable of entries to a Map
+ *
+ * NB: this schema is PascalCase to avoid confusion with mapper functions, like `[…].map(…)`
+ *
  * @category Reference
  * @see {@link object}
  * @see {@link record}
@@ -27,7 +31,7 @@ export interface MapSchema<
  * @see {@link tuple}
  * @example
  * ```ts
- * const schema = x.mapOf(x.number, x.string)
+ * const schema = x.Map(x.number, x.string)
  *
  * const entries = [[1, 'Jack'], [2, 'Mary']]
  * const map = new Map(entries)
@@ -65,9 +69,9 @@ export function mapOf<
  * The default value is intentionally low because safety-first.
  *
  * If you need to increase it, I recommend increasing it _locally_ at schema level:
- * `x.mapOf(x.string, x.string).size({ max: 10_000 })`
+ * `x.Map(x.string, x.string).size({ max: 10_000 })`
  *
- * If you need to loosen it globally, use `x.mapOf.defaultMaxSize = 10_000`
+ * If you need to loosen it globally, use `x.Map.defaultMaxSize = 10_000`
  *
  * @category Config – Safety Guards
  * @see {@link mapOf}
@@ -77,8 +81,8 @@ export function mapOf<
  * ```ts
  * import { mapOfSize } from './test-utils'
  *
- * x.mapOf.defaultMaxSize = 20
- * const schema = x.mapOf(x.string, x.string)
+ * x.Map.defaultMaxSize = 20
+ * const schema = x.Map(x.string, x.string)
  *
  * assert(schema.parse(mapOfSize(20)).success === true)
  * assert(schema.parse(mapOfSize(21)).success === false)
@@ -87,8 +91,8 @@ export function mapOf<
  * ```ts
  * import { mapOfSize } from './test-utils'
  *
- * x.mapOf.defaultMaxSize = 20
- * const schema = x.mapOf(x.string, x.string).size({ max: 25 })
+ * x.Map.defaultMaxSize = 20
+ * const schema = x.Map(x.string, x.string).size({ max: 25 })
  * assert(schema.parse(mapOfSize(24)).success === true)
  * ```
  *
@@ -96,8 +100,8 @@ export function mapOf<
  * ```ts
  * import { mapOfSize } from './test-utils'
  *
- * x.mapOf.defaultMaxSize = 20
- * const schema = x.mapOf(x.string, x.string).size({ min: 3 })
+ * x.Map.defaultMaxSize = 20
+ * const schema = x.Map(x.string, x.string).size({ min: 3 })
  *
  * assert(schema.parse(mapOfSize(12)).success === true)
  *
@@ -109,12 +113,12 @@ export function mapOf<
  * ```ts
  * import { mapOfSize } from './test-utils'
  *
- * x.mapOf.defaultMaxSize = 100
- * const schema = x.mapOf(x.string, x.string).size({ min: 3 })
+ * x.Map.defaultMaxSize = 100
+ * const schema = x.Map(x.string, x.string).size({ min: 3 })
  *
  * assert(schema.parse(mapOfSize(21)).success === true)
  *
- * x.mapOf.defaultMaxSize = 20
+ * x.Map.defaultMaxSize = 20
  * assert(schema.parse(mapOfSize(21)).success === true)
  * ```
  */

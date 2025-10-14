@@ -257,11 +257,11 @@ describe('toJsonSchemaEnum', () => {
 
 describe('toJsonSchemaSet', () => {
   it('converts a set', () => {
-    const schema = toJsonSchema(x.setOf(x.number))
+    const schema = toJsonSchema(x.Set(x.number))
     expect(schema).toEqual({
       type: 'array',
       items: { type: 'number' },
-      maxItems: x.setOf.defaultMaxSize,
+      maxItems: x.Set.defaultMaxSize,
       uniqueItems: true,
     })
     expect(ajv.validate(schema, [1, 2])).toBe(true)
