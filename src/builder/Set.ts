@@ -90,24 +90,28 @@ export function setOf<S extends SchemaLike<any, any>>(
  *
  * @example it keeps max when applying min:
  * ```ts
+ * import { setOfSize } from './test-utils'
+ *
  * x.setOf.defaultMaxSize = 20
  * const schema = x.setOf(x.string).size({ min: 3 })
  *
- * assert(x.setOf(x.string).parse(new Array(12).fill('x')).success === true)
+ * assert(schema.parse(setOfSize(12)).success === true)
  *
- * assert(x.setOf(x.string).parse(new Array(2).fill('x')).success === false)
- * assert(x.setOf(x.string).parse(new Array(21).fill('x')).success === false)
+ * assert(schema.parse(setOfSize(2)).success === false)
+ * assert(schema.parse(setOfSize(21)).success === false)
  * ```
  *
  * @example the rule is **not** retro-active
  * ```ts
+ * import { setOfSize } from './test-utils'
+ *
  * x.setOf.defaultMaxSize = 100
  * const schema = x.setOf(x.string).size({ min: 3 })
  *
- * assert(schema.parse(new Array(21).fill('x')).success === true)
+ * assert(schema.parse(setOfSize(21)).success === true)
  *
  * x.setOf.defaultMaxSize = 20
- * assert(schema.parse(new Array(21).fill('x')).success === true)
+ * assert(schema.parse(setOfSize(21)).success === true)
  * ```
  */
 setOf.defaultMaxSize = 500

@@ -7,9 +7,11 @@ export const arrayOfSize = <T = string>(size: number, fill: T = 'x') =>
   new Array(size).fill(fill)
 
 // @ts-ignore
-export const setOfSize = <T = string>(size: number, fill: T = 'x') =>
-  new Set(arrayOfSize(size, fill))
+export const setOfSize = (size: number) =>
+  new Set(Array.from({ length: size }, (_, i) => String(i + 1)))
 
 // @ts-ignore
-export const mapOfSize = <T = string>(size: number, keyAndValue: T = 'x') =>
-  new Map<T, T>(arrayOfSize(size, [keyAndValue, keyAndValue]))
+export const mapOfSize = (size: number) =>
+  new Map<string, string>(
+    Array.from({ length: size }, (_, i) => [String(i + 1), `value-${i + 1}`]),
+  )
