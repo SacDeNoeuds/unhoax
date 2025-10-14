@@ -13,9 +13,7 @@ export interface TupleSchema<
 > extends Schema<{
     input: { [K in keyof S]: InputOf<S[K]> }
     output: { [K in keyof S]: TypeOf<S[K]> }
-    props: {
-      items: S
-    }
+    meta: { items: S }
   }> {}
 
 /**

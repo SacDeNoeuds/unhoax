@@ -1,5 +1,5 @@
 import type { JSONSchema7 } from 'json-schema'
-import type { SchemaAdditionalProps } from './Schema'
+import type { SchemaMetaShape } from './Schema'
 import type { SchemaLike } from './SchemaFactory'
 import type { SetSchema } from './Set'
 import type { ArraySchema } from './array'
@@ -16,7 +16,7 @@ const numberSchemaNames = new Set([
   'unsafeInteger',
 ])
 
-type SchemaIsh = SchemaLike<any, any> & SchemaAdditionalProps
+type SchemaIsh = SchemaLike<any, any> & SchemaMetaShape
 
 export function toJsonSchema(schema: SchemaIsh): JSONSchema7 {
   if (schema.name.startsWith('Array<'))

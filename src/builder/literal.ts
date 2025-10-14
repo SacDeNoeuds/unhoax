@@ -11,7 +11,7 @@ export interface LiteralSchema<L extends Literal[]>
   extends Schema<{
     input: L[number]
     output: L[number]
-    props: { literals: L }
+    meta: { literals: L }
   }> {}
 
 /**

@@ -12,9 +12,7 @@ export interface SetSchema<S extends SchemaLike<any, any>>
   extends Schema<{
       output: Set<TypeOf<S>>
       input: Iterable<InputOf<S>>
-      props: {
-        item: S
-      }
+      meta: { item: S }
     }>,
     SizedSchemaRefiners {}
 

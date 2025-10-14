@@ -1,5 +1,5 @@
 import { failure, ok } from '../common/ParseResult'
-import type { Schema, SchemaAdditionalProps } from './Schema'
+import type { Schema, SchemaMetaShape } from './Schema'
 import { Factory } from './SchemaFactory'
 
 export type Guard<T> = (value: unknown) => value is T
@@ -35,7 +35,7 @@ export type Guard<T> = (value: unknown) => value is T
 export const fromGuard = <T>(
   name: string,
   guard: Guard<T>,
-  props?: SchemaAdditionalProps,
+  props?: SchemaMetaShape,
 ) => {
   return new Factory({
     name,

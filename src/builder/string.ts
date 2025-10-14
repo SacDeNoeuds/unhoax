@@ -21,7 +21,7 @@ export interface StringSchema
   extends Schema<{
       input: string
       output: string
-      props: {
+      meta: {
         /**
          * Allows to configure the default max length of strings.
          *
@@ -37,7 +37,7 @@ export interface StringSchema
          * @see {@link string}
          * @see {@link untrimmedString}
          *
-         * @example
+         * @example change global max size
          * ```ts
          * x.string.defaultMaxSize = 20
          *

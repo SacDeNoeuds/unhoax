@@ -14,9 +14,7 @@ export interface MapSchema<
 > extends Schema<{
       input: Iterable<[key: InputOf<KeySchema>, value: InputOf<ValueSchema>]>
       output: Map<TypeOf<KeySchema>, TypeOf<ValueSchema>>
-      props: {
-        item: TupleSchema<[KeySchema, ValueSchema]>
-      }
+      meta: { item: TupleSchema<[KeySchema, ValueSchema]> }
     }>,
     SizedSchemaRefiners {}
 

@@ -4,7 +4,7 @@ import { failure, ok, success, type ParseResult } from '../common/ParseResult'
 import type { Refinement, SchemaMeta } from '../common/Schema'
 import { literal } from './literal'
 import type { NumericSchemaRefiners } from './NumericSchemaRefiners'
-import type { Schema, SchemaAdditionalProps } from './Schema'
+import type { Schema, SchemaMetaShape } from './Schema'
 import type { SchemaRefiners } from './SchemaRefiners'
 import type { SizedSchemaRefiners } from './SizedSchemaRefiners'
 import type { StringSchemaRefiners } from './string'
@@ -23,7 +23,7 @@ export interface SchemaLike<T, Input> extends StandardSchemaV1<Input, T> {
   parse(input: unknown, context?: ParseContext): ParseResult<T>
 }
 
-interface SchemaConfig<T> extends SchemaAdditionalProps {
+interface SchemaConfig<T> extends SchemaMetaShape {
   readonly name: string
   readonly parser: (
     input: unknown,

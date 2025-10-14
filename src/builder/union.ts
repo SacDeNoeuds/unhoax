@@ -9,7 +9,7 @@ export interface UnionSchema<
 > extends Schema<{
     input: InputOf<S[number]>
     output: TypeOf<S[number]>
-    props: { schemas: S }
+    meta: { schemas: S }
   }> {}
 
 function namedUnion<

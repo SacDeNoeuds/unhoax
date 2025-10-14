@@ -12,7 +12,7 @@ export interface ArraySchema<S extends SchemaLike<any, any>>
   extends Schema<{
       output: TypeOf<S>[]
       input: Iterable<InputOf<S>>
-      props: { item: S }
+      meta: { item: S }
     }>,
     SizedSchemaRefiners {}
 

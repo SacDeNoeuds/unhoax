@@ -1,5 +1,5 @@
 import type { Refinement } from '../common/Schema'
-import type { SchemaOf, SchemaPropsOf } from './Schema'
+import type { Schema, SchemaMetaOf } from './Schema'
 import type { SchemaLike } from './SchemaFactory'
 
 export interface SchemaRefiners<Output, Input> {
@@ -146,9 +146,9 @@ type Evolve<PreviousSchema, NextOutput> =
   PreviousSchema extends SchemaLike<infer Output, infer Input>
     ? [Output, NextOutput] extends [NextOutput, Output]
       ? PreviousSchema
-      : SchemaOf<{
+      : Schema<{
           input: Input
           output: NextOutput
-          props: SchemaPropsOf<PreviousSchema>
+          meta: SchemaMetaOf<PreviousSchema>
         }>
     : never

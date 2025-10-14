@@ -14,7 +14,7 @@ export interface RecordSchema<
 > extends Schema<{
     input: Record<InputOf<KeySchema>, InputOf<ValueSchema>>
     output: Record<TypeOf<KeySchema>, TypeOf<ValueSchema>>
-    props: {
+    meta: {
       key: KeySchema
       value: ValueSchema
     }
