@@ -71,10 +71,9 @@ export function union<
  * assert(schema.name === 'a | b')
  * ```
  */
-export function variant<S extends [ObjectSchema<any>, ...ObjectSchema<any>[]]>(
-  discriminant: keyof S[number]['props'],
-  schemas: S,
-): UnionSchema<S> {
+export function variant<
+  S extends [ObjectSchema<any, any>, ...ObjectSchema<any, any>[]],
+>(discriminant: keyof S[number]['props'], schemas: S): UnionSchema<S> {
   const name = schemas
     .map((schema) => (schema.props?.[discriminant] as any).literals[0])
     .filter((value, index, self) => self.indexOf(value) === index)

@@ -1,4 +1,9 @@
-import { object, type ObjectSchema, type ObjectShape } from './object'
+import {
+  object,
+  type ObjectSchema,
+  type ObjectSchemasShape,
+  type OutputObjectFromSchemasShape,
+} from './object'
 
 /**
  * @category Reference
@@ -14,14 +19,20 @@ import { object, type ObjectSchema, type ObjectShape } from './object'
  * assert(c.parse({ name: 12, age: 18 }).success === true)
  * ```
  */
-export function intersect<A extends ObjectShape, B extends ObjectShape>(
-  a: ObjectSchema<A>,
-  b: ObjectSchema<B>,
-): ObjectSchema<A & B> {
+export function intersect<
+  A extends ObjectSchemasShape,
+  B extends ObjectSchemasShape,
+>(
+  a: ObjectSchema<OutputObjectFromSchemasShape<A>, A>,
+  b: ObjectSchema<OutputObjectFromSchemasShape<B>, B>,
+): ObjectSchema<
+  OutputObjectFromSchemasShape<A> & OutputObjectFromSchemasShape<B>,
+  A & B
+> {
   return object({
     ...a.props,
     ...b.props,
-  }) as unknown as ObjectSchema<A & B>
+  }) as any
 }
 
 /**
@@ -44,14 +55,14 @@ export function intersect<A extends ObjectShape, B extends ObjectShape>(
  * )
  * ```
  */
-export function omit<T extends ObjectShape, K extends keyof T>(
-  schema: ObjectSchema<T>,
+export function omit<S extends ObjectSchemasShape, K extends keyof S>(
+  schema: ObjectSchema<OutputObjectFromSchemasShape<S>, S>,
   ...keys: K[]
-): ObjectSchema<Omit<T, K>> {
+): ObjectSchema<Omit<OutputObjectFromSchemasShape<S>, K>, Omit<S, K>> {
   const props = Object.fromEntries(
     Object.entries(schema.props!).filter(([key]) => !keys.includes(key as any)),
   )
-  return object(props) as unknown as ObjectSchema<Omit<T, K>>
+  return object(props) as any
 }
 
 /**
@@ -74,12 +85,18 @@ export function omit<T extends ObjectShape, K extends keyof T>(
  * )
  * ```
  */
-export function pick<T extends ObjectShape, K extends keyof T>(
-  schema: ObjectSchema<T>,
+export function pick<S extends ObjectSchemasShape, K extends keyof S>(
+  schema: ObjectSchema<OutputObjectFromSchemasShape<S>, S>,
   ...keys: K[]
-): ObjectSchema<Pick<T, K>> {
+): ObjectSchema<
+  Pick<
+    OutputObjectFromSchemasShape<S>,
+    Extract<K, keyof OutputObjectFromSchemasShape<S>>
+  >,
+  Pick<S, K>
+> {
   const props = Object.fromEntries(
     Object.entries(schema.props!).filter(([key]) => keys.includes(key as any)),
   )
-  return object(props) as unknown as ObjectSchema<Pick<T, K>>
+  return object(props) as any
 }

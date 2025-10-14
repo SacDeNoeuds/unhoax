@@ -4,7 +4,7 @@ import type { SchemaLike } from './SchemaFactory'
 import type { SetSchema } from './Set'
 import type { ArraySchema } from './array'
 import type { Literal } from './literal'
-import type { ObjectSchema } from './object'
+import type { ObjectSchema, ObjectSchemasShape } from './object'
 import type { RecordSchema } from './record'
 import type { StringSchema } from './string'
 import type { TupleSchema } from './tuple'
@@ -35,7 +35,9 @@ export function toJsonSchema(schema: SchemaIsh): JSONSchema7 {
   if (schema.literals) return toJsonSchemaLiterals(schema)
   if (schema.schemas) return toJsonSchemaUnion(schema)
   if (schema.props)
-    return toJsonSchemaObject(schema as unknown as ObjectSchema<any>)
+    return toJsonSchemaObject(
+      schema as unknown as ObjectSchema<any, ObjectSchemasShape>,
+    )
   if (schema.items) return toJsonSchemaTuple(schema as TupleSchema<any>)
 
   console.debug('schema', schema)
@@ -113,7 +115,9 @@ function toJsonSchemaSet(schema: SetSchema<any>): JSONSchema7 {
   }
 }
 
-function toJsonSchemaObject(schema: ObjectSchema<any>): JSONSchema7 {
+function toJsonSchemaObject(
+  schema: ObjectSchema<any, ObjectSchemasShape>,
+): JSONSchema7 {
   const properties = Object.fromEntries(
     Object.entries(schema.props).map(([key, value]) => [
       key,

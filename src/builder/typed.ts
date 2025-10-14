@@ -1,9 +1,9 @@
-import {
-  object,
-  type ObjectSchema,
-  type ObjectShape,
-  type PropsOf,
-} from './object'
+import { object, type ObjectSchema, type ObjectShape } from './object'
+import type { SchemaLike } from './SchemaFactory'
+
+type PropsOf<T extends Record<string, any>> = {
+  readonly [Key in keyof T]: SchemaLike<T[Key], any>
+}
 
 export interface Typed<T> {
   /**

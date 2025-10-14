@@ -1,11 +1,7 @@
 import { withPathSegment } from '../common/ParseContext'
 import { failure, success } from '../common/ParseResult'
-import type { Schema, TypeOf } from './Schema'
+import type { InputOf, Schema, TypeOf } from './Schema'
 import { Factory, type SchemaLike } from './SchemaFactory'
-
-export type PropsOf<T extends Record<string, any>> = {
-  readonly [Key in keyof T]: SchemaLike<T[Key], any>
-}
 
 export function isObject(input: unknown): input is Record<string, unknown> {
   // input.constructor is `undefined` for null-proto objects.
@@ -18,13 +14,22 @@ export type ObjectShape = Record<PropertyKey, any>
  * @category Reference
  * @see {@link object}
  */
-export interface ObjectSchema<T extends ObjectShape, Schemas = PropsOf<T>>
-  extends Schema<{ input: T; output: T; meta: { props: Schemas } }> {}
+export interface ObjectSchema<T extends ObjectShape, S extends SchemasShape>
+  extends Schema<{
+    input: InputFromSchemas<S>
+    output: T
+    meta: { props: S }
+  }> {}
 
 type SchemasShape = Record<PropertyKey, SchemaLike<any, any>>
 
+export type {
+  SchemasShape as ObjectSchemasShape,
+  OutputFromSchemas as OutputObjectFromSchemasShape,
+}
+
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] } & {}
-type ObjectFromSchemas<S extends SchemasShape> = Simplify<
+type OutputFromSchemas<S extends SchemasShape> = Simplify<
   {
     [Key in keyof S as undefined extends TypeOf<S[Key]> ? never : Key]: TypeOf<
       S[Key]
@@ -33,6 +38,17 @@ type ObjectFromSchemas<S extends SchemasShape> = Simplify<
     [Key in keyof S as undefined extends TypeOf<S[Key]> ? Key : never]?: TypeOf<
       S[Key]
     >
+  }
+>
+type InputFromSchemas<S extends SchemasShape> = Simplify<
+  {
+    [Key in keyof S as undefined extends InputOf<S[Key]>
+      ? never
+      : Key]: InputOf<S[Key]>
+  } & {
+    [Key in keyof S as undefined extends InputOf<S[Key]>
+      ? Key
+      : never]?: InputOf<S[Key]>
   }
 >
 
@@ -65,7 +81,7 @@ type ObjectFromSchemas<S extends SchemasShape> = Simplify<
  */
 export function object<Schemas extends SchemasShape>(
   props: Schemas,
-): ObjectSchema<ObjectFromSchemas<Schemas>, Schemas>
+): ObjectSchema<OutputFromSchemas<Schemas>, Schemas>
 /**
  * @category Reference
  *
@@ -82,7 +98,7 @@ export function object<Schemas extends SchemasShape>(
 export function object<S extends SchemasShape>(
   name: string,
   props: S,
-): ObjectSchema<ObjectFromSchemas<S>, S>
+): ObjectSchema<OutputFromSchemas<S>, S>
 export function object<S extends SchemasShape>(
   ...args: [name: string, props: S] | [props: S]
 ) {
@@ -93,7 +109,7 @@ export function object<S extends SchemasShape>(
     parser: (input, context, self: any) => {
       if (!isObject(input)) return failure(context, name, input)
 
-      const parsed = {} as ObjectFromSchemas<S>
+      const parsed = {} as OutputFromSchemas<S>
       for (const key in self.props) {
         const schema = self.props[key]
         const nestedContext = withPathSegment(context, key)
@@ -104,5 +120,5 @@ export function object<S extends SchemasShape>(
       }
       return success(context, parsed)
     },
-  }) as unknown as ObjectSchema<ObjectFromSchemas<S>, S>
+  }) as unknown as ObjectSchema<OutputFromSchemas<S>, S>
 }
