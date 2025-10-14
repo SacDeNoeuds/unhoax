@@ -22,15 +22,20 @@ export interface ObjectSchema<T extends ObjectShape, Schemas = PropsOf<T>>
   extends Schema<{ input: T; output: T; meta: { props: Schemas } }> {}
 
 type SchemasShape = Record<PropertyKey, SchemaLike<any, any>>
-type ObjectFromSchemas<S extends SchemasShape> = {
-  [Key in keyof S as TypeOf<S[Key]> extends undefined ? Key : never]?: TypeOf<
-    S[Key]
-  >
-} & {
-  [Key in keyof S as TypeOf<S[Key]> extends undefined ? never : Key]: TypeOf<
-    S[Key]
-  >
-}
+
+type Simplify<T> = { [KeyType in keyof T]: T[KeyType] } & {}
+type ObjectFromSchemas<S extends SchemasShape> = Simplify<
+  {
+    [Key in keyof S as undefined extends TypeOf<S[Key]> ? never : Key]: TypeOf<
+      S[Key]
+    >
+  } & {
+    [Key in keyof S as undefined extends TypeOf<S[Key]> ? Key : never]?: TypeOf<
+      S[Key]
+    >
+  }
+>
+
 /**
  * @category Reference
  *
