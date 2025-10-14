@@ -13,7 +13,7 @@
     "@ts-rest/core": "^3.53.0-rc.1",
     "@ts-rest/serverless": "^3.53.0-rc.1",
     "typescript": "^5.8.3",
-    "unhoax": "^0.10.4"
+    "unhoax": "^0.11.0"
   },
   "devDependencies": {
     "vitest": "^3.2.4",
