@@ -98,5 +98,16 @@ export function setOf<S extends SchemaLike<any, any>>(
  * assert(x.setOf(x.string).parse(new Array(2).fill('x')).success === false)
  * assert(x.setOf(x.string).parse(new Array(21).fill('x')).success === false)
  * ```
+ *
+ * @example the rule is **not** retro-active
+ * ```ts
+ * x.setOf.defaultMaxSize = 100
+ * const schema = x.setOf(x.string).size({ min: 3 })
+ *
+ * assert(schema.parse(new Array(21).fill('x')).success === true)
+ *
+ * x.setOf.defaultMaxSize = 20
+ * assert(schema.parse(new Array(21).fill('x')).success === true)
+ * ```
  */
 setOf.defaultMaxSize = 500

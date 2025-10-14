@@ -95,5 +95,16 @@ export function array<S extends SchemaLike<any, any>>(
  * assert(schema.parse(new Array(2).fill('x')).success === false)
  * assert(schema.parse(new Array(21).fill('x')).success === false)
  * ```
+ *
+ * @example the rule is **not** retro-active
+ * ```ts
+ * x.array.defaultMaxSize = 100
+ * const schema = x.array(x.string).size({ min: 3 })
+ *
+ * assert(schema.parse(new Array(21).fill('x')).success === true)
+ *
+ * x.array.defaultMaxSize = 20
+ * assert(schema.parse(new Array(21).fill('x')).success === true)
+ * ```
  */
 array.defaultMaxSize = 500

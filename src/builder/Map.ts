@@ -104,5 +104,16 @@ export function mapOf<
  * assert(schema.parse(mapOfSize(2)).success === false)
  * assert(schema.parse(mapOfSize(21)).success === false)
  * ```
+ *
+ * @example the rule is **not** retro-active
+ * ```ts
+ * x.mapOf.defaultMaxSize = 100
+ * const schema = x.mapOf(x.string).size({ min: 3 })
+ *
+ * assert(schema.parse(mapOfSize(21)).success === true)
+ *
+ * x.mapOf.defaultMaxSize = 20
+ * assert(schema.parse(mapOfSize(21)).success === true)
+ * ```
  */
 mapOf.defaultMaxSize = 500

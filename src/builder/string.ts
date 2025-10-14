@@ -61,6 +61,16 @@ export interface StringSchema
          * assert(schema.parse('xx').success === false)
          * assert(schema.parse('x'.repeat(21)).success === false)
          * ```
+         * @example the rule is **not** retro-active
+         * ```ts
+         * x.string.defaultMaxSize = 500
+         * const schema = x.string.size({ min: 3 })
+         *
+         * assert(schema.parse('x'.repeat(21)).success === true)
+         *
+         * x.string.defaultMaxSize = 20
+         * assert(schema.parse('x'.repeat(21)).success === true)
+         * ```
          */
         defaultMaxSize: number
       }
