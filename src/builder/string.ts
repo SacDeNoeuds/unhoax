@@ -97,7 +97,7 @@ export const untrimmedString = fromGuard(
 let defaultMaxSize = 500
 /**
  * This also trims the string. If you do not want this behavior,
- * explicitly use [`x.untrimmedString`](./advanced-schemas.html#untrimmedstring)
+ * explicitly use [`x.untrimmedString`](#x-untrimmedstring)
  * @category Reference
  * @see {@link untrimmedString}
  * @example

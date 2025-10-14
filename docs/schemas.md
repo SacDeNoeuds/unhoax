@@ -585,7 +585,7 @@ assert(schema.parse(new Set([1, 2, 3, 4])).success === false)
 ## `x.string`
 
 This also trims the string. If you do not want this behavior,
-explicitly use [`x.untrimmedString`](./advanced-schemas.html#untrimmedstring)
+explicitly use [`x.untrimmedString`](#x-untrimmedstring)
 
 ```ts
 assert(x.string.parse('  hello  ').value === 'hello')
