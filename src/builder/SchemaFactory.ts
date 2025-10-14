@@ -36,7 +36,7 @@ interface SchemaConfig<T> extends SchemaMetaShape {
 
 interface Interface
   extends SchemaLike<any, any>,
-    SchemaRefiners<any, any>,
+    SchemaRefiners<any>,
     NumericSchemaRefiners<any>,
     SizedSchemaRefiners,
     StringSchemaRefiners {}
@@ -58,7 +58,7 @@ export class Factory implements Interface {
   private readonly parser!: SchemaConfig<any>['parser']
   readonly meta: NonNullable<SchemaConfig<any>['meta']> = {}
   readonly refinements: NonNullable<SchemaConfig<any>['refinements']> = {}
-  readonly guardAs!: SchemaRefiners<any, any>['guardAs']
+  readonly guardAs!: SchemaRefiners<any>['guardAs']
 
   // additional props captured from inputs.
   readonly item?: any // for iterable schemas

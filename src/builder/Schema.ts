@@ -12,7 +12,7 @@ type Params = {
 
 export interface Schema<P extends Params>
   extends SchemaLike<P['output'], P['input']>,
-    SchemaRefiners<P['output'], P['input']>,
+    SchemaRefiners<P['output']>,
     SchemaMeta<P['meta']> {}
 
 type PermittedAdditionalProps =

@@ -2,7 +2,7 @@ import type { Refinement } from '../common/Schema'
 import type { Schema, SchemaMetaOf } from './Schema'
 import type { SchemaLike } from './SchemaFactory'
 
-export interface SchemaRefiners<Output, Input> {
+export interface SchemaRefiners<Output> {
   /**
    * @category Reference
    * @example
