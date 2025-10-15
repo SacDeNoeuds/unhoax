@@ -50,6 +50,18 @@ export function intersect<
  *
  * @category Reference
  * @see {@link object}
+ * @example Without unhoax utility
+ * ```ts
+ * import justOmit from 'just-omit'
+ *
+ * const schema = x.object({ name: x.string, age: x.number })
+ * const nextSchema = x.object(justOmit(schema.props, 'age'))
+ *
+ * assert.deepEqual(
+ *   nextSchema.parse({ name: 'Jack', age: 18 }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
+ * )
+ * ```
  * @example With unhoax utility
  * ```ts
  * import { omit } from './object.helpers'
@@ -61,18 +73,6 @@ export function intersect<
  *   nextSchema.parse({ name: 'Jack' }),
  *   { success: true, value: { name: 'Jack' } }, // ✅
  * )
- *
- * assert.deepEqual(
- *   nextSchema.parse({ name: 'Jack', age: 18 }),
- *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
- * )
- * ```
- * @example Without unhoax utility
- * ```ts
- * import { default as justOmit } from 'just-omit'
- *
- * const schema = x.object({ name: x.string, age: x.number })
- * const nextSchema = x.object(justOmit(schema.props, 'age'))
  *
  * assert.deepEqual(
  *   nextSchema.parse({ name: 'Jack', age: 18 }),
@@ -95,6 +95,18 @@ export function omit<S extends ObjectSchemasShape, K extends keyof S>(
  *
  * @category Reference
  * @see {@link object}
+ * @example Without unhoax utility
+ * ```ts
+ * import justPick from 'just-pick'
+ *
+ * const schema = x.object({ name: x.string, age: x.number })
+ * const nextSchema = x.object(justPick(schema.props, 'name'))
+ *
+ * assert.deepEqual(
+ *   nextSchema.parse({ name: 'Jack', age: 18 }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
+ * )
+ * ```
  * @example With unhoax utility
  * ```ts
  * import { pick } from './object.helpers'
@@ -106,18 +118,6 @@ export function omit<S extends ObjectSchemasShape, K extends keyof S>(
  *   nextSchema.parse({ name: 'Jack' }),
  *   { success: true, value: { name: 'Jack' } }, // ✅
  * )
- *
- * assert.deepEqual(
- *   nextSchema.parse({ name: 'Jack', age: 18 }),
- *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
- * )
- * ```
- * @example Without unhoax utility
- * ```ts
- * import { default as justPick } from 'just-pick'
- *
- * const schema = x.object({ name: x.string, age: x.number })
- * const nextSchema = x.object(justPick(schema.props, 'name'))
  *
  * assert.deepEqual(
  *   nextSchema.parse({ name: 'Jack', age: 18 }),

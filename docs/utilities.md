@@ -12,7 +12,7 @@ const c = x.object({ ...a.props, ...b.props })
 assert(c.parse({ name: 12, age: 18 }).success === true)
 ```
 
-**With unhoax**
+**With unhoax (prefer without)**
 
 ```ts
 import { intersect } from './object.helpers'
@@ -27,6 +27,20 @@ assert(c.parse({ name: 12, age: 18 }).success === true)
 # `omit`
 
 I recommend using your own implementation of `omit` considering you usually have one in your project
+
+**Without unhoax utility**
+
+```ts
+import justOmit from 'just-omit'
+
+const schema = x.object({ name: x.string, age: x.number })
+const nextSchema = x.object(justOmit(schema.props, 'age'))
+
+assert.deepEqual(
+  nextSchema.parse({ name: 'Jack', age: 18 }),
+  { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
+)
+```
 
 **With unhoax utility**
 
@@ -47,23 +61,23 @@ assert.deepEqual(
 )
 ```
 
+# `pick`
+
+I recommend using your own implementation of `pick` considering you usually have one in your project
+
 **Without unhoax utility**
 
 ```ts
-import { default as justOmit } from 'just-omit'
+import justPick from 'just-pick'
 
 const schema = x.object({ name: x.string, age: x.number })
-const nextSchema = x.object(justOmit(schema.props, 'age'))
+const nextSchema = x.object(justPick(schema.props, 'name'))
 
 assert.deepEqual(
   nextSchema.parse({ name: 'Jack', age: 18 }),
   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
 )
 ```
-
-# `pick`
-
-I recommend using your own implementation of `pick` considering you usually have one in your project
 
 **With unhoax utility**
 
@@ -77,20 +91,6 @@ assert.deepEqual(
   nextSchema.parse({ name: 'Jack' }),
   { success: true, value: { name: 'Jack' } }, // ✅
 )
-
-assert.deepEqual(
-  nextSchema.parse({ name: 'Jack', age: 18 }),
-  { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
-)
-```
-
-**Without unhoax utility**
-
-```ts
-import { default as justPick } from 'just-pick'
-
-const schema = x.object({ name: x.string, age: x.number })
-const nextSchema = x.object(justPick(schema.props, 'name'))
 
 assert.deepEqual(
   nextSchema.parse({ name: 'Jack', age: 18 }),
