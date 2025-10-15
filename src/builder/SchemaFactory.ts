@@ -253,34 +253,6 @@ export class Factory implements Interface {
       { pattern },
     )
   }
-
-  // ObjectBuilder
-  // intersect(otherSchema: ObjectSchema<any, any>): any {
-  //   return this.#evolve({
-  //     // @ts-ignore the prop exists, no worries. This is backed by tests
-  //     props: { ...(this as any).props, ...otherSchema.props },
-  //   })
-  // }
-
-  // omit(...props: any[]): any {
-  //   const object = (this as any).props
-  //   return this.#evolve({
-  //     // @ts-ignore the prop exists, no worries. This is backed by tests
-  //     props: Object.fromEntries(
-  //       Object.entries(object).filter(([key]) => !props.includes(key)),
-  //     ),
-  //   })
-  // }
-
-  // pick(...props: any[]): any {
-  //   const object = (this as any).props
-  //   return this.#evolve({
-  //     // @ts-ignore the prop exists, no worries. This is backed by tests
-  //     props: Object.fromEntries(
-  //       Object.entries(object).filter(([key]) => props.includes(key)),
-  //     ),
-  //   })
-  // }
 }
 
 export interface UnknownSchema

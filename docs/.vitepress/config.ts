@@ -34,6 +34,7 @@ export default defineConfig({
         text: 'Reference',
         items: [
           { text: 'Schemas', link: '/schemas' },
+          { text: 'Schema Methods', link: '/schema-methods' },
           { text: 'Utilities', link: '/utilities' },
           { text: 'JSON Schema', link: '/json-schema' },
         ],

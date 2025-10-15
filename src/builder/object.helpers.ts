@@ -6,9 +6,19 @@ import {
 } from './object'
 
 /**
+ * Unless you absolutely want to use some library function, just use spreading. Cf the example without unhoax.
+ *
  * @category Reference
  * @see {@link object}
- * @example
+ * @example Without unhoax
+ * ```ts
+ * const a = x.object({ name: x.string })
+ * const b = x.object({ name: x.number, age: x.number })
+ * const c = x.object({ ...a.props, ...b.props })
+ *
+ * assert(c.parse({ name: 12, age: 18 }).success === true)
+ * ```
+ * @example With unhoax (prefer without)
  * ```ts
  * import { intersect } from './object.helpers'
  *
@@ -36,22 +46,37 @@ export function intersect<
 }
 
 /**
+ * I recommend using your own implementation of `omit` considering you usually have one in your project
+ *
  * @category Reference
  * @see {@link object}
- * @example
+ * @example With unhoax utility
  * ```ts
  * import { omit } from './object.helpers'
  *
- * const schema = omit(x.object({ name: x.string, age: x.number }), 'age')
+ * const schema = x.object({ name: x.string, age: x.number })
+ * const nextSchema = omit(schema, 'age')
  *
  * assert.deepEqual(
- *   schema.parse({ name: 'Jack' }),
- *   { success: true, value: { name: 'Jack' } },
+ *   nextSchema.parse({ name: 'Jack' }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅
  * )
  *
  * assert.deepEqual(
- *   schema.parse({ name: 'Jack', age: 18 }),
- *   { success: true, value: { name: 'Jack' } },
+ *   nextSchema.parse({ name: 'Jack', age: 18 }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
+ * )
+ * ```
+ * @example Without unhoax utility
+ * ```ts
+ * import { default as justOmit } from 'just-omit'
+ *
+ * const schema = x.object({ name: x.string, age: x.number })
+ * const nextSchema = x.object(justOmit(schema.props, 'age'))
+ *
+ * assert.deepEqual(
+ *   nextSchema.parse({ name: 'Jack', age: 18 }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
  * )
  * ```
  */
@@ -66,22 +91,37 @@ export function omit<S extends ObjectSchemasShape, K extends keyof S>(
 }
 
 /**
+ * I recommend using your own implementation of `pick` considering you usually have one in your project
+ *
  * @category Reference
  * @see {@link object}
- * @example
+ * @example With unhoax utility
  * ```ts
  * import { pick } from './object.helpers'
  *
- * const schema = pick(x.object({ name: x.string, age: x.number }), 'name')
+ * const schema = x.object({ name: x.string, age: x.number })
+ * const nextSchema = pick(schema, 'name')
  *
  * assert.deepEqual(
- *   schema.parse({ name: 'Jack' }),
- *   { success: true, value: { name: 'Jack' } },
+ *   nextSchema.parse({ name: 'Jack' }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅
  * )
  *
  * assert.deepEqual(
- *   schema.parse({ name: 'Jack', age: 18 }),
- *   { success: true, value: { name: 'Jack' } },
+ *   nextSchema.parse({ name: 'Jack', age: 18 }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
+ * )
+ * ```
+ * @example Without unhoax utility
+ * ```ts
+ * import { default as justPick } from 'just-pick'
+ *
+ * const schema = x.object({ name: x.string, age: x.number })
+ * const nextSchema = x.object(justPick(schema.props, 'name'))
+ *
+ * assert.deepEqual(
+ *   nextSchema.parse({ name: 'Jack', age: 18 }),
+ *   { success: true, value: { name: 'Jack' } }, // ✅ only `name` is parsed
  * )
  * ```
  */

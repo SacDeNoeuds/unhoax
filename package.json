@@ -81,6 +81,8 @@
     "ajv-formats": "^3.0.1",
     "generate-jsdoc-example-tests": "^0.2.5",
     "heedoc": "^0.2.0",
+    "just-omit": "^2.2.0",
+    "just-pick": "^4.2.0",
     "just-pipe": "^1.0.0",
     "prettier": "^3.5.3",
     "rollup": "^4.44.1",

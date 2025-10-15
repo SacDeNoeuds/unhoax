@@ -123,9 +123,8 @@ Promise.all([
     },
   }),
   generateReferenceMarkdown({
-    output: './docs/utilities.md',
+    output: './docs/schema-methods.md',
     startHeadingLevel: 1,
-    // mainHeading: 'Utilities',
     entryPoints: {
       './src/builder/main-barrel.ts': {
         exports: {
@@ -135,6 +134,19 @@ Promise.all([
         propertiesToOmit: new Set(['~standard']),
         renames: {
           SchemaRefiners: 'x.{anySchema}',
+        },
+      },
+    },
+  }),
+  generateReferenceMarkdown({
+    output: './docs/utilities.md',
+    startHeadingLevel: 1,
+    // mainHeading: 'Utilities',
+    entryPoints: {
+      './src/builder/main.ts': {
+        exports: {
+          type: 'pick',
+          names: ['intersect', 'pick', 'omit'],
         },
       },
     },
