@@ -57,7 +57,16 @@ declare const getUser: (value: User) => void
 // }
 ```
 
-For 2 properties it is still fine, but for more, it quickly goes out of hand.
+The value here drives me crazy. For 2 properties it is still fine, but for more, it quickly goes out of hand.
+
+Let’s say you have a long process which relies on such a `User` type. At the end of your process (involving 5+ functions), you hover on a variable and see:
+
+```ts
+const someValue: { id: number; name: string }
+```
+
+Does it help ? Not a bit. This could be a `Tag`, a `Label`, a short `Account` or `User`…
+Shortly, **what a type contains is not what it means** – or what it _is_. That‘s what naming conveys: valuable hints about what the code is doing.
 
 A great way of ensuring proper names for types in TypeScript is to use interfaces:
 
