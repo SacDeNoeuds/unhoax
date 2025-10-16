@@ -104,7 +104,7 @@ export class Factory implements Interface {
 
   parse(input: unknown, context = createParseContext(this.name, input)) {
     const result = this.parser(input, context, this as any)
-    if (!result.success) return failure(context, this.name, input)
+    if (!result.success) return result
     for (const key in this.refinements)
       if (!this.refinements[key].refine(result.value, this.refinements[key]))
         return failure(context, this.name, result.value, key)
