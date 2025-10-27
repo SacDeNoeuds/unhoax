@@ -25,7 +25,7 @@ export {
 export type { NumericSchemaRefiners } from './NumericSchemaRefiners'
 export { object, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
-export type { InputOf, Schema, SchemaBase, TypeOf } from './Schema'
+export type { InputOf, Schema, SchemaFor, TypeOf } from './Schema'
 export { unknown } from './SchemaFactory'
 export type { SchemaRefiners } from './SchemaRefiners'
 export { setOf as Set, type SetSchema } from './Set'

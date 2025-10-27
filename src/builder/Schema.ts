@@ -3,7 +3,7 @@ import type { SchemaRefiners } from './SchemaRefiners'
 
 export type InputOf<S> = S extends SchemaLike<any, infer Input> ? Input : never
 export type TypeOf<S> = S extends SchemaLike<infer Output, any> ? Output : never
-export interface SchemaBase<S> extends SchemaLike<S, unknown> {}
+export interface SchemaFor<S> extends SchemaLike<S, any> {}
 
 type Params = {
   input: any
