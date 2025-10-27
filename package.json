@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "gen-tests": "npx gen-jet ./src/builder --header 'import { test } from \"vitest\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
+    "gen-tests": "npx gen-jet ./src/builder --header 'import { test, expect } from \"vitest\"' --header 'import assert from \"node:assert\"' --header 'import { x } from \"./main\"'",
     "clean-tests": "rm -rf src/**/*.example.test.*",
     "check-ts": "tsc --noEmit",
     "build:clean": "rm -rf ./dist",

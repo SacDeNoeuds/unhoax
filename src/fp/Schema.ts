@@ -30,7 +30,10 @@ export function defineSchema<T>(conf: SchemaConfig<T>): Schema<T> {
     if (!result.success) return failure(context, conf.name, input)
     for (const key in conf.refinements)
       if (!conf.refinements[key].refine(result.value, conf.refinements[key]))
-        return failure(context, conf.name, result.value, key)
+        return failure(context, conf.name, result.value, {
+          name: key,
+          meta: {},
+        })
 
     return success(context, result.value)
   }

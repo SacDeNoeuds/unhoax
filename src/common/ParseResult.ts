@@ -42,6 +42,10 @@ export type ParseError = Extract<
   StandardSchemaV1.FailureResult
 >
 
+type Refinement = {
+  name: string
+  meta: Record<string, unknown>
+}
 /**
  * @category Parsing
  * @see {@link ParseError}
@@ -49,7 +53,7 @@ export type ParseError = Extract<
 export type ParseIssue = Extract<
   {
     readonly schemaName: string
-    readonly refinement?: string
+    readonly refinement?: Refinement
     readonly input: unknown
     readonly message: string
     readonly path: PropertyKey[]
@@ -57,10 +61,11 @@ export type ParseIssue = Extract<
   StandardSchemaV1.Issue
 >
 
-function makeMessage(issue: Omit<ParseIssue, 'message'>): string {
-  const refinement = issue.refinement ? ` (${issue.refinement})` : ''
-  const path = issue.path.length ? `At ${issue.path.join('.')}: ` : ''
-  return `${path}not a ${issue.schemaName}${refinement}`
+function makeMessage(
+  issue: Pick<ParseIssue, 'schemaName' | 'refinement'>,
+): string {
+  if (issue.refinement) return `invalid ${issue.refinement.name}`
+  return `invalid ${issue.schemaName}`
 }
 
 /**
@@ -84,16 +89,14 @@ export function failure(
   context: ParseContext,
   schemaName: string,
   input: unknown,
-  refinement?: string,
+  refinement?: Refinement,
 ): Failure {
   context.issues.push({
     input,
     schemaName,
     path: context.path,
     refinement,
-    get message() {
-      return makeMessage(this)
-    },
+    message: makeMessage({ schemaName, refinement }),
   })
   return {
     success: false,

@@ -47,11 +47,11 @@ export interface SizedSchemaRefiners {
    * const sized = x.string.size({ min: 3 })
    *
    * assert(sized.parse('he').success === false)
-   * assert.deepEqual(sized.parse('he').issues, [{
+   * expect(sized.parse('he').issues).toEqual([{
    *   schemaName: 'string',
-   *   message: 'not a string (size)',
+   *   message: 'invalid size',
    *   path: [],
-   *   refinement: 'size',
+   *   refinement: { name: 'size', meta: { min: 3, max: 500 } },
    *   input: 'he',
    * }])
    * ```
@@ -70,11 +70,11 @@ export interface SizedSchemaRefiners {
    * ```ts
    * const sized = x.string.size({ max: 3 })
    *
-   * assert.deepEqual(sized.parse('heyo').issues, [{
+   * expect(sized.parse('heyo').issues).toEqual([{
    *   schemaName: 'string',
-   *   message: 'not a string (size)',
+   *   message: 'invalid size',
    *   path: [],
-   *   refinement: 'size',
+   *   refinement: { name: 'size', meta: { max: 3 } },
    *   input: 'heyo',
    * }])
    * ```

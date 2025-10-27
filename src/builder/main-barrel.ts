@@ -1,3 +1,10 @@
+export type {
+  Failure,
+  ParseError,
+  ParseIssue,
+  ParseResult,
+  Success,
+} from '../common/ParseResult'
 export { array, type ArraySchema } from './array'
 export { bigint, type BigIntSchema } from './bigint'
 export { boolean } from './boolean'
@@ -18,7 +25,7 @@ export {
 export type { NumericSchemaRefiners } from './NumericSchemaRefiners'
 export { object, type ObjectSchema } from './object'
 export { record, type RecordSchema } from './record'
-export type { InputOf, Schema, TypeOf } from './Schema'
+export type { InputOf, Schema, SchemaBase, TypeOf } from './Schema'
 export { unknown } from './SchemaFactory'
 export type { SchemaRefiners } from './SchemaRefiners'
 export { setOf as Set, type SetSchema } from './Set'
