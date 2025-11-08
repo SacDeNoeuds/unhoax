@@ -164,7 +164,11 @@ export class Factory implements Interface {
       parser: (input, context) => {
         const result = this.parse(input, context)
         if (!result.success) return result
-        return schema.parse(coerce(result.value), context)
+        try {
+          return schema.parse(coerce(result.value), context)
+        } catch (error) {
+          return failure(context, this.name, input)
+        }
       },
     })
   }

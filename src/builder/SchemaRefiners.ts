@@ -75,6 +75,19 @@ export interface SchemaRefiners<Output> {
    *
    * assert(numberFromString.name === 'number')
    * ```
+   * @example it returns a failure when the coercer throws
+   * ```ts
+   * class FakeTemporalPlainDate {
+   *   static from(input: string): FakeTemporalPlainDate {
+   *     throw new Error("invalid plain date")
+   *   }
+   * }
+   * const plainDateSchema = x.string.convertTo(
+   *   x.instanceOf(FakeTemporalPlainDate),
+   *   FakeTemporalPlainDate.from
+   * )
+   * assert(plainDateSchema.parse('42').success === false)
+   * ```
    */
   convertTo<U>(
     schema: SchemaLike<U, any>,
