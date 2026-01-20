@@ -27,9 +27,10 @@ export const defineIterableSchema = <T, Input, Acc extends Sized>(
       const acc = createAcc()
       let index = 0
       for (const value of input) {
-        const nestedContext = withPathSegment(context, index)
-        // schema.parse pushes an issue if it fails
-        const result = itemSchema.parse(value, nestedContext)
+        const result = withPathSegment(context, index, (nestedContext) => {
+          // schema.parse pushes an issue if it fails
+          return itemSchema.parse(value, nestedContext)
+        })
         if (result.success) addToAcc(acc, result.value)
         index++
       }

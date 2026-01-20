@@ -4,11 +4,7 @@ import { createParseContext, withPathSegment } from './ParseContext'
 
 describe('withPathSegment', () => {
   const context = createParseContext('Toto', 42)
-  const withSegment = withPathSegment(context, 0)
-
-  it('keeps `issues` reference', () => {
-    expect(withSegment.issues).toBe(context.issues)
-  })
+  const withSegment = withPathSegment(context, 0, (nested) => nested)
 
   it('keeps root schema & input', () => {
     expect(withSegment.rootSchemaName).toBe(context.rootSchemaName)

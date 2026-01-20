@@ -26,15 +26,19 @@ export function createParseContext(
   return { rootSchemaName, rootInput, path: [], issues: [] }
 }
 
-export function withPathSegment(
+export function withPathSegment<T>(
   context: ParseContext,
   segment: PropertyKey,
-): ParseContext {
+  run: (issueLessContext: ParseContext) => T,
+): T {
   // explicitly DO NOT CLONE context.issues because errors are **pushed** to the same array.
-  return {
-    issues: context.issues,
+  const issueLessContext: ParseContext = {
     rootInput: context.rootInput,
     rootSchemaName: context.rootSchemaName,
     path: [...context.path, segment],
+    issues: [],
   }
+  const result = run(issueLessContext)
+  context.issues.push(...issueLessContext.issues)
+  return result
 }

@@ -63,8 +63,9 @@ export function tuple<
 
       const tuple = items.flatMap((itemSchema, index) => {
         const value = input[index]!
-        const ctx = withPathSegment(context, index)
-        const result = itemSchema.parse(value, ctx)
+        const result = withPathSegment(context, index, (ctx) =>
+          itemSchema.parse(value, ctx),
+        )
         // if undefined, an issue will be added to the context
         // and the error will be taken from context at `success()` step.
         return result.success ? [result.value] : []

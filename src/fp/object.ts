@@ -74,9 +74,10 @@ export function object<T extends ObjectShape>(
       const parsed = {} as T
       for (const key in props) {
         const schema = props[key]
-        const nestedContext = withPathSegment(context, key)
-        // schema.parse pushes an issue if it fails
-        const result = schema.parse(input[key], nestedContext)
+        const result = withPathSegment(context, key, (nestedContext) => {
+          // schema.parse pushes an issue if it fails
+          return schema.parse(input[key], nestedContext)
+        })
         // @ts-ignore
         if (result.success) parsed[key] = result.value
       }
